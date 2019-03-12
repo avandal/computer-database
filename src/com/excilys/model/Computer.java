@@ -1,15 +1,15 @@
 package com.excilys.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Computer {
 	private int id;
 	private String name;
-	private Date introduced;
-	private Date discontinued;
+	private Timestamp introduced;
+	private Timestamp discontinued;
 	private Company company;
 	
-	public Computer(int id, String name, Date introduced, Date discontinued, Company company) {
+	public Computer(int id, String name, Timestamp introduced, Timestamp discontinued, Company company) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;

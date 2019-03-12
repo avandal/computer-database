@@ -2,12 +2,12 @@ package com.excilys.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class ComputerDB {
 	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -15,9 +15,6 @@ public class ComputerDB {
 	
 	private static final String USER = "admincdb";
 	private static final String PASSWORD = "qwerty1234";
-	
-	private static HashMap<Integer, Company> memoize_companies = new HashMap<>();
-	private static HashMap<Integer, Computer> memoize_computers = new HashMap<>();
 	
 	private static Connection co = null;
 	
@@ -45,6 +42,19 @@ public class ComputerDB {
 		return ret;
 	}
 	
+	private int update(String q) {
+		int ret = -1;
+		
+		try {
+			Statement stmt = co.createStatement();
+			ret = stmt.executeUpdate(q);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+	
 	private Company resultSetCompany(ResultSet res) {
 		Company comp = null;
 		
@@ -61,8 +71,8 @@ public class ComputerDB {
 	
 	private Computer resultSetComputer(ResultSet res) {
 		try {
-			Date introduced = res.getTimestamp("ct.introduced");
-			Date discontinued = res.getTimestamp("ct.discontinued");
+			Timestamp introduced = res.getTimestamp("ct.introduced");
+			Timestamp discontinued = res.getTimestamp("ct.discontinued");
 			Company comp = resultSetCompany(res);
 			
 			return new Computer(res.getInt("ct.id"), res.getString("ct.name"), introduced, discontinued, comp);
@@ -75,38 +85,10 @@ public class ComputerDB {
 	
 	@SuppressWarnings("unused")
 	private Company getCompanyById(int id) {
-		if (memoize_companies.containsKey(id)) {
-			return memoize_companies.get(id);
-		} else {
-			String q = "select cn.id, cn.name from company cn where id = " + id;
-			ResultSet res = query(q);
-			Company company = resultSetCompany(res);
-			memoize_companies.put(id, company);
-			return company;
-		}
-	}
-	
-	private Computer getComputerById(int id) {
-		if (memoize_computers.containsKey(id)) {
-			return memoize_computers.get(id);
-		} else {
-			Computer ret = null;
-			
-			String q = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
-					+ "from computer ct left join company cn on ct.company_id = cn.id where ct.id = "+id;
-			ResultSet res = query(q);
-			
-			try {
-				if (res.next()) {
-					ret = resultSetComputer(res);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			memoize_computers.put(id, ret);
-			return ret;
-		}
+		String q = "select cn.id, cn.name from company cn where id = " + id;
+		ResultSet res = query(q);
+		Company company = resultSetCompany(res);
+		return company;
 	}
 	
 	
@@ -124,9 +106,7 @@ public class ComputerDB {
 		
 		try {
 			while(res.next()) {
-				int comp_id = res.getInt("cn.id");
 				Company company = resultSetCompany(res);
-				memoize_companies.put(comp_id, company);
 				ret.add(company);
 			}
 		} catch (SQLException e) {
@@ -148,8 +128,6 @@ public class ComputerDB {
 				Computer computer = resultSetComputer(res);
 				
 				if (computer != null) {
-					int comp_id = res.getInt("ct.id");
-					memoize_computers.put(comp_id, computer);
 					computer_list.add(computer);
 				}
 			}
@@ -160,8 +138,56 @@ public class ComputerDB {
 		return computer_list;
 	}
 	
-	public void showComputerDetails(int id) {
-		System.out.println(getComputerById(id));
+	public Computer getComputerDetails(int computerId) {
+		Computer ret = null;
+		
+		String q = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
+				+ "from computer ct left join company cn on ct.company_id = cn.id where ct.id = "+computerId;
+		ResultSet res = query(q);		
+		
+		try {
+			if (res.next()) {
+				ret = resultSetComputer(res);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+	
+	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, int companyId) {
+		String query = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
+		
+		try {
+			PreparedStatement stmt = co.prepareStatement(query);
+			stmt.setString(1, name);
+			stmt.setTimestamp(2, introduced);
+			stmt.setTimestamp(3, discontinued);
+			stmt.setInt(4, companyId);
+			
+			String qExists = "select cn.id, cn.name from company cn where id = "+companyId;
+			ResultSet res = query(qExists);
+			
+			// Company exists
+			if (res.next()) {
+				int status = stmt.executeUpdate();
+				return status;
+			} else {
+				return -1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	// TODO
+	public void updateComputer() {}
+	
+	public int deleteComputer(int computerId) {
+		String q = "delete from computer where id = "+computerId;
+		return update(q);
 	}
 	
 	
