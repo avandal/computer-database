@@ -156,21 +156,35 @@ public class ComputerDB {
 		return ret;
 	}
 	
-	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, int companyId) {
+	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		String query = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
 		
 		try {
 			PreparedStatement stmt = co.prepareStatement(query);
 			stmt.setString(1, name);
-			stmt.setTimestamp(2, introduced);
-			stmt.setTimestamp(3, discontinued);
-			stmt.setInt(4, companyId);
+			
+			if (introduced != null) {
+				stmt.setTimestamp(2, introduced);
+			} else {
+				stmt.setNull(2, java.sql.Types.TIMESTAMP);
+			}
+			
+			if (discontinued != null) {
+				stmt.setTimestamp(3, discontinued);
+			} else {
+				stmt.setNull(3, java.sql.Types.TIMESTAMP);
+			}
+			if (companyId != null) {
+				stmt.setInt(4, companyId);
+			} else {
+				stmt.setNull(4, java.sql.Types.INTEGER);
+			}
 			
 			String qExists = "select cn.id, cn.name from company cn where id = "+companyId;
 			ResultSet res = query(qExists);
 			
 			// Company exists
-			if (res.next()) {
+			if (res.next() || companyId == null) {
 				int status = stmt.executeUpdate();
 				return status;
 			} else {
@@ -182,8 +196,34 @@ public class ComputerDB {
 		return -1;
 	}
 	
-	// TODO
-	public void updateComputer() {}
+	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued) {
+		String query = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
+		PreparedStatement stmt;
+		try {
+			stmt = co.prepareStatement(query);
+			stmt.setString(1, name);
+			
+			if (introduced != null) {
+				stmt.setTimestamp(2, introduced);
+			} else {
+				stmt.setNull(2, java.sql.Types.TIMESTAMP);
+			}
+			
+			if (discontinued != null) {
+				stmt.setTimestamp(3, discontinued);
+			} else {
+				stmt.setNull(3, java.sql.Types.TIMESTAMP);
+			}
+			stmt.setInt(4, computerId);
+			
+			int status = stmt.executeUpdate();
+			
+			return status;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 	
 	public int deleteComputer(int computerId) {
 		String q = "delete from computer where id = "+computerId;

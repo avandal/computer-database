@@ -149,7 +149,13 @@ public class MainCDB {
 			} else if (response == null || response.equals("")) {
 				System.out.println("Company id must have a value (or null)");
 			} else {
-				return parseInt(response);
+				int input = parseInt(response);
+				if (input <= 0) {
+					System.out.println("Invalid company id.");
+				} else {
+					compId = input;
+					loop = false;
+				}
 			}
 		}
 		
@@ -185,15 +191,113 @@ public class MainCDB {
 		}
 		compDiscontinued = (Timestamp) discontinued;
 		
+		
+		Object companyId = loopOnCompanyId("Please give a company id (an integer, 'abort' to abort, 'null' to set null)");
+		if (companyId instanceof Boolean) {
+			return true;
+		}
+		compCompanyId = (Integer) companyId;
+		
+		
+		int status = cdb.createComputer(compName, compIntroduced, compDiscontinued, compCompanyId);
+		if (status <= 0) {
+			System.out.println("[Problem] Nothing has been created.");
+		} else {
+			System.out.println("Computer successfully created.");
+		}
+		
 		return false;
+	}
+	
+	private static void updateComputer() {
+		String message = "Please give a computer id.";
+		System.out.println(message);
+		int computerId = userGetInt();
+		if (computerId <= 0) {
+			System.out.println("Invalid computer id.");
+		} else {
+			Computer computer = cdb.getComputerDetails(computerId);
+			if (computer != null) {
+
+				boolean loop = true;
+				
+				String compName = computer.getName();
+				Timestamp compIntroduced = computer.getIntroduced();
+				Timestamp compDiscontinued = computer.getDiscontinued();
+				
+				while (loop) {
+					System.out.println("Now:");
+					System.out.println("name = " + computer.getName()
+									+ ", introduced = " + computer.getIntroduced()
+									+ ", discontinued = " + computer.getDiscontinued());
+					System.out.println("Your changes:");
+					System.out.println("name = " + compName
+									+ ", introduced = " + compIntroduced
+									+ ", discontinued = " + compDiscontinued);
+					System.out.println("1 - Update name");
+					System.out.println("2 - Update introduced");
+					System.out.println("3 - Update discontinued");
+					System.out.println("4 - Confirm update");
+					System.out.println("5 - Quit without update");
+					
+					int newInput = userGetInt();
+					switch (newInput) {
+					case 1 :
+						Object name = loopOnName("Please give a computer name ('abort' to abort).");
+						if (name instanceof Boolean) {
+							System.out.println("Aborted.");
+						}
+						compName = (String) name;
+						break;
+						
+					case 2 :
+						Object introduced = loopOnTimestamp("Please give an introduced date ('yyyy-mm-dd hh:mm:ss' format, "
+														+ "'abort' to abort, 'null' to set null).");
+						if (introduced instanceof Boolean) {
+							System.out.println("Aborted.");
+						}
+						compIntroduced = (Timestamp) introduced;
+						break;
+						
+					case 3 :
+						Object discontinued = loopOnTimestamp("Please give a discontinued date ('yyyy-mm-dd hh:mm:ss' format, "
+														+ "'abort' to abort, 'null' to set null).");
+						if (discontinued instanceof Boolean) {
+							System.out.println("Aborted.");
+						}
+						compDiscontinued = (Timestamp) discontinued;
+						break;
+					
+					case 4 :
+						int status = cdb.updateComputer(computerId, compName, compIntroduced, compDiscontinued);
+						if (status == 1) {
+							System.out.println("Computer successfully updated.");
+						} else {
+							System.out.println("[Problem] Fail updating computer.");
+						}
+						loop = false;
+						break;
+					
+					case 5 : 
+						System.out.println("Nothing changed.");
+						loop = false;
+						break;
+					
+					default : System.out.println("Invalid input"); break;
+					}
+				}
+			} else {
+				System.out.println("This computer doesn't exist.");
+			}
+		}
 	}
 	
 	private static void deleteComputer(int computerId) {
 		int status = cdb.deleteComputer(computerId);
 		switch (status) {
-		case 1 : System.out.println("Successfully removed!"); break;
+		case 1 : System.out.println("Computer successfully removed!"); break;
 		case 0 : System.out.println("There is no computer with this id"); break;
-		default : System.err.println("[Problem] More than 1 computer has been deleted with this id"); break;
+		default : System.out.println("[Problem] More than 1 computer has been deleted with this id"); break;
 		}
 	}
 	
@@ -229,7 +333,7 @@ public class MainCDB {
 				break;
 				
 			case 5 :
-				// TODO
+				updateComputer();
 				break;
 				
 			case 6 :
