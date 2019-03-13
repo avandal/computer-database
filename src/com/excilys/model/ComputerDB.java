@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 
 public class ComputerDB {
@@ -15,6 +16,19 @@ public class ComputerDB {
 	
 	private static final String USER = "admincdb";
 	private static final String PASSWORD = "qwerty1234";
+	
+	private static final String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ?";
+	
+	private static final String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn";
+	private static final String SELECT_ALL_COMPUTERS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
+													+ "from computer ct left join company cn on ct.company_id = cn.id";
+	
+	private static final String SELECT_COMPUTER_DETAILS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
+														+ "from computer ct left join company cn on ct.company_id = cn.id where ct.id = ?";
+	
+	private static final String INSERT_COMPUTER = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
+	private static final String UPDATE_COMPUTER = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
+	private static final String DELETE_COMPUTER = "delete from computer where id = ?";
 	
 	private static Connection co = null;
 	
@@ -29,64 +43,36 @@ public class ComputerDB {
 		}
 	}
 	
-	private ResultSet query(String q) {
-		ResultSet ret = null;
-		
-		try {
-			Statement stmt = co.createStatement();
-			ret = stmt.executeQuery(q);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	private ResultSet query(String q) throws SQLException {
+		Statement stmt = co.createStatement();
+		ResultSet ret = stmt.executeQuery(q);
 		
 		return ret;
 	}
 	
-	private int update(String q) {
-		int ret = -1;
+	private Company resultSetCompany(ResultSet res) throws SQLException {
+		Integer id = res.getInt("cn.id");
+		String name = res.getString("cn.name");
 		
-		try {
-			Statement stmt = co.createStatement();
-			ret = stmt.executeUpdate(q);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return ret;
+		return new Company(id, name);
 	}
 	
-	private Company resultSetCompany(ResultSet res) {
-		Company comp = null;
+	private Computer resultSetComputer(ResultSet res) throws SQLException {
+		Integer id = res.getInt("ct.id");
+		String name = res.getString("ct.name");
+		Timestamp introduced = res.getTimestamp("ct.introduced");
+		Timestamp discontinued = res.getTimestamp("ct.discontinued");
+		Company comp = resultSetCompany(res);
 		
-		try {
-			Integer id = res.getInt("cn.id");
-			String name = res.getString("cn.name");
-			
-			comp = new Company(id, name);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return comp;
-	}
-	
-	private Computer resultSetComputer(ResultSet res) {
-		try {
-			Timestamp introduced = res.getTimestamp("ct.introduced");
-			Timestamp discontinued = res.getTimestamp("ct.discontinued");
-			Company comp = resultSetCompany(res);
-			
-			return new Computer(res.getInt("ct.id"), res.getString("ct.name"), introduced, discontinued, comp);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;		
+		return new Computer(id, name, introduced, discontinued, comp);		
 	}
 	
 	
 	@SuppressWarnings("unused")
-	private Company getCompanyById(int id) {
-		String q = "select cn.id, cn.name from company cn where id = " + id;
-		ResultSet res = query(q);
+	private Company getCompanyById(int id) throws SQLException {
+		PreparedStatement stmt = co.prepareStatement(SELECT_ONE_COMPANY);
+		stmt.setInt(1, id);
+		ResultSet res = stmt.executeQuery();
 		Company company = resultSetCompany(res);
 		return company;
 	}
@@ -101,10 +87,8 @@ public class ComputerDB {
 	public ArrayList<Company> companyList() {
 		ArrayList<Company> ret = new ArrayList<>();
 		
-		String q = "select cn.id, cn.name from company cn";
-		ResultSet res = query(q);
-		
 		try {
+			ResultSet res = query(SELECT_ALL_COMPANIES);
 			while(res.next()) {
 				Company company = resultSetCompany(res);
 				ret.add(company);
@@ -119,11 +103,8 @@ public class ComputerDB {
 	public ArrayList<Computer> computerList() {
 		ArrayList<Computer> computer_list = new ArrayList<>();
 		
-		String q = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
-				+ "from computer ct left join company cn on ct.company_id = cn.id;";
-		ResultSet res = query(q);
-		
 		try {
+			ResultSet res = query(SELECT_ALL_COMPUTERS);
 			while(res.next()) {
 				Computer computer = resultSetComputer(res);
 				
@@ -141,11 +122,11 @@ public class ComputerDB {
 	public Computer getComputerDetails(int computerId) {
 		Computer ret = null;
 		
-		String q = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
-				+ "from computer ct left join company cn on ct.company_id = cn.id where ct.id = "+computerId;
-		ResultSet res = query(q);		
-		
 		try {
+			PreparedStatement stmt = co.prepareStatement(SELECT_COMPUTER_DETAILS);
+			stmt.setInt(1, computerId);
+			
+			ResultSet res = stmt.executeQuery();
 			if (res.next()) {
 				ret = resultSetComputer(res);
 			}
@@ -157,31 +138,31 @@ public class ComputerDB {
 	}
 	
 	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		String query = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
-		
 		try {
-			PreparedStatement stmt = co.prepareStatement(query);
+			PreparedStatement stmt = co.prepareStatement(INSERT_COMPUTER);
 			stmt.setString(1, name);
 			
 			if (introduced != null) {
 				stmt.setTimestamp(2, introduced);
 			} else {
-				stmt.setNull(2, java.sql.Types.TIMESTAMP);
+				stmt.setNull(2, Types.TIMESTAMP);
 			}
 			
 			if (discontinued != null) {
 				stmt.setTimestamp(3, discontinued);
 			} else {
-				stmt.setNull(3, java.sql.Types.TIMESTAMP);
+				stmt.setNull(3, Types.TIMESTAMP);
 			}
 			if (companyId != null) {
 				stmt.setInt(4, companyId);
 			} else {
-				stmt.setNull(4, java.sql.Types.INTEGER);
+				stmt.setNull(4, Types.INTEGER);
 			}
 			
-			String qExists = "select cn.id, cn.name from company cn where id = "+companyId;
-			ResultSet res = query(qExists);
+			PreparedStatement stmtExists = co.prepareStatement(SELECT_ONE_COMPANY);
+			stmtExists.setInt(1, companyId);
+			
+			ResultSet res = stmtExists.executeQuery();
 			
 			// Company exists
 			if (res.next() || companyId == null) {
@@ -193,14 +174,13 @@ public class ComputerDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return -1;
 	}
 	
 	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued) {
-		String query = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
-		PreparedStatement stmt;
 		try {
-			stmt = co.prepareStatement(query);
+			PreparedStatement stmt = co.prepareStatement(UPDATE_COMPUTER);
 			stmt.setString(1, name);
 			
 			if (introduced != null) {
@@ -226,8 +206,18 @@ public class ComputerDB {
 	}
 	
 	public int deleteComputer(int computerId) {
-		String q = "delete from computer where id = "+computerId;
-		return update(q);
+		try {
+			PreparedStatement stmt = co.prepareStatement(DELETE_COMPUTER);
+			stmt.setInt(1, computerId);
+			
+			int status = stmt.executeUpdate();
+			
+			return status;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return -1;
 	}
 	
 	
