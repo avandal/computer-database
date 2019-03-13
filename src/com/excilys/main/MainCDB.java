@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 import com.excilys.model.Computer;
 import com.excilys.model.ComputerDB;
+import com.excilys.persistence.DAO;
+
+import control.Controller;
 
 public class MainCDB {
 	private static ComputerDB cdb = new ComputerDB();
@@ -301,6 +304,7 @@ public class MainCDB {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static void loopUser() {
 		boolean loop = true;
 		
@@ -365,6 +369,12 @@ public class MainCDB {
 	
 	public static void main(String[] args) {
 		//db.computerList().forEach((c) -> System.out.println(c));
-		loopUser();
+		//loopUser();
+		
+		DAO.initConnection();
+		
+		Controller control = new Controller();
+		control.run();
+		DAO.closeConnection();
 	}
 }

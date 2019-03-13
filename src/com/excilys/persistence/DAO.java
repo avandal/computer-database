@@ -15,19 +15,6 @@ public abstract class DAO {
 	private static final String USER = "admincdb";
 	private static final String PASSWORD = "qwerty1234";
 	
-	static Connection getConnection() {
-		if (connection == null) {
-			try {
-				Class.forName(DRIVER);
-				connection = DriverManager.getConnection(URL, USER, PASSWORD);
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return connection;
-	}
-	
 	static ResultSet query(String q) throws SQLException {
 		if (connection != null) {
 			Statement stmt = connection.createStatement();
@@ -38,7 +25,26 @@ public abstract class DAO {
 		return null;
 	}
 	
-	public void closeConnection() {
+	public static void initConnection() {
+		if (connection == null) {
+			try {
+				Class.forName(DRIVER);
+				connection = DriverManager.getConnection(URL, USER, PASSWORD);
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static Connection getConnection() {
+		if (connection == null) {
+			initConnection();
+		}
+		
+		return connection;
+	}
+	
+	public static void closeConnection() {
 		try {
 			if (connection != null && !connection.isClosed()) {
 				connection.close();
