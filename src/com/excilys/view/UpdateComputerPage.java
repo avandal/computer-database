@@ -182,8 +182,7 @@ public class UpdateComputerPage extends Page {
 		this.index = Item.UPDATE_ITEM;
 	}
 	
-	@Override
-	public Page exec(String input) {
+	private Page initialChecks(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
 			return this;
@@ -191,14 +190,32 @@ public class UpdateComputerPage extends Page {
 		
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted]"));
-			return this;
+			this.index = Item.MENU_ITEM;
+			return new MenuPage();
 		}
 		
+		return null;
+	}
+	
+	private boolean checkStart(String input) {
 		if (!this.start) {
 			if (execId(input)) {
 				this.start = true;
 			}
-			
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public Page exec(String input) {
+		Page initialCheckPage = initialChecks(input);
+		if (initialCheckPage != null) {
+			return initialCheckPage;
+		}
+		
+		if (!checkStart(input)) {
 			return this;
 		}
 		

@@ -127,7 +127,9 @@ public class CreateComputerPage extends Page {
 
 		if (finished) {
 			int status = ComputerDAO.createComputer(nameComp, introducedComp, discontinuedComp, companyIdComp);
-			if (status <= 0) {
+			if (status == -2) {
+				System.out.println(boxMessage("[Error] this companyId doesn't exist, " + BACK_MENU));
+			} else if (status <= 0) {
 				System.out.println(boxMessage("[Error] Nothing has been created, " + BACK_MENU));
 			} else {
 				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));

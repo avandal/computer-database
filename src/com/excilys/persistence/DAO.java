@@ -15,29 +15,17 @@ public abstract class DAO {
 	private static final String USER = "admincdb";
 	private static final String PASSWORD = "qwerty1234";
 	
-	static ResultSet query(String q) throws SQLException {
-		if (connection != null) {
-			Statement stmt = connection.createStatement();
-			ResultSet ret = stmt.executeQuery(q);
-			
-			return ret;
-		}
-		return null;
-	}
-	
 	public static void initConnection() {
-		if (connection == null) {
-			try {
-				Class.forName(DRIVER);
-				connection = DriverManager.getConnection(URL, USER, PASSWORD);
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			}
+		try {
+			Class.forName(DRIVER);
+			connection = DriverManager.getConnection(URL, USER, PASSWORD);
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	public static Connection getConnection() {
-		if (connection == null) {
+	public static Connection getConnection() throws SQLException {
+		if (connection == null || connection.isClosed()) {
 			initConnection();
 		}
 		

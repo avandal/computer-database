@@ -1,8 +1,10 @@
 package com.excilys.persistence;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -37,8 +39,10 @@ public class ComputerDAO {
 	public static ArrayList<Computer> computerList() {
 		ArrayList<Computer> computer_list = new ArrayList<>();
 
-		try {
-			ResultSet res = DAO.query(SELECT_ALL_COMPUTERS);
+		try (Connection con = DAO.getConnection();
+			 Statement stmt = con.createStatement();
+			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPUTERS);) {
+			
 			while (res.next()) {
 				Computer computer = resultSetComputer(res);
 
@@ -56,13 +60,16 @@ public class ComputerDAO {
 	public static Computer getComputerDetails(int computerId) {
 		Computer ret = null;
 
-		try {
-			PreparedStatement stmt = DAO.getConnection().prepareStatement(SELECT_COMPUTER_DETAILS);
+		try (Connection con = DAO.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(SELECT_COMPUTER_DETAILS);) {
+			
 			stmt.setInt(1, computerId);
+			
+			try (ResultSet res = stmt.executeQuery();) {
 
-			ResultSet res = stmt.executeQuery();
-			if (res.next()) {
-				ret = resultSetComputer(res);
+				if (res.next()) {
+					ret = resultSetComputer(res);
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -72,8 +79,9 @@ public class ComputerDAO {
 	}
 
 	public static int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		try {
-			PreparedStatement stmt = DAO.getConnection().prepareStatement(INSERT_COMPUTER);
+		try (Connection con = DAO.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(INSERT_COMPUTER);) {
+			
 			stmt.setString(1, name);
 
 			if (introduced != null) {
@@ -89,7 +97,12 @@ public class ComputerDAO {
 			}
 
 			if (companyId != null) {
-				stmt.setInt(4, companyId);
+				Company company = CompanyDAO.getCompanyById(companyId);
+				if (company != null) {
+					stmt.setInt(4, companyId);
+				} else {
+					return -2;
+				}
 			} else {
 				stmt.setNull(4, Types.INTEGER);
 			}
@@ -105,8 +118,9 @@ public class ComputerDAO {
 	}
 
 	public static int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued) {
-		try {
-			PreparedStatement stmt = DAO.getConnection().prepareStatement(UPDATE_COMPUTER);
+		try (Connection con = DAO.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(UPDATE_COMPUTER);) {
+			
 			stmt.setString(1, name);
 
 			if (introduced != null) {
@@ -132,8 +146,9 @@ public class ComputerDAO {
 	}
 
 	public static int deleteComputer(int computerId) {
-		try {
-			PreparedStatement stmt = DAO.getConnection().prepareStatement(DELETE_COMPUTER);
+		try (Connection con = DAO.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(DELETE_COMPUTER);) {
+			
 			stmt.setInt(1, computerId);
 
 			int status = stmt.executeUpdate();

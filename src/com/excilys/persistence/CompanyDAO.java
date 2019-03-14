@@ -1,8 +1,10 @@
 package com.excilys.persistence;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +21,23 @@ public class CompanyDAO {
 		return new Company(id, name);
 	}
 	
-	static Company getCompanyById(int id) throws SQLException {
-		PreparedStatement stmt = DAO.getConnection().prepareStatement(SELECT_ONE_COMPANY);
-		stmt.setInt(1, id);
-		ResultSet res = stmt.executeQuery();
-		Company company = resultSetCompany(res);
+	static Company getCompanyById(int id) {
+		Company company = null;
+		
+		try (Connection con = DAO.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(SELECT_ONE_COMPANY);) {
+			
+			stmt.setInt(1, id);
+			
+			try (ResultSet res = stmt.executeQuery();) {
+			
+				if (res.next()) {
+					company = resultSetCompany(res);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return company;
 	}
 	
@@ -34,8 +48,10 @@ public class CompanyDAO {
 	public static List<Company> companyList() {
 		ArrayList<Company> ret = new ArrayList<>();
 		
-		try {
-			ResultSet res = DAO.query(SELECT_ALL_COMPANIES);
+		try (Connection con = DAO.getConnection();
+			 Statement stmt = con.createStatement();
+			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPANIES);) {
+			
 			while(res.next()) {
 				Company company = resultSetCompany(res);
 				ret.add(company);
