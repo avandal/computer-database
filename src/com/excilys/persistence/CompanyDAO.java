@@ -8,11 +8,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.model.Company;
 
 public class CompanyDAO {
 	private static String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ?";
 	private static String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn";
+	
+	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	static Company resultSetCompany(ResultSet res) throws SQLException {
 		Integer id = res.getInt("cn.id");
@@ -36,6 +41,7 @@ public class CompanyDAO {
 				}
 			}
 		} catch (SQLException e) {
+			logger.error("getCompanyId - SQL error");
 			e.printStackTrace();
 		}
 		return company;
@@ -57,6 +63,7 @@ public class CompanyDAO {
 				ret.add(company);
 			}
 		} catch (SQLException e) {
+			logger.error("companyList - SQL error, incomplete list");
 			e.printStackTrace();
 		}
 		

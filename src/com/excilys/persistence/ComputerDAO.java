@@ -9,6 +9,9 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -22,9 +25,10 @@ public class ComputerDAO {
 	private static final String INSERT_COMPUTER = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
 	private static final String UPDATE_COMPUTER = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
 	private static final String DELETE_COMPUTER = "delete from computer where id = ?";
+	
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
-	public ComputerDAO() {
-	}
+	public ComputerDAO() {}
 
 	static Computer resultSetComputer(ResultSet res) throws SQLException {
 		Integer id = res.getInt("ct.id");
@@ -51,6 +55,7 @@ public class ComputerDAO {
 				}
 			}
 		} catch (SQLException e) {
+			logger.error("computerList - SQL error, incomplete list");
 			e.printStackTrace();
 		}
 
@@ -72,6 +77,7 @@ public class ComputerDAO {
 				}
 			}
 		} catch (SQLException e) {
+			logger.error("getComputerDetails - SQL error");
 			e.printStackTrace();
 		}
 
@@ -101,6 +107,7 @@ public class ComputerDAO {
 				if (company != null) {
 					stmt.setInt(4, companyId);
 				} else {
+					logger.error("'createComputer' method - This company id doesn't exist.");
 					return -2;
 				}
 			} else {
@@ -111,6 +118,7 @@ public class ComputerDAO {
 
 			return status;
 		} catch (SQLException e) {
+			logger.error("SQL error");
 			e.printStackTrace();
 		}
 
@@ -140,6 +148,7 @@ public class ComputerDAO {
 
 			return status;
 		} catch (SQLException e) {
+			logger.error("updateComputer - SQL error");
 			e.printStackTrace();
 		}
 		return -1;
@@ -155,6 +164,7 @@ public class ComputerDAO {
 
 			return status;
 		} catch (SQLException e) {
+			logger.error("deleteComputer - SQL error");
 			e.printStackTrace();
 		}
 

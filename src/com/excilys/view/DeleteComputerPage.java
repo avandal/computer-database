@@ -17,20 +17,6 @@ public class DeleteComputerPage extends Page {
 
 		return input;
 	}
-	
-	private boolean initialChecks(String input) {
-		if (input == null || input.equals("")) {
-			System.out.println(boxMessage("Invalid input"));
-			return false;
-		}
-		
-		if (input.equals("abort")) {
-			System.out.println(boxMessage("[Aborted]"));
-			return false;
-		}
-		
-		return true;
-	}
 
 	@Override
 	public Page exec(String input) {
