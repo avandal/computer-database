@@ -1,8 +1,8 @@
-package view;
+package com.excilys.view;
+
+import static com.excilys.util.Util.boxMessage;
 
 import com.excilys.persistence.CompanyDAO;
-
-import util.Util;
 
 public class ListCompanyPage extends Page {
 
@@ -10,7 +10,7 @@ public class ListCompanyPage extends Page {
 
 	@Override
 	public String show() {
-		System.out.println(Util.boxMessage("Here is the database's company list"));
+		System.out.println(boxMessage("Here is the database's company list"));
 		return null;
 	}
 
@@ -18,7 +18,7 @@ public class ListCompanyPage extends Page {
 	public Page exec(String input) {
 		CompanyDAO.companyList().forEach(System.out::println);
 		System.out.println();
-		System.out.println(M_BACK_MENU);
+		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
 		return new MenuPage();
 	}

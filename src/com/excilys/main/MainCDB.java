@@ -3,11 +3,10 @@ package com.excilys.main;
 import java.sql.Timestamp;
 import java.util.Scanner;
 
+import com.excilys.control.Controller;
 import com.excilys.model.Computer;
 import com.excilys.model.ComputerDB;
 import com.excilys.persistence.DAO;
-
-import control.Controller;
 
 public class MainCDB {
 	private static ComputerDB cdb = new ComputerDB();

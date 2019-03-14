@@ -1,4 +1,4 @@
-package view;
+package com.excilys.view;
 
 import java.util.Scanner;
 

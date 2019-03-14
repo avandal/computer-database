@@ -1,6 +1,6 @@
-package view;
+package com.excilys.view;
 
-import util.Util;
+import com.excilys.util.Util;
 
 public class MenuPage extends Page {
 	
@@ -9,13 +9,13 @@ public class MenuPage extends Page {
 	@Override
 	public String show() {
 		System.out.println("Choose:");
-		System.out.println("1 - " + PageDescriptor.LIST_COMPUTER);
-		System.out.println("2 - " + PageDescriptor.LIST_COMPANY);
-		System.out.println("3 - " + PageDescriptor.SHOW_COMPUTER);
-		System.out.println("4 - " + PageDescriptor.CREATE_COMPUTER);
-		System.out.println("5 - " + PageDescriptor.UPDATE_COMPUTER);
-		System.out.println("6 - " + PageDescriptor.DELETE_COMPUTER);
-		System.out.println("7 - Quit");
+		System.out.println(PageDescriptor.LIST_COMPUTER);
+		System.out.println(PageDescriptor.LIST_COMPANY);
+		System.out.println(PageDescriptor.SHOW_COMPUTER);
+		System.out.println(PageDescriptor.CREATE_COMPUTER);
+		System.out.println(PageDescriptor.UPDATE_COMPUTER);
+		System.out.println(PageDescriptor.DELETE_COMPUTER);
+		System.out.println(PageDescriptor.QUIT);
 		
 		String input = this.scan.nextLine();
 		
@@ -23,7 +23,7 @@ public class MenuPage extends Page {
 	}
 	
 	private Page wrongTyped() {
-		System.out.println("Error typing, " + BACK_MENU);
+		System.out.println(Util.boxMessage("Error typing, " + BACK_MENU));
 		System.out.println();
 		return new MenuPage();
 	}
@@ -51,14 +51,20 @@ public class MenuPage extends Page {
 				pageReturn = new ShowComputerPage();
 				break;
 			
-			case 4 : break;
+			case 4 : 
+				pageReturn = new CreateComputerPage();
+				break;
+				
+			case 5 : 
+				pageReturn = new UpdateComputerPage();
+				break;
 			
-			case 5 : break;
-			
-			case 6 : break;
+			case 6 :
+				pageReturn = new DeleteComputerPage();
+				break;
 			
 			case 7 : 
-				System.out.println("Goodbye!");
+				System.out.println(Util.boxMessage("Goodbye!"));
 				pageReturn = null;
 				break;
 			

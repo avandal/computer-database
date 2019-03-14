@@ -1,8 +1,8 @@
-package view;
+package com.excilys.view;
+
+import static com.excilys.util.Util.boxMessage;
 
 import com.excilys.persistence.ComputerDAO;
-
-import util.Util;
 
 public class ListComputerPage extends Page {
 	
@@ -10,7 +10,7 @@ public class ListComputerPage extends Page {
 
 	@Override
 	public String show() {
-		System.out.println(Util.boxMessage("Here is the database's computer list"));
+		System.out.println(boxMessage("Here is the database's computer list"));
 		return null;
 	}
 
@@ -18,7 +18,7 @@ public class ListComputerPage extends Page {
 	public Page exec(String input) {
 		ComputerDAO.computerList().forEach(System.out::println);
 		System.out.println();
-		System.out.println(M_BACK_MENU);
+		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
 		return new MenuPage();
 	}

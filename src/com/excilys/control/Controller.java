@@ -1,7 +1,7 @@
-package control;
+package com.excilys.control;
 
-import view.MenuPage;
-import view.Page;
+import com.excilys.view.MenuPage;
+import com.excilys.view.Page;
 
 public class Controller {
 	private Page currentPage;
