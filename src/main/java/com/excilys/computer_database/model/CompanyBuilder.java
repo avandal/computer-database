@@ -1,7 +1,6 @@
 package com.excilys.computer_database.model;
 
 public class CompanyBuilder {
-	
 	private int id;
 	private String name;
 

@@ -36,7 +36,7 @@ public class Computer {
 		
 		if (this.discontinued == null && computer.discontinued != null) return false;
 		if (this.discontinued != null && computer.discontinued == null) return false;
-		if (this.discontinued != null && computer.discontinued != null && !this.introduced.equals(computer.introduced)) return false;
+		if (this.discontinued != null && computer.discontinued != null && !this.discontinued.equals(computer.discontinued)) return false;
 		
 		if (this.company == null && computer.company != null) return false;
 		if (this.company != null && computer.company == null) return false;

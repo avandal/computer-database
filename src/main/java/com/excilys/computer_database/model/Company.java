@@ -20,7 +20,7 @@ public class Company {
 		if (this.id != company.id) return false;
 		
 		if (this.name == null && company.name != null) return false;
-		if (this.name != null && company.name != null) return false;
+		if (this.name != null && company.name == null) return false;
 		if (this.name != null && company.name != null && !this.name.equals(company.name)) return false;
 		
 		return true;

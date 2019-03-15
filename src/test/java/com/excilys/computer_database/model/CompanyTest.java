@@ -17,19 +17,20 @@ public class CompanyTest extends TestCase {
 
 		// Both are same ref
 		assertEquals(company1, company1);
-		// c2 null
+		// Compare with null
 		assertNotEquals(company1, null);
-		// Other class
+		// Compare with other class
 		assertNotEquals(company1, new Object());
 		
-		// Compared with another
+		// Compare with another
 		CompanyBuilder builderCompany2 = new CompanyBuilder();
 		Company company2;
 		
-		// Differents id
+		// Different ids
 		company1 = builderCompany1.id(0).build();
 		company2 = builderCompany2.id(1).build();
 		assertNotEquals(company1, company2);
+		// Set to same value
 		builderCompany2.id(0);
 		
 		// Name null or not null
