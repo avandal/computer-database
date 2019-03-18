@@ -50,7 +50,7 @@ public abstract class Util {
 	 * @return Your message after boxing
 	 */
 	public static String boxMessage(String message) {
-		if (message == null) return message;
+		if (message == null) return null;
 		
 		String[] lines = message.split("\n");
 		int length = sizeMax(lines);
