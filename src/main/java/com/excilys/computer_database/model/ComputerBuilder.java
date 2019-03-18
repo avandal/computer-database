@@ -36,6 +36,15 @@ public class ComputerBuilder {
 		return this;
 	}
 	
+	public ComputerBuilder empty() {
+		this.id = 0;
+		this.name = null;
+		this.introduced = null;
+		this.discontinued = null;
+		this.company = null;
+		return this;
+	}
+	
 	public Computer build() {
 		return new Computer(id, name, introduced, discontinued, company);
 	}

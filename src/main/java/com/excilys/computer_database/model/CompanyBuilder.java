@@ -16,6 +16,12 @@ public class CompanyBuilder {
 		return this;
 	}
 	
+	public CompanyBuilder empty() {
+		this.id = 0;
+		this.name = null;
+		return this;
+	}
+	
 	public Company build() {
 		return new Company(id, name);
 	}

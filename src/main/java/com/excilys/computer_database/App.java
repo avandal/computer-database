@@ -1,6 +1,6 @@
 package com.excilys.computer_database;
 
-import com.excilys.compute_database.control.Controller;
+import com.excilys.computer_database.control.Controller;
 
 /**
  * Hello world!

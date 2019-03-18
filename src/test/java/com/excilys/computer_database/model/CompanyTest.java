@@ -2,38 +2,56 @@ package com.excilys.computer_database.model;
 
 import static org.junit.Assert.assertNotEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import junit.framework.TestCase;
 
 public class CompanyTest extends TestCase {
+	
+	private CompanyBuilder builderCompany1 = new CompanyBuilder();
+	private CompanyBuilder builderCompany2 = new CompanyBuilder();
+	
+	Company company1;
+	Company company2;
 
 	public CompanyTest() {}
-
+	
+	@Before
+	public void setUp() {
+		company1 = builderCompany1.empty().build();
+		company2 = builderCompany2.empty().build();
+	}
+	
 	@Test
-	public void testEquals() {
-		CompanyBuilder builderCompany1 = new CompanyBuilder();
-		Company company1 = builderCompany1.build();
-
+	public void testNullEquals() {
 		// Both are same ref
 		assertEquals(company1, company1);
 		// Compare with null
 		assertNotEquals(company1, null);
 		// Compare with other class
 		assertNotEquals(company1, new Object());
-		
-		// Compare with another
-		CompanyBuilder builderCompany2 = new CompanyBuilder();
-		Company company2;
+	}
+	
+	@Test
+	public void testIdEquals() {
+		company1 = builderCompany1.id(2).build();
+		company2 = builderCompany2.id(3).build();
 		
 		// Different ids
-		company1 = builderCompany1.id(0).build();
-		company2 = builderCompany2.id(1).build();
+		company1 = builderCompany1.id(2).build();
+		company2 = builderCompany2.id(3).build();
 		assertNotEquals(company1, company2);
-		// Set to same value
-		builderCompany2.id(0);
 		
-		// Name null or not null
+		// Same value
+		company1 = builderCompany1.id(1).build();
+		company2 = builderCompany2.id(1).build();
+		assertEquals(company1, company2);
+	}
+	
+	@Test
+	public void testNameEquals() {
+		// null or not null
 		company1 = builderCompany1.name(null).build();
 		company2 = builderCompany2.name("no").build();
 		assertNotEquals(company1, company2);
@@ -42,15 +60,27 @@ public class CompanyTest extends TestCase {
 		company2 = builderCompany2.name(null).build();
 		assertNotEquals(company1, company2);
 		
-		// Different names
+		company1 = builderCompany1.name(null).build();
+		company2 = builderCompany2.name(null).build();
+		assertEquals(company1, company2);
+		
+		// Different
 		company1 = builderCompany1.name("one").build();
 		company2 = builderCompany2.name("two").build();
 		assertNotEquals(company1, company2);
 		
-		// Equal objects
+		// Same value
 		company1 = builderCompany1.name("same").build();
 		company2 = builderCompany2.name("same").build();
 		assertEquals(company1, company2);
 	}
-
+	
+	@Test
+	public void testGlobalEquals() {
+		testNullEquals();
+		testIdEquals();
+		testNameEquals();
+		
+		assertEquals(company1, company2);
+	}
 }

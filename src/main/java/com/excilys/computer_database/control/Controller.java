@@ -1,4 +1,4 @@
-package com.excilys.compute_database.control;
+package com.excilys.computer_database.control;
 
 import com.excilys.computer_database.view.MenuPage;
 import com.excilys.computer_database.view.Page;
