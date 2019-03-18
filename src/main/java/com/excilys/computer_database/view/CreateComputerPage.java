@@ -23,8 +23,11 @@ public class CreateComputerPage extends Page {
 	private Integer companyIdComp;
 
 	private int index = 1;
+	
+	private ComputerDAO dao;
 
 	public CreateComputerPage() {
+		this.dao = ComputerDAO.getInstance();
 	}
 
 	@Override
@@ -126,7 +129,7 @@ public class CreateComputerPage extends Page {
 		}
 
 		if (finished) {
-			int status = ComputerDAO.createComputer(nameComp, introducedComp, discontinuedComp, companyIdComp);
+			int status = dao.createComputer(nameComp, introducedComp, discontinuedComp, companyIdComp);
 			if (status == -2) {
 				System.out.println(boxMessage("[Error] this companyId doesn't exist, " + BACK_MENU));
 			} else if (status <= 0) {

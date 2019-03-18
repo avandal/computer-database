@@ -10,6 +10,8 @@ import com.excilys.computer_database.util.Util;
 
 public class UpdateComputerPage extends Page {
 	
+	private ComputerDAO dao;
+	
 	private static enum Item {
 		MENU_ITEM("1 - Update name\n2 - Update introduced\n3 - Update discontinued\n4 - Confirm update\n5 - Quit without saving"),
 		NAME_ITEM("Please give a computer name ('abort' to abort)"),
@@ -53,7 +55,9 @@ public class UpdateComputerPage extends Page {
 	private boolean start = false;
 	private Item index = Item.MENU_ITEM;
 	
-	public UpdateComputerPage() {}
+	public UpdateComputerPage() {
+		dao = ComputerDAO.getInstance();
+	}
 	
 	private String currentChanges() {
 		String ret = "Now:\n";
@@ -108,7 +112,7 @@ public class UpdateComputerPage extends Page {
 			return false;
 		}
 		
-		this.toChange = ComputerDAO.getComputerDetails(id);
+		this.toChange = dao.getComputerDetails(id);
 		
 		if (this.toChange == null) {
 			System.out.println(boxMessage("There is no computer with this id"));
@@ -171,7 +175,7 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private void execUpdate() {
-		int status = ComputerDAO.updateComputer(idComp, nameComp, introducedComp, discontinuedComp);
+		int status = dao.updateComputer(idComp, nameComp, introducedComp, discontinuedComp);
 		
 		if (status == 1) {
 			System.out.println(boxMessage("Computer successfully updated"));

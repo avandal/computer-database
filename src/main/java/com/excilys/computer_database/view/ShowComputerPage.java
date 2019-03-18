@@ -7,8 +7,12 @@ import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.util.Util;
 
 public class ShowComputerPage extends Page {
+	
+	private ComputerDAO dao;
 
-	public ShowComputerPage() {}
+	public ShowComputerPage() {
+		dao = ComputerDAO.getInstance();
+	}
 
 	@Override
 	public String show() {
@@ -43,7 +47,7 @@ public class ShowComputerPage extends Page {
 			return new ShowComputerPage();
 		}
 		
-		Computer computer = ComputerDAO.getComputerDetails(idInput);
+		Computer computer = dao.getComputerDetails(idInput);
 		System.out.println(boxMessage("Here's the "+idInput+" computer"));
 		System.out.println(computer);
 		

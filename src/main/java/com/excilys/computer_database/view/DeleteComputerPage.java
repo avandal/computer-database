@@ -6,8 +6,12 @@ import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.util.Util;
 
 public class DeleteComputerPage extends Page {
+	
+	private ComputerDAO dao;
 
-	public DeleteComputerPage() {}
+	public DeleteComputerPage() {
+		dao = ComputerDAO.getInstance();
+	}
 
 	@Override
 	public String show() {
@@ -42,7 +46,7 @@ public class DeleteComputerPage extends Page {
 			return new DeleteComputerPage();
 		}
 
-		int status = ComputerDAO.deleteComputer(idInput);
+		int status = dao.deleteComputer(idInput);
 		
 		if (status == 1) {
 			System.out.println(boxMessage("Computer successfully deleted"));

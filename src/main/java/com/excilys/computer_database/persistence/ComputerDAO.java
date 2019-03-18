@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 
@@ -27,20 +28,23 @@ public class ComputerDAO {
 	private static final String DELETE_COMPUTER = "delete from computer where id = ?";
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	
+	private static volatile ComputerDAO instance;
 
-	public ComputerDAO() {}
-
-	static Computer resultSetComputer(ResultSet res) throws SQLException {
-		Integer id = res.getInt("ct.id");
-		String name = res.getString("ct.name");
-		Timestamp introduced = res.getTimestamp("ct.introduced");
-		Timestamp discontinued = res.getTimestamp("ct.discontinued");
-		Company comp = CompanyDAO.resultSetCompany(res);
-
-		return new Computer(id, name, introduced, discontinued, comp);
+	private ComputerDAO() {}
+	
+	public static ComputerDAO getInstance() {
+		if (instance == null) {
+			synchronized(ComputerDAO.class) {
+				if (instance == null) {
+					instance = new ComputerDAO();
+				}
+			}
+		}
+		return instance;
 	}
 
-	public static ArrayList<Computer> computerList() {
+	public ArrayList<Computer> computerList() {
 		ArrayList<Computer> computer_list = new ArrayList<>();
 
 		try (Connection con = DAO.getConnection();
@@ -48,7 +52,7 @@ public class ComputerDAO {
 			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPUTERS);) {
 			
 			while (res.next()) {
-				Computer computer = resultSetComputer(res);
+				Computer computer = ComputerMapper.resultSetComputer(res);
 
 				if (computer != null) {
 					computer_list.add(computer);
@@ -62,7 +66,7 @@ public class ComputerDAO {
 		return computer_list;
 	}
 
-	public static Computer getComputerDetails(int computerId) {
+	public Computer getComputerDetails(int computerId) {
 		Computer ret = null;
 
 		try (Connection con = DAO.getConnection();
@@ -73,7 +77,7 @@ public class ComputerDAO {
 			try (ResultSet res = stmt.executeQuery();) {
 
 				if (res.next()) {
-					ret = resultSetComputer(res);
+					ret = ComputerMapper.resultSetComputer(res);
 				}
 			}
 		} catch (SQLException e) {
@@ -84,7 +88,7 @@ public class ComputerDAO {
 		return ret;
 	}
 
-	public static int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		try (Connection con = DAO.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(INSERT_COMPUTER);) {
 			
@@ -103,7 +107,8 @@ public class ComputerDAO {
 			}
 
 			if (companyId != null) {
-				Company company = CompanyDAO.getCompanyById(companyId);
+				CompanyDAO companyDAO = CompanyDAO.getInstance();
+				Company company = companyDAO.getCompanyById(companyId);
 				if (company != null) {
 					stmt.setInt(4, companyId);
 				} else {
@@ -125,7 +130,7 @@ public class ComputerDAO {
 		return -1;
 	}
 
-	public static int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued) {
+	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued) {
 		try (Connection con = DAO.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(UPDATE_COMPUTER);) {
 			
@@ -154,7 +159,7 @@ public class ComputerDAO {
 		return -1;
 	}
 
-	public static int deleteComputer(int computerId) {
+	public int deleteComputer(int computerId) {
 		try (Connection con = DAO.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(DELETE_COMPUTER);) {
 			

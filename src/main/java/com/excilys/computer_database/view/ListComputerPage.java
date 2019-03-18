@@ -6,7 +6,11 @@ import com.excilys.computer_database.persistence.ComputerDAO;
 
 public class ListComputerPage extends Page {
 	
-	public ListComputerPage() {}
+	private ComputerDAO dao;
+	
+	public ListComputerPage() {
+		dao = ComputerDAO.getInstance();
+	}
 
 	@Override
 	public String show() {
@@ -16,7 +20,7 @@ public class ListComputerPage extends Page {
 
 	@Override
 	public Page exec(String input) {
-		ComputerDAO.computerList().forEach(System.out::println);
+		dao.computerList().forEach(System.out::println);
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();

@@ -11,6 +11,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
 public class CompanyDAO {
@@ -19,14 +20,22 @@ public class CompanyDAO {
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
-	static Company resultSetCompany(ResultSet res) throws SQLException {
-		Integer id = res.getInt("cn.id");
-		String name = res.getString("cn.name");
-		
-		return new Company(id, name);
+	private static volatile CompanyDAO instance = new CompanyDAO();
+	
+	private CompanyDAO() {}
+	
+	public static CompanyDAO getInstance() {
+		if (instance == null) {
+			synchronized(CompanyDAO.class) {
+				if (instance == null) {
+					instance = new CompanyDAO();
+				}
+			}
+		}
+		return instance;
 	}
 	
-	static Company getCompanyById(int id) {
+	public Company getCompanyById(int id) {
 		
 		Company company = null;
 		
@@ -38,7 +47,7 @@ public class CompanyDAO {
 			try (ResultSet res = stmt.executeQuery();) {
 			
 				if (res.next()) {
-					company = resultSetCompany(res);
+					company = CompanyMapper.resultSetCompany(res);
 				}
 			}
 		} catch (SQLException e) {
@@ -52,7 +61,7 @@ public class CompanyDAO {
 	
 	
 	
-	public static List<Company> companyList() {
+	public List<Company> companyList() {
 		ArrayList<Company> ret = new ArrayList<>();
 		
 		try (Connection con = DAO.getConnection();
@@ -60,7 +69,7 @@ public class CompanyDAO {
 			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPANIES);) {
 			
 			while(res.next()) {
-				Company company = resultSetCompany(res);
+				Company company = CompanyMapper.resultSetCompany(res);
 				ret.add(company);
 			}
 		} catch (SQLException e) {

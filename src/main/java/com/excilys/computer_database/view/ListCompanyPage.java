@@ -16,7 +16,8 @@ public class ListCompanyPage extends Page {
 
 	@Override
 	public Page exec(String input) {
-		CompanyDAO.companyList().forEach(System.out::println);
+		CompanyDAO companyDAO = CompanyDAO.getInstance();
+		companyDAO.companyList().forEach(System.out::println);
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
