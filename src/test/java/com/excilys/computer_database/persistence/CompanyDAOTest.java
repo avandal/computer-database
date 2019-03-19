@@ -1,6 +1,5 @@
 package com.excilys.computer_database.persistence;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -18,9 +17,11 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
+import junit.framework.TestCase;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(CompanyDAO.class)
-public class CompanyDAOTest {
+public class CompanyDAOTest extends TestCase {
 	
 	CompanyDAO companyDao;
 	
