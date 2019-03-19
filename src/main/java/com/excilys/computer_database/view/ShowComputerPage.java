@@ -23,8 +23,7 @@ public class ShowComputerPage extends Page {
 		return input;
 	}
 
-	@Override
-	public Page exec(String input) {
+	private Page initialCheck(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
 			return new ShowComputerPage();
@@ -35,8 +34,10 @@ public class ShowComputerPage extends Page {
 			return new MenuPage();
 		}
 		
-		Integer idInput = Util.parseInt(input);
-		
+		return null;
+	}
+
+	private Page invalidInput(Integer idInput) {
 		if (idInput == null) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
 			return new ShowComputerPage();
@@ -47,12 +48,29 @@ public class ShowComputerPage extends Page {
 			return new ShowComputerPage();
 		}
 		
+		return null;
+	}
+
+	@Override
+	public Page exec(String input) {
+		Page next = initialCheck(input);
+		
+		if (next != null)
+			return next;
+		
+		Integer idInput = Util.parseInt(input);
+		
+		Page isInvalid = invalidInput(idInput);
+		
+		if (isInvalid != null)
+			return isInvalid;
+		
 		Computer computer = dao.getComputerDetails(idInput);
 		System.out.println(boxMessage("Here's the "+idInput+" computer"));
 		System.out.println(computer);
 		
 		System.out.println(boxMessage(M_BACK_MENU));
+		
 		return new MenuPage();
 	}
-
 }

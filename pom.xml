@@ -13,6 +13,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -43,17 +45,17 @@
 			<scope>test</scope>
 		</dependency>
 
-	<dependency>
-		<groupId>org.powermock</groupId>
-		<artifactId>powermock-core</artifactId>
-		<version>1.7.0</version>
-		<scope>test</scope>
-	</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-core</artifactId>
+			<version>1.7.0</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito -->
 		<dependency>
 			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
+			<artifactId>powermock-api-mockito2</artifactId>
 			<version>1.7.0</version>
 			<scope>test</scope>
 		</dependency>
@@ -66,9 +68,5 @@
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
-
-
-
-
 	</dependencies>
 </project>

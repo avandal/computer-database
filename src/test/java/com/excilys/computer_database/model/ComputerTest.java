@@ -23,7 +23,6 @@ public class ComputerTest extends TestCase {
 	public void setUp() {
 		computer1 = builderComputer1.empty().build();
 		computer2 = builderComputer2.empty().build();
-		System.out.println("test");
 	}
 	
 	@Test
