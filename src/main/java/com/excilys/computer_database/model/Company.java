@@ -42,4 +42,8 @@ public class Company {
 	public String toString() {
 		return id+" - "+name;
 	}
+	
+	public Company copy() {
+		return new Company(this.id, this.name);
+	}
 }

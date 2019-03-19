@@ -15,8 +15,8 @@ import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
 public class CompanyDAO {
-	private static String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ?";
-	private static String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn";
+	public static String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ?";
+	public static String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn";
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
