@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +67,8 @@ public class ComputerDAO {
 		return computer_list;
 	}
 
-	public Computer getComputerDetails(int computerId) {
-		Computer ret = null;
+	public Optional<Computer> getComputerDetails(int computerId) {
+		Optional<Computer> ret = Optional.empty();
 
 		try (Connection con = DAO.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(SELECT_COMPUTER_DETAILS);) {
@@ -77,7 +78,7 @@ public class ComputerDAO {
 			try (ResultSet res = stmt.executeQuery();) {
 
 				if (res.next()) {
-					ret = ComputerMapper.resultSetComputer(res);
+					ret = Optional.of(ComputerMapper.resultSetComputer(res));
 				}
 			}
 		} catch (SQLException e) {
@@ -108,8 +109,10 @@ public class ComputerDAO {
 
 			if (companyId != null) {
 				CompanyDAO companyDAO = CompanyDAO.getInstance();
-				Company company = companyDAO.getCompanyById(companyId);
-				if (company != null) {
+				
+				Optional<Company> company = companyDAO.getCompanyById(companyId);
+				
+				if (company.isPresent()) {
 					stmt.setInt(4, companyId);
 				} else {
 					logger.error("'createComputer' method - This company id doesn't exist.");

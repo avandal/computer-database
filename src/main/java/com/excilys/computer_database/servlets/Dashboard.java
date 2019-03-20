@@ -2,6 +2,7 @@ package com.excilys.computer_database.servlets;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,12 +31,12 @@ public class Dashboard extends HttpServlet {
 
 	private void extractPageSize(HttpServletRequest request) {
 		String pageSizeParam = request.getParameter(PAGE_SIZE_PARAM);
-		Integer pageSize = Util.parseInt(pageSizeParam);
+		Optional<Integer> pageSize = Util.parseInt(pageSizeParam);
 		
-		if (pageSize != null) {
-			size = PageSize.getById(pageSize);
+		if (pageSize.isPresent()) {
+			size = PageSize.getById(pageSize.get());
 			
-			if (size.getSize() != pageSize) {
+			if (size.getSize() != pageSize.get()) {
 				System.out.println("Changing the page size");
 				request.setAttribute(PAGE_SIZE_PARAM, size.getSize());
 			}
@@ -48,10 +49,10 @@ public class Dashboard extends HttpServlet {
 	
 	private void extractPageIndex(HttpServletRequest request) {
 		String pageIndexParam = request.getParameter(PAGE_INDEX_PARAM);
-		Integer pageIndex = Util.parseInt(pageIndexParam);
+		Optional<Integer> pageIndex = Util.parseInt(pageIndexParam);
 		
-		if (pageIndex != null) {
-			index = pageIndex;
+		if (pageIndex.isPresent()) {
+			index = pageIndex.get();
 			
 			if (index * size.getSize() > list.size()) {
 				System.out.println("index page out of list range");

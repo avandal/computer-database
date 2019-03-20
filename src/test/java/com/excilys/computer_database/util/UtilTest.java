@@ -3,6 +3,7 @@ package com.excilys.computer_database.util;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -13,14 +14,17 @@ public class UtilTest extends TestCase {
 	public UtilTest() {}
 	
 	private void testIntWith(int value) {
-		assertEquals(Util.parseInt(String.format("%d", value)), Integer.valueOf(value));
+		Optional<Integer> toTest = Util.parseInt(String.format("%d", value));
+		
+		assertTrue(toTest.isPresent());
+		assertEquals(toTest.get(), Integer.valueOf(value));
 	}
 	
 	@Test
 	public void testParseInt() {
-		assertNull(Util.parseInt(null));
-		assertNull(Util.parseInt("Any string"));
-		assertNull(Util.parseInt("1.25"));
+		assertFalse(Util.parseInt(null).isPresent());
+		assertFalse(Util.parseInt("Any string").isPresent());
+		assertFalse(Util.parseInt("1.25").isPresent());
 		
 		testIntWith(0);
 		testIntWith(-1);
@@ -29,13 +33,13 @@ public class UtilTest extends TestCase {
 	
 	@Test
 	public void testParseTimestamp() {
-		assertNull(Util.parseTimestamp(null));
-		assertNull(Util.parseTimestamp("Any not-timestamp"));
+		assertFalse(Util.parseTimestamp(null).isPresent());
+		assertFalse(Util.parseTimestamp("Any not-timestamp").isPresent());
 		
-		Timestamp time = Util.parseTimestamp("1995-12-12 20:00:00");
-		assertNotNull(time);
+		Optional<Timestamp> time = Util.parseTimestamp("1995-12-12 20:00:00");
+		assertTrue(time.isPresent());
 		
-		LocalDateTime localDateTime = time.toLocalDateTime();
+		LocalDateTime localDateTime = time.get().toLocalDateTime();
 		LocalDate localDate = localDateTime.toLocalDate();
 		
 		assertEquals(localDate.getYear(), 1995);

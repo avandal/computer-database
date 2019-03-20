@@ -1,5 +1,7 @@
 package com.excilys.computer_database.control;
 
+import java.util.Optional;
+
 import com.excilys.computer_database.view.MenuPage;
 import com.excilys.computer_database.view.Page;
 
@@ -15,11 +17,12 @@ public class ControlerCLI {
 
 		while (loop) {
 			String input = this.currentPage.show();
-			Page page = this.currentPage.exec(input);
-			if (page == null) {
+			Optional<Page> page = this.currentPage.exec(input);
+			
+			if (!page.isPresent()) {
 				loop = false;
 			} else {
-				this.currentPage = page;
+				this.currentPage = page.get();
 			}
 		}
 	}

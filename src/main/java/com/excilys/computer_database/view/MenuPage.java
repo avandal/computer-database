@@ -1,5 +1,7 @@
 package com.excilys.computer_database.view;
 
+import java.util.Optional;
+
 import com.excilys.computer_database.util.Util;
 
 public class MenuPage extends Page {
@@ -29,47 +31,47 @@ public class MenuPage extends Page {
 	}
 
 	@Override
-	public Page exec(String input) {
+	public Optional<Page> exec(String input) {
 		// TODO Auto-generated method stub
-		Integer choice = Util.parseInt(input);
-		Page pageReturn = null;
+		Optional<Integer> choice = Util.parseInt(input);
+		Optional<Page> pageReturn = Optional.empty();
 		
-		if (choice == null) {
-			pageReturn = wrongTyped();
+		if (!choice.isPresent()) {
+			pageReturn = Optional.of(wrongTyped());
 		} else {
 			
-			switch (choice) {
+			switch (choice.get()) {
 			case 1 :
-				pageReturn = new ListComputerPage();
+				pageReturn = Optional.of(new ListComputerPage());
 				break;
 			
 			case 2 : 
-				pageReturn = new ListCompanyPage();
+				pageReturn = Optional.of(new ListCompanyPage());
 				break;
 			
 			case 3 :
-				pageReturn = new ShowComputerPage();
+				pageReturn = Optional.of(new ShowComputerPage());
 				break;
 			
 			case 4 : 
-				pageReturn = new CreateComputerPage();
+				pageReturn = Optional.of(new CreateComputerPage());
 				break;
 				
 			case 5 : 
-				pageReturn = new UpdateComputerPage();
+				pageReturn = Optional.of(new UpdateComputerPage());
 				break;
 			
 			case 6 :
-				pageReturn = new DeleteComputerPage();
+				pageReturn = Optional.of(new DeleteComputerPage());
 				break;
 			
 			case 7 : 
 				System.out.println(Util.boxMessage("Goodbye!"));
-				pageReturn = null;
+				pageReturn = Optional.empty();
 				break;
 			
 			default :
-				pageReturn = wrongTyped();
+				pageReturn = Optional.of(wrongTyped());
 				break;
 			}
 		}

@@ -1,5 +1,6 @@
 package com.excilys.computer_database.view;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public abstract class Page {
@@ -11,5 +12,5 @@ public abstract class Page {
 	public Page() {}
 	
 	public abstract String show();
-	public abstract Page exec(String input);
+	public abstract Optional<Page> exec(String input);
 }

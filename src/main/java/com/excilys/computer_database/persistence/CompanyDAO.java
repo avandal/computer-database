@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +36,9 @@ public class CompanyDAO {
 		return instance;
 	}
 	
-	public Company getCompanyById(int id) {
+	public Optional<Company> getCompanyById(int id) {
 		
-		Company company = null;
+		Optional<Company> company = Optional.empty();
 		
 		try (Connection con = DAO.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(SELECT_ONE_COMPANY);) {
@@ -47,7 +48,7 @@ public class CompanyDAO {
 			try (ResultSet res = stmt.executeQuery();) {
 			
 				if (res.next()) {
-					company = CompanyMapper.resultSetCompany(res);
+					company = Optional.of(CompanyMapper.resultSetCompany(res));
 				}
 			}
 		} catch (SQLException e) {

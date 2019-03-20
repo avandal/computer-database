@@ -2,6 +2,8 @@ package com.excilys.computer_database.view;
 
 import static com.excilys.computer_database.util.Util.boxMessage;
 
+import java.util.Optional;
+
 import com.excilys.computer_database.persistence.ComputerDAO;
 
 public class ListComputerPage extends Page {
@@ -19,12 +21,12 @@ public class ListComputerPage extends Page {
 	}
 
 	@Override
-	public Page exec(String input) {
+	public Optional<Page> exec(String input) {
 		dao.computerList().forEach(System.out::println);
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
-		return new MenuPage();
+		return Optional.of(new MenuPage());
 	}
 
 }

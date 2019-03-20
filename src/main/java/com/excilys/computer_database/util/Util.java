@@ -1,22 +1,23 @@
 package com.excilys.computer_database.util;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 public abstract class Util {
 	
-	public static Integer parseInt(String input) {
+	public static Optional<Integer> parseInt(String input) {
 		try {
-			return Integer.parseInt(input);
+			return Optional.of(Integer.parseInt(input));
 		} catch (NumberFormatException e) {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
-	public static Timestamp parseTimestamp(String input) {
+	public static Optional<Timestamp> parseTimestamp(String input) {
 		try {
-			return Timestamp.valueOf(input);
+			return Optional.of(Timestamp.valueOf(input));
 		} catch (IllegalArgumentException e) {
-			return null;
+			return Optional.empty();
 		}
 	}
 	

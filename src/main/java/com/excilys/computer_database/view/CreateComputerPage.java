@@ -3,6 +3,7 @@ package com.excilys.computer_database.view;
 import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.util.Util;
@@ -73,14 +74,14 @@ public class CreateComputerPage extends Page {
 			return true;
 		}
 
-		Timestamp time = Util.parseTimestamp(input);
+		Optional<Timestamp> time = Util.parseTimestamp(input);
 
-		if (time == null) {
+		if (!time.isPresent()) {
 			System.out.println(boxMessage("Wrong format"));
 			return false;
 		}
 
-		setTimestamp(timestamp, time);
+		setTimestamp(timestamp, time.get());
 		return true;
 	}
 
@@ -90,27 +91,27 @@ public class CreateComputerPage extends Page {
 			return true;
 		}
 
-		Integer id = Util.parseInt(input);
+		Optional<Integer> id = Util.parseInt(input);
 
-		if (id == null) {
+		if (!id.isPresent()) {
 			System.out.println(boxMessage("Must be an integer"));
 			return false;
 		}
 
-		this.companyIdComp = id;
+		this.companyIdComp = id.get();
 		return true;
 	}
 
 	@Override
-	public Page exec(String input) {
+	public Optional<Page> exec(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return this;
+			return Optional.of(this);
 		}
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return new MenuPage();
+			return Optional.of(new MenuPage());
 		}
 
 		boolean next = false;
@@ -138,13 +139,13 @@ public class CreateComputerPage extends Page {
 				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));
 			}
 
-			return new MenuPage();
+			return Optional.of(new MenuPage());
 		}
 
 		if (next) {
 			index++;
 		}
 
-		return this;
+		return Optional.of(this);
 	}
 }

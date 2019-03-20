@@ -3,14 +3,13 @@ package com.excilys.computer_database.view;
 import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.util.Util;
 
 public class UpdateComputerPage extends Page {
-	
-	private ComputerDAO dao;
 	
 	private static enum Item {
 		MENU_ITEM("1 - Update name\n2 - Update introduced\n3 - Update discontinued\n4 - Confirm update\n5 - Quit without saving"),
@@ -43,9 +42,11 @@ public class UpdateComputerPage extends Page {
 		}
 	}
 	
+	private ComputerDAO dao;
+	
 	private final static String MSG_ID = "Please give a computer id ('abort' to abort)";
 										
-	private Computer toChange;
+	private Optional<Computer> toChange;
 	
 	private int idComp;
 	private String nameComp;
@@ -61,9 +62,9 @@ public class UpdateComputerPage extends Page {
 	
 	private String currentChanges() {
 		String ret = "Now:\n";
-		ret += "name: " + toChange.getName();
-		ret += ", introduced: " + toChange.getIntroduced();
-		ret += ", discontinued: " + toChange.getDiscontinued() + "\n";
+		ret += "name: " + toChange.get().getName();
+		ret += ", introduced: " + toChange.get().getIntroduced();
+		ret += ", discontinued: " + toChange.get().getDiscontinued() + "\n";
 		ret += "Your changes:\n";
 		ret += "name: " + nameComp;
 		ret += ", introduced: " + introducedComp;
@@ -105,43 +106,43 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private boolean execId(String input) {
-		Integer id = Util.parseInt(input);
+		Optional<Integer> id = Util.parseInt(input);
 		
-		if (id == null) {
+		if (!id.isPresent()) {
 			System.out.println(boxMessage("Must be an integer"));
 			return false;
 		}
 		
-		this.toChange = dao.getComputerDetails(id);
+		this.toChange = dao.getComputerDetails(id.get());
 		
-		if (this.toChange == null) {
+		if (!this.toChange.isPresent()) {
 			System.out.println(boxMessage("There is no computer with this id"));
 			return false;
 		}
 		
-		this.idComp = id;
+		this.idComp = id.get();
 		
-		this.nameComp = this.toChange.getName();
-		this.introducedComp = this.toChange.getIntroduced();
-		this.discontinuedComp = this.toChange.getDiscontinued();
+		this.nameComp = this.toChange.get().getName();
+		this.introducedComp = this.toChange.get().getIntroduced();
+		this.discontinuedComp = this.toChange.get().getDiscontinued();
 		
 		return true;
 	}
 	
 	private void execMenu(String input) {
-		Integer choice = Util.parseInt(input);
+		Optional<Integer> choice = Util.parseInt(input);
 		
-		if (choice == null) {
+		if (!choice.isPresent()) {
 			System.out.println(boxMessage("Must be an integer"));
 			return;
 		}
 		
-		if (choice < 1 || choice > 5) {
+		if (choice.get() < 1 || choice.get() > 5) {
 			System.out.println(boxMessage("Must be [1,2,3,4,5]"));
 			return;
 		}
 		
-		this.index = Item.intToItem(choice);
+		this.index = Item.intToItem(choice.get());
 	}
 	
 	private void execName(String input) {
@@ -163,14 +164,14 @@ public class UpdateComputerPage extends Page {
 			return;
 		}
 		
-		Timestamp time = Util.parseTimestamp(input);
+		Optional<Timestamp> time = Util.parseTimestamp(input);
 		
-		if (time == null) {
+		if (!time.isPresent()) {
 			System.out.println(boxMessage("Wrong format"));
 			return;
 		}
 		
-		setTimestamp(timestamp, time);
+		setTimestamp(timestamp, time.get());
 		this.index = Item.MENU_ITEM;
 	}
 	
@@ -186,19 +187,19 @@ public class UpdateComputerPage extends Page {
 		this.index = Item.UPDATE_ITEM;
 	}
 	
-	private Page initialChecks(String input) {
+	private Optional<Page> initialChecks(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return this;
+			return Optional.of(this);
 		}
 		
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted]"));
 			this.index = Item.MENU_ITEM;
-			return new MenuPage();
+			return Optional.of(new MenuPage());
 		}
 		
-		return null;
+		return Optional.empty();
 	}
 	
 	private boolean checkStart(String input) {
@@ -213,14 +214,14 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	@Override
-	public Page exec(String input) {
-		Page initialCheckPage = initialChecks(input);
-		if (initialCheckPage != null) {
+	public Optional<Page> exec(String input) {
+		Optional<Page> initialCheckPage = initialChecks(input);
+		if (initialCheckPage.isPresent()) {
 			return initialCheckPage;
 		}
 		
 		if (!checkStart(input)) {
-			return this;
+			return Optional.of(this);
 		}
 		
 		switch (this.index) {
@@ -242,14 +243,14 @@ public class UpdateComputerPage extends Page {
 			
 		case UPDATE_ITEM :
 			execUpdate();
-			return new MenuPage();
+			return Optional.of(new MenuPage());
 			
 		case QUIT_ITEM :
-			return new MenuPage();
+			return Optional.of(new MenuPage());
 			
 		default : break;
 		}
 		
-		return this;
+		return Optional.of(this);
 	}
 }

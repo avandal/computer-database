@@ -1,22 +1,22 @@
 package com.excilys.computer_database.dto;
 
-import java.sql.Timestamp;
-
-import com.excilys.computer_database.model.Company;
-
 public class ComputerDTO {
 	private int id;
 	private String name;
-	private Timestamp introduced;
-	private Timestamp discontinued;
-	private Company company;
+	private String introduced;
+	private String discontinued;
 	
-	public ComputerDTO(int id, String name, Timestamp introduced, Timestamp discontinued, Company company) {
+	private int companyId;
+	private String companyName;
+	
+	public ComputerDTO(int id, String name, String introduced, String discontinued, int companyId, String companyName) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.company = company;
+		
+		this.companyId = companyId;
+		this.companyName = companyName;
 	}
 
 	public int getId() {
@@ -35,31 +35,35 @@ public class ComputerDTO {
 		this.name = name;
 	}
 
-	public Timestamp getIntroduced() {
+	public String getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(Timestamp introduced) {
+	public void setIntroduced(String introduced) {
 		this.introduced = introduced;
 	}
 
-	public Timestamp getDiscontinued() {
+	public String getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(Timestamp discontinued) {
+	public void setDiscontinued(String discontinued) {
 		this.discontinued = discontinued;
 	}
 
-	public Company getCompany() {
-		return company;
+	public int getCompanyId() {
+		return companyId;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
-	
-	public String toString() {
-		return id+" - "+name+", "+introduced+", "+discontinued+", ["+company+"]";
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 }

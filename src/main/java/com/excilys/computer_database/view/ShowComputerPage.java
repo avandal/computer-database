@@ -2,6 +2,8 @@ package com.excilys.computer_database.view;
 
 import static com.excilys.computer_database.util.Util.boxMessage;
 
+import java.util.Optional;
+
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.util.Util;
@@ -23,54 +25,59 @@ public class ShowComputerPage extends Page {
 		return input;
 	}
 
-	private Page initialCheck(String input) {
+	private Optional<Page> initialCheck(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return new ShowComputerPage();
+			return Optional.of(new ShowComputerPage());
 		}
 		
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return new MenuPage();
+			return Optional.of(new MenuPage());
 		}
 		
-		return null;
+		return Optional.empty();
 	}
 
-	private Page invalidInput(Integer idInput) {
-		if (idInput == null) {
+	private Optional<Page> invalidInput(Optional<Integer> idInput) {
+		if (!idInput.isPresent()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return new ShowComputerPage();
+			return Optional.of(new ShowComputerPage());
 		}
 		
-		if (idInput <= 0) {
+		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return new ShowComputerPage();
+			return Optional.of(new ShowComputerPage());
 		}
 		
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
-	public Page exec(String input) {
-		Page next = initialCheck(input);
+	public Optional<Page> exec(String input) {
+		Optional<Page> next = initialCheck(input);
 		
-		if (next != null)
+		if (next.isPresent())
 			return next;
 		
-		Integer idInput = Util.parseInt(input);
+		Optional<Integer> idInput = Util.parseInt(input);
 		
-		Page isInvalid = invalidInput(idInput);
+		Optional<Page> isInvalid = invalidInput(idInput);
 		
-		if (isInvalid != null)
+		if (isInvalid.isPresent())
 			return isInvalid;
 		
-		Computer computer = dao.getComputerDetails(idInput);
-		System.out.println(boxMessage("Here's the "+idInput+" computer"));
-		System.out.println(computer);
+		Optional<Computer> computer = dao.getComputerDetails(idInput.get());
+		
+		if (computer.isPresent()) {
+			System.out.println(boxMessage("Here's the "+idInput.get()+" computer"));
+			System.out.println(computer.get());
+		} else {
+			System.out.println((boxMessage("There is no computer with this id")));
+		}
 		
 		System.out.println(boxMessage(M_BACK_MENU));
 		
-		return new MenuPage();
+		return Optional.of(new MenuPage());
 	}
 }

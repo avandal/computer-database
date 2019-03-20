@@ -2,6 +2,8 @@ package com.excilys.computer_database.view;
 
 import static com.excilys.computer_database.util.Util.boxMessage;
 
+import java.util.Optional;
+
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.util.Util;
 
@@ -23,30 +25,30 @@ public class DeleteComputerPage extends Page {
 	}
 
 	@Override
-	public Page exec(String input) {
+	public Optional<Page> exec(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return new DeleteComputerPage();
+			return Optional.of(new DeleteComputerPage());
 		}
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return new MenuPage();
+			return Optional.of(new MenuPage());
 		}
 
-		Integer idInput = Util.parseInt(input);
+		Optional<Integer> idInput = Util.parseInt(input);
 
-		if (idInput == null) {
+		if (!idInput.isPresent()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return new DeleteComputerPage();
+			return Optional.of(new DeleteComputerPage());
 		}
 
-		if (idInput <= 0) {
+		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return new DeleteComputerPage();
+			return Optional.of(new DeleteComputerPage());
 		}
 
-		int status = dao.deleteComputer(idInput);
+		int status = dao.deleteComputer(idInput.get());
 		
 		if (status == 1) {
 			System.out.println(boxMessage("Computer successfully deleted"));
@@ -54,7 +56,7 @@ public class DeleteComputerPage extends Page {
 			System.out.println(boxMessage("[Problem] Fail deleting computer"));
 		}
 		
-		return new MenuPage();
+		return Optional.of(new MenuPage());
 	}
 
 }
