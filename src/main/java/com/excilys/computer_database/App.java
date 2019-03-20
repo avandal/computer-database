@@ -1,6 +1,6 @@
 package com.excilys.computer_database;
 
-import com.excilys.computer_database.control.Controller;
+import com.excilys.computer_database.control.ControlerCLI;
 
 /**
  * Hello world!
@@ -8,7 +8,7 @@ import com.excilys.computer_database.control.Controller;
  */
 public class App {
 	public static void main(String[] args) {
-		Controller control = new Controller();
+		ControlerCLI control = new ControlerCLI();
 		control.run();
 	}
 }

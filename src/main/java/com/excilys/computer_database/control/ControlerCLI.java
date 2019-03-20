@@ -3,10 +3,10 @@ package com.excilys.computer_database.control;
 import com.excilys.computer_database.view.MenuPage;
 import com.excilys.computer_database.view.Page;
 
-public class Controller {
+public class ControlerCLI {
 	private Page currentPage;
 
-	public Controller() {
+	public ControlerCLI() {
 		this.currentPage = new MenuPage();
 	}
 
