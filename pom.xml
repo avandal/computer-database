@@ -68,5 +68,14 @@
 			<version>2.0.0</version>
 			<scope>test</scope>
 		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/jstl/jstl -->
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
 	</dependencies>
 </project>

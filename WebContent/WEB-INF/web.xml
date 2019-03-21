@@ -4,26 +4,4 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
 	id="WebApp_ID" version="4.0">
 	<display-name>Computer-database</display-name>
-	<servlet>
-		<servlet-name>dashboardServlet</servlet-name>
-		<servlet-class>servlets.Dashboard</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>dashboardServlet</servlet-name>
-		<url-pattern>/dashboard.jsp</url-pattern>
-	</servlet-mapping>
-	<!--
-	<error-page>
-		<error-code>404</error-code>
-		<location>/views/404.html</location>
-	</error-page>
-	<error-page>
-		<error-code>403</error-code>
-		<location>/views/403.html</location>
-	</error-page>
-	<error-page>
-		<error-code>500</error-code>
-		<location>/views/500.html</location>
-	</error-page>
-	-->
 </web-app>

@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@	page import="java.util.List, java.util.Optional" %>
+<%@ page import="com.excilys.computer_database.model.Computer, com.excilys.computer_database.util.Util" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,9 +8,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href=<c:url value = "/resources/css/bootstrap.min.css" /> rel="stylesheet" media="screen">
+<link href=<c:url value = "/resources/css/font-awesome.css" /> rel="stylesheet" media="screen">
+<link href=<c:url value = "/resources/css/main.css" /> rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -19,7 +22,14 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                121 Computers found
+            	<c:choose>
+	            	<c:when test = "${ nbComputers > 0}">
+	                	${ nbComputers } Computers found
+	                </c:when>
+	                <c:otherwise>
+	                	No computer found
+	                </c:otherwise>
+                </c:choose>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -75,150 +85,20 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
+                	<c:forEach items = "${ computerListFiltered }" var="computer">
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
                         </td>
                         <td>
-                            <a href="editComputer.html" onclick="">MacBook Pro</a>
+                            <a href="editComputer.html" onclick="">${ computer.getName() }</a>
                         </td>
-                        <td>2006-01-10</td>
-                        <td></td>
-                        <td>Apple Inc.</td>
+                        <td>${ computer.getIntroduced() }</td>
+                        <td>${ computer.getDiscontinued() }</td>
+                        <td>${ computer.getCompany().getName() }</td>
 
                     </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Connection Machine</a>
-                        </td>
-                        <td>1987-01-01</td>
-                        <td></td>
-                        <td>Thinking Machines</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">PowerBook</a>
-                        </td>
-                        <td>1991-01-01</td>
-                        <td>2006-01-01</td>
-                        <td>Apple Inc.</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Commodore 64</a>
-                        </td>
-                        <td>1982-08-01</td>
-                        <td>1994-01-01</td>
-                        <td>Commodore International</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Altair 8800</a>
-                        </td>
-                        <td>1974-12-19</td>
-                        <td></td>
-                        <td>Micro Instrumentation and Telemetry Systems</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Canon Cat</a>
-                        </td>
-                        <td>1987-01-01</td>
-                        <td></td>
-                        <td>Canon</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Nokia 770</a>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td>Nokia</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">NeXTcube</a>
-                        </td>
-                        <td>1988-01-01</td>
-                        <td>1993-01-01</td>
-                        <td>NeXT</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">IBM 650</a>
-                        </td>
-                        <td>1953-01-01</td>
-                        <td>1962-01-01</td>
-                        <td>IBM</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">PlayStation 2</a>
-                        </td>
-                        <td>2000-03-24</td>
-                        <td></td>
-                        <td>Sony</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Archos 101</a>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Nintendo 3DS</a>
-                        </td>
-                        <td>2010-03-23</td>
-                        <td></td>
-                        <td>Nintendo</td>
-
-                    </tr>
+                    </c:forEach>
                     
                 </tbody>
             </table>
@@ -226,31 +106,47 @@
     </section>
 
     <footer class="navbar-fixed-bottom">
+    	<% 
+    		int index = ((Integer) request.getAttribute("pageIndex"));
+    		int pSize = ((Integer) request.getAttribute("pageSize"));
+    		int nbComp = ((Integer) request.getAttribute("nbComputers"));
+    	%>
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="#" aria-label="Previous">
+                    <a href="dashboard?pageIndex=<%= (index <= 1) ? 1 : (index - 1) %>" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
+              
+              <c:choose>
+              	<c:when test = "${ pageIndex >= 3 }">
+              		<% for (int i = index - 2; i < index + 3; i++) { %>
+              			<li><a href="dashboard?pageIndex=<%= i %>"><%= i %></a></li>
+              		<% } %>
+              	</c:when>
+              	<c:otherwise>
+              		<% for (int i = 1; i <= 5; i++) { %>
+              			<li><a href="dashboard?pageIndex=<%= i %>"><%= i %></a></li>
+              		<% } %>
+              	</c:otherwise>
+              </c:choose>
+              
               <li>
-                <a href="#" aria-label="Next">
+                <a href="dashboard?pageIndex=<% if (index * pSize > nbComp) { %> <%= index %> <% } else { %> <%= (index + 1) } %>" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
-
+		</div>
         <div class="btn-group btn-group-sm pull-right" role="group" >
+        	<button type="button" class="btn btn-default">5</button>
             <button type="button" class="btn btn-default">10</button>
+            <button type="button" class="btn btn-default">20</button>
             <button type="button" class="btn btn-default">50</button>
             <button type="button" class="btn btn-default">100</button>
         </div>
-
+		
     </footer>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
