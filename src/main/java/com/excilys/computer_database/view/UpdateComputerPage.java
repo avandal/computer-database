@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.persistence.ComputerDAO;
+import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
 public class UpdateComputerPage extends Page {
@@ -42,7 +42,7 @@ public class UpdateComputerPage extends Page {
 		}
 	}
 	
-	private ComputerDAO dao;
+	private ComputerService service;
 	
 	private final static String MSG_ID = "Please give a computer id ('abort' to abort)";
 										
@@ -57,7 +57,7 @@ public class UpdateComputerPage extends Page {
 	private Item index = Item.MENU_ITEM;
 	
 	public UpdateComputerPage() {
-		dao = ComputerDAO.getInstance();
+		service = ComputerService.getInstance();
 	}
 	
 	private String currentChanges() {
@@ -113,7 +113,7 @@ public class UpdateComputerPage extends Page {
 			return false;
 		}
 		
-		this.toChange = dao.getComputerDetails(id.get());
+		this.toChange = service.getComputerDetails(id.get());
 		
 		if (!this.toChange.isPresent()) {
 			System.out.println(boxMessage("There is no computer with this id"));
@@ -176,7 +176,7 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private void execUpdate() {
-		int status = dao.updateComputer(idComp, nameComp, introducedComp, discontinuedComp);
+		int status = service.updateComputer(idComp, nameComp, introducedComp, discontinuedComp);
 		
 		if (status == 1) {
 			System.out.println(boxMessage("Computer successfully updated"));

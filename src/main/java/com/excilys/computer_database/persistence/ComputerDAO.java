@@ -17,7 +17,7 @@ import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 
-public class ComputerDAO {
+public class ComputerDAO extends DAO {
 	private static final String SELECT_ALL_COMPUTERS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
 			+ "from computer ct left join company cn on ct.company_id = cn.id";
 
@@ -32,13 +32,18 @@ public class ComputerDAO {
 	
 	private static volatile ComputerDAO instance;
 
-	private ComputerDAO() {}
+	private ComputerDAO(String driver, String url, String user, String password) {
+		DAO.driver = driver;
+		DAO.url = url;
+		DAO.user = user;
+		DAO.password = password;
+	}
 	
-	public static ComputerDAO getInstance() {
+	public static ComputerDAO getInstance(String driver, String url, String user, String password) {
 		if (instance == null) {
 			synchronized(ComputerDAO.class) {
 				if (instance == null) {
-					instance = new ComputerDAO();
+					instance = new ComputerDAO(driver, url, user, password);
 				}
 			}
 		}
@@ -108,7 +113,7 @@ public class ComputerDAO {
 			}
 
 			if (companyId != null) {
-				CompanyDAO companyDAO = CompanyDAO.getInstance();
+				CompanyDAO companyDAO = CompanyDAO.getInstance(driver, url, user, password);
 				
 				Optional<Company> company = companyDAO.getCompanyById(companyId);
 				

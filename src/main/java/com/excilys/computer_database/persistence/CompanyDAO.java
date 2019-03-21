@@ -15,21 +15,23 @@ import org.slf4j.LoggerFactory;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
-public class CompanyDAO {
+public class CompanyDAO extends DAO {
 	public static String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ?";
 	public static String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn";
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
-	private static volatile CompanyDAO instance = new CompanyDAO();
+	private static volatile CompanyDAO instance;
 	
-	private CompanyDAO() {}
+	private CompanyDAO(String driver, String url, String user, String password) {
+		DAO.driver = driver;
+	}
 	
-	public static CompanyDAO getInstance() {
+	public static CompanyDAO getInstance(String driver, String url, String user, String password) {
 		if (instance == null) {
 			synchronized(CompanyDAO.class) {
 				if (instance == null) {
-					instance = new CompanyDAO();
+					instance = new CompanyDAO(driver, url, user, password);
 				}
 			}
 		}

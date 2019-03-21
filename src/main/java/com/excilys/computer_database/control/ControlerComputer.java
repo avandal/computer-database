@@ -3,7 +3,7 @@ package com.excilys.computer_database.control;
 import java.util.List;
 
 import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.persistence.ComputerDAO;
+import com.excilys.computer_database.service.ComputerService;
 
 public class ControlerComputer {
 	
@@ -23,7 +23,7 @@ public class ControlerComputer {
 	}
 	
 	public List<Computer> getAll() {
-		ComputerDAO dao = ComputerDAO.getInstance();
-		return dao.computerList();
+		ComputerService service = ComputerService.getInstance();
+		return service.getAll();
 	}
 }

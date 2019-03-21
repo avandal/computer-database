@@ -4,15 +4,15 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.persistence.ComputerDAO;
+import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
 public class DeleteComputerPage extends Page {
 	
-	private ComputerDAO dao;
+	private ComputerService service;
 
 	public DeleteComputerPage() {
-		dao = ComputerDAO.getInstance();
+		service = ComputerService.getInstance();
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class DeleteComputerPage extends Page {
 			return Optional.of(new DeleteComputerPage());
 		}
 
-		int status = dao.deleteComputer(idInput.get());
+		int status = service.deleteComputer(idInput.get());
 		
 		if (status == 1) {
 			System.out.println(boxMessage("Computer successfully deleted"));

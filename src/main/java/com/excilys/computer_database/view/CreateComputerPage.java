@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import com.excilys.computer_database.persistence.ComputerDAO;
+import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
 public class CreateComputerPage extends Page {
@@ -25,10 +26,10 @@ public class CreateComputerPage extends Page {
 
 	private int index = 1;
 	
-	private ComputerDAO dao;
+	private ComputerService service;
 
 	public CreateComputerPage() {
-		this.dao = ComputerDAO.getInstance();
+		this.service = ComputerService.getInstance();
 	}
 
 	@Override
@@ -130,7 +131,7 @@ public class CreateComputerPage extends Page {
 		}
 
 		if (finished) {
-			int status = dao.createComputer(nameComp, introducedComp, discontinuedComp, companyIdComp);
+			int status = service.createComputer(nameComp, introducedComp, discontinuedComp, companyIdComp);
 			if (status == -2) {
 				System.out.println(boxMessage("[Error] this companyId doesn't exist, " + BACK_MENU));
 			} else if (status <= 0) {

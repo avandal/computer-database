@@ -4,14 +4,14 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.persistence.ComputerDAO;
+import com.excilys.computer_database.service.ComputerService;
 
 public class ListComputerPage extends Page {
 	
-	private ComputerDAO dao;
+	private ComputerService service;
 	
 	public ListComputerPage() {
-		dao = ComputerDAO.getInstance();
+		service = ComputerService.getInstance();
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class ListComputerPage extends Page {
 
 	@Override
 	public Optional<Page> exec(String input) {
-		dao.computerList().forEach(System.out::println);
+		service.getAll().forEach(System.out::println);
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();

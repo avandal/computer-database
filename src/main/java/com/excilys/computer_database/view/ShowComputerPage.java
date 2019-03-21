@@ -5,15 +5,15 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.util.Optional;
 
 import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.persistence.ComputerDAO;
+import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
 public class ShowComputerPage extends Page {
 	
-	private ComputerDAO dao;
+	private ComputerService service;
 
 	public ShowComputerPage() {
-		dao = ComputerDAO.getInstance();
+		service = ComputerService.getInstance();
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ShowComputerPage extends Page {
 		if (isInvalid.isPresent())
 			return isInvalid;
 		
-		Optional<Computer> computer = dao.getComputerDetails(idInput.get());
+		Optional<Computer> computer = service.getComputerDetails(idInput.get());
 		
 		if (computer.isPresent()) {
 			System.out.println(boxMessage("Here's the "+idInput.get()+" computer"));

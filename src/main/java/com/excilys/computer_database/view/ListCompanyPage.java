@@ -4,7 +4,7 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.persistence.CompanyDAO;
+import com.excilys.computer_database.service.CompanyService;
 
 public class ListCompanyPage extends Page {
 
@@ -18,8 +18,8 @@ public class ListCompanyPage extends Page {
 
 	@Override
 	public Optional<Page> exec(String input) {
-		CompanyDAO companyDAO = CompanyDAO.getInstance();
-		companyDAO.companyList().forEach(System.out::println);
+		CompanyService service = CompanyService.getInstance();
+		service.getAll().forEach(System.out::println);
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
