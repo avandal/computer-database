@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.excilys.computer_database.dto.CompanyDTO;
+import com.excilys.computer_database.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 
@@ -22,6 +23,13 @@ public abstract class CompanyMapper {
 		return new CompanyBuilder()
 				.id(dto.getId())
 				.name(dto.getName())
+				.build();
+	}
+	
+	public static CompanyDTO companyToDTO(Company company) {
+		return new CompanyDTOBuilder()
+				.id(company.getId())
+				.name(company.getName())
 				.build();
 	}
 }

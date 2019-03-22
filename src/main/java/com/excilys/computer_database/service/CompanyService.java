@@ -1,8 +1,10 @@
 package com.excilys.computer_database.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.dto.CompanyDTO;
+import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.persistence.CompanyDAO;
 
 public class CompanyService extends Service {
@@ -25,7 +27,7 @@ public class CompanyService extends Service {
 		return instance;
 	}
 	
-	public List<Company> getAll() {
-		return dao.companyList();
+	public List<CompanyDTO> getAll() {
+		return dao.companyList().stream().map(c -> CompanyMapper.companyToDTO(c)).collect(Collectors.toList());
 	}
 }

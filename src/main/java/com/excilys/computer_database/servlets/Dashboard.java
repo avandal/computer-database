@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computer_database.control.ControlerComputer;
+import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.service.ComputerService;
+import com.excilys.computer_database.ui.WebPage;
+import com.excilys.computer_database.ui.WebPageBuilder;
 import com.excilys.computer_database.util.Util;
 
 @WebServlet(name = "Dashboard", urlPatterns = {"/dashboard"})
@@ -23,15 +27,17 @@ public class Dashboard extends HttpServlet {
 	
 	public static final String PAGE_SIZE_PARAM = "pageSize";
 	public static final String PAGE_INDEX_PARAM = "pageIndex";
-	
 	public static final String NB_COMPUTERS = "nbComputers";
 	public static final String LIST_COMP_PARAM_FILTERED = "computerListFiltered";
+	public static final String WEB_PAGE_PARAM = "webPage";
 
 	private PageSize size;
 	private int index;
 	
-	private ControlerComputer controler;
-	private List<Computer> list;
+	private WebPage<ComputerDTO> webPage;
+	private ComputerService service;
+	
+	private List<ComputerDTO> list;
 
 	private int extractPageSize(HttpServletRequest request) {
 		String pageSizeParam = request.getParameter(PAGE_SIZE_PARAM);
@@ -73,21 +79,22 @@ public class Dashboard extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		controler = ControlerComputer.getInstance();
+		service = ComputerService.getInstance();
+		list = service.getAll();
 		
-		list = controler.getAll();
+		request.setAttribute(NB_COMPUTERS, list.size());
 		
 		request.setAttribute(PAGE_SIZE_PARAM, extractPageSize(request));
 		request.setAttribute(PAGE_INDEX_PARAM, extractPageIndex(request));
 		
-		request.setAttribute(NB_COMPUTERS, list.size());
+		webPage = new WebPageBuilder<ComputerDTO>()
+				.list(list)
+				.index(index)
+				.size(size.getSize())
+				.build();
 		
-		List<Computer> filtered = list.stream().filter(
-				c -> c.getId() > (index - 1) * size.getSize() 
-				  && c.getId() <= (index) * size.getSize()
-			).collect(Collectors.toList());
-		
-		request.setAttribute(LIST_COMP_PARAM_FILTERED, filtered);
+		request.setAttribute(WEB_PAGE_PARAM, webPage);
+		webPage.indexPage().forEach(System.out::println);
 		
 		this.getServletContext().getRequestDispatcher(LIST_COMP_VIEW).forward(request, response);
 	}

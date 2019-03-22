@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@	page import="java.util.List, java.util.Optional" %>
-<%@ page import="com.excilys.computer_database.model.Computer, com.excilys.computer_database.util.Util" %>
+<%@ page import="com.excilys.computer_database.dto.ComputerDTO, com.excilys.computer_database.util.Util" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,7 +85,7 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                	<c:forEach items = "${ computerListFiltered }" var="computer">
+                	<c:forEach items = "${ webPage.indexPage() }" var="computer">
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
@@ -95,7 +95,7 @@
                         </td>
                         <td>${ computer.getIntroduced() }</td>
                         <td>${ computer.getDiscontinued() }</td>
-                        <td>${ computer.getCompany().getName() }</td>
+                        <td>${ computer.getCompanyName() }</td>
 
                     </tr>
                     </c:forEach>
@@ -114,7 +114,7 @@
         <div class="container text-center">
             <ul class="pagination">
                 <li>
-                    <a href="dashboard?pageIndex=<%= (index <= 1) ? 1 : (index - 1) %>" aria-label="Previous">
+                    <a href="${webPage.previousPage('dashboard')}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
@@ -133,20 +133,21 @@
               </c:choose>
               
               <li>
-                <a href="dashboard?pageIndex=<% if (index * pSize > nbComp) { %> <%= index %> <% } else { %> <%= (index + 1) } %>" aria-label="Next">
+                <a href="${webPage.nextPage('dashboard')}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
-		</div>
+		
         <div class="btn-group btn-group-sm pull-right" role="group" >
+        	<a href="dashboard/" class="btn btn-default">5</a>
         	<button type="button" class="btn btn-default">5</button>
             <button type="button" class="btn btn-default">10</button>
             <button type="button" class="btn btn-default">20</button>
             <button type="button" class="btn btn-default">50</button>
             <button type="button" class="btn btn-default">100</button>
         </div>
-		
+		</div>
     </footer>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>

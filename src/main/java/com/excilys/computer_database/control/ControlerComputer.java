@@ -22,8 +22,8 @@ public class ControlerComputer {
 		return instance;
 	}
 	
-	public List<Computer> getAll() {
-		ComputerService service = ComputerService.getInstance();
-		return service.getAll();
-	}
+//	public List<Computer> getAll() {
+//		ComputerService service = ComputerService.getInstance();
+//		return service.getAll();
+//	}
 }
