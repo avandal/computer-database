@@ -24,7 +24,7 @@
             <h1 id="homeTitle">
             	<c:choose>
 	            	<c:when test = "${ nbComputers > 0}">
-	                	${ nbComputers } Computers found
+	                	${ nbComputers } Computers found - ${webPage.firstId()}/${webPage.lastId()}
 	                </c:when>
 	                <c:otherwise>
 	                	No computer found
@@ -119,19 +119,9 @@
                   </a>
               </li>
               
-              <c:choose>
-              	<c:when test = "${ pageIndex >= 3 }">
-              		<% for (int i = index - 2; i < index + 3; i++) { %>
-              			<li><a href="dashboard?pageIndex=<%= i %>"><%= i %></a></li>
-              		<% } %>
-              	</c:when>
-              	<c:otherwise>
-              		<% for (int i = 1; i <= 5; i++) { %>
-              			<li><a href="dashboard?pageIndex=<%= i %>"><%= i %></a></li>
-              		<% } %>
-              	</c:otherwise>
-              </c:choose>
-              
+              <c:forEach var = "i" begin = "${webPage.getFirstIndex()}" end = "${webPage.getFirstIndex() + 4}">
+              	<li><a href="${webPage.indexAt('dashboard', i)}">${i}</a></li>
+              </c:forEach>              
               <li>
                 <a href="${webPage.nextPage('dashboard')}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
@@ -140,12 +130,11 @@
         </ul>
 		
         <div class="btn-group btn-group-sm pull-right" role="group" >
-        	<a href="dashboard/" class="btn btn-default">5</a>
-        	<button type="button" class="btn btn-default">5</button>
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">20</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+         
+        	<c:forEach items = "${webPage.sizes()}" var = "pSize">
+        		<a href="${webPage.setPageSize('dashboard', pSize.getSize())}" class="btn btn-default">${pSize.getSize()}</a>
+        	</c:forEach>
+        	 
         </div>
 		</div>
     </footer>

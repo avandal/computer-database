@@ -3,7 +3,6 @@ package com.excilys.computer_database.servlets;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,9 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computer_database.control.ControlerComputer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computer_database.dto.ComputerDTO;
-import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.ui.WebPage;
 import com.excilys.computer_database.ui.WebPageBuilder;
@@ -38,6 +38,8 @@ public class Dashboard extends HttpServlet {
 	private ComputerService service;
 	
 	private List<ComputerDTO> list;
+	
+	private static Logger logger = LoggerFactory.getLogger(Dashboard.class);
 
 	private int extractPageSize(HttpServletRequest request) {
 		String pageSizeParam = request.getParameter(PAGE_SIZE_PARAM);
@@ -47,9 +49,11 @@ public class Dashboard extends HttpServlet {
 			if (pageSize.isPresent()) {
 				size = PageSize.getById(pageSize.get());
 			} else {
+				logger.warn("extractPageSize - Undefined pageSize input, set to default");
 				size = PageSize.SHOW_10;
 			}
 		} else {
+			logger.warn("extractPageSize - pageSize does not exist, set to default");
 			size = PageSize.SHOW_10;
 		}
 
@@ -64,15 +68,16 @@ public class Dashboard extends HttpServlet {
 			if (pageIndex.isPresent()) {
 				index = pageIndex.get();
 				
-				if (index * size.getSize() > list.size()) {
+				if ((index - 1) * size.getSize() > list.size() || index <= 0) {
+					logger.warn("extractPageIndex - Trying to get an invalid page (index out of bound), set to default 1");
 					index = 1;
-					System.out.println("index page out of list range");
 				}
 			} else {
+				logger.warn("extractPageIndex - Undefined pageIndex input, set to default 1");
 				index = 1;
-				System.out.println("Invalid input, set page index to 1");
 			}
 		} else {
+			logger.warn("extractPageIndex - pageIndex does not exist, set to default 1");
 			index = 1;
 		}
 		return index;
@@ -94,7 +99,6 @@ public class Dashboard extends HttpServlet {
 				.build();
 		
 		request.setAttribute(WEB_PAGE_PARAM, webPage);
-		webPage.indexPage().forEach(System.out::println);
 		
 		this.getServletContext().getRequestDispatcher(LIST_COMP_VIEW).forward(request, response);
 	}

@@ -4,7 +4,7 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
@@ -67,7 +67,7 @@ public class ShowComputerPage extends Page {
 		if (isInvalid.isPresent())
 			return isInvalid;
 		
-		Optional<Computer> computer = service.getComputerDetails(idInput.get());
+		Optional<ComputerDTO> computer = service.getComputerDetails(idInput.get());
 		
 		if (computer.isPresent()) {
 			System.out.println(boxMessage("Here's the "+idInput.get()+" computer"));

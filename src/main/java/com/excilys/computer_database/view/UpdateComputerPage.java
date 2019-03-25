@@ -5,6 +5,8 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+import com.excilys.computer_database.dto.ComputerDTO;
+import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
@@ -113,12 +115,14 @@ public class UpdateComputerPage extends Page {
 			return false;
 		}
 		
-		this.toChange = service.getComputerDetails(id.get());
+		Optional<ComputerDTO> toChange = service.getComputerDetails(id.get());
 		
-		if (!this.toChange.isPresent()) {
+		if (!toChange.isPresent()) {
 			System.out.println(boxMessage("There is no computer with this id"));
 			return false;
 		}
+		
+		this.toChange = Optional.of(ComputerMapper.dtoToComputer(toChange.get()));
 		
 		this.idComp = id.get();
 		
