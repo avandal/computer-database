@@ -95,6 +95,17 @@ public class ComputerDAO extends DAO {
 	}
 
 	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+		if (companyId != null) {
+			CompanyDAO companyDAO = CompanyDAO.getInstance(driver, url, user, password);
+			
+			Optional<Company> company = companyDAO.getCompanyById(companyId);
+			
+			if (!company.isPresent()) {
+				logger.error("'createComputer' method - This company id doesn't exist.");
+				return -2;
+			}
+		}
+		
 		try (Connection con = DAO.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(INSERT_COMPUTER);) {
 			
@@ -113,16 +124,7 @@ public class ComputerDAO extends DAO {
 			}
 
 			if (companyId != null) {
-				CompanyDAO companyDAO = CompanyDAO.getInstance(driver, url, user, password);
-				
-				Optional<Company> company = companyDAO.getCompanyById(companyId);
-				
-				if (company.isPresent()) {
-					stmt.setInt(4, companyId);
-				} else {
-					logger.error("'createComputer' method - This company id doesn't exist.");
-					return -2;
-				}
+				stmt.setInt(4, companyId);
 			} else {
 				stmt.setNull(4, Types.INTEGER);
 			}

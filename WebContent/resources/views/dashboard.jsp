@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@	page import="java.util.List, java.util.Optional" %>
-<%@ page import="com.excilys.computer_database.dto.ComputerDTO, com.excilys.computer_database.util.Util" %>
+<%@ page import="com.excilys.computer_database.dto.ComputerDTO" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +14,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href=<c:url value = "dashboard" />> Application - Computer Database </a>
         </div>
     </header>
 
@@ -41,7 +40,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href=<c:url value = "addComputer" />>Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>

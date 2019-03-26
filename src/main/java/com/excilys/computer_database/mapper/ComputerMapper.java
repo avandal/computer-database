@@ -2,13 +2,14 @@ package com.excilys.computer_database.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.Optional;
 
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
+import com.excilys.computer_database.util.Util;
 
 public abstract class ComputerMapper {
 
@@ -24,19 +25,43 @@ public abstract class ComputerMapper {
 				.build();
 	}
 
-	public static Computer dtoToComputer(ComputerDTO dto) {
-		return new ComputerBuilder()
-				.id(dto.getId())
-				.name(dto.getName())
-				.introduced(Timestamp.valueOf(dto.getIntroduced()))
-				.discontinued(Timestamp.valueOf(dto.getDiscontinued()))
-				.company(new Company(dto.getCompanyId(), dto.getCompanyName()))
-				.build();
+	public static Optional<Computer> dtoToComputer(ComputerDTO dto) {
+		ComputerBuilder builder = new ComputerBuilder();
+		
+		if (dto.getId() == null || !Util.parseInt(dto.getId()).isPresent()) {
+			return Optional.empty();
+		}
+		builder.id(Util.parseInt(dto.getId()).get());
+		
+		if (dto.getName() == null || dto.getName().isEmpty()) {
+			return Optional.empty();
+		}
+		builder.name(dto.getName());
+		
+		if (dto.getIntroduced() == null || !Util.parseTimestamp(dto.getIntroduced()).isPresent()) {
+			return Optional.empty();
+		}
+		builder.introduced(Util.parseTimestamp(dto.getIntroduced()).get());
+		
+		if (dto.getDiscontinued() == null || !Util.parseTimestamp(dto.getDiscontinued()).isPresent()) {
+			return Optional.empty();
+		}
+		builder.discontinued(Util.parseTimestamp(dto.getDiscontinued()).get());
+		
+		if (dto.getCompanyId() != null && Util.parseInt(dto.getCompanyId()).isPresent()) {
+			builder.company(new Company(Util.parseInt(dto.getCompanyId()).get(), null));
+			
+			Computer computer = builder.build();
+			
+			return Optional.of(computer);
+		} else {
+			return Optional.empty();
+		}
 	}
 	
 	public static ComputerDTO computerToDTO(Computer computer) {
 		ComputerDTOBuilder builder = new ComputerDTOBuilder().empty();
-		builder.id(computer.getId()).name(computer.getName());
+		builder.id(Integer.toString(computer.getId())).name(computer.getName());
 		
 		if (computer.getIntroduced() != null) {
 			builder.introduced(computer.getIntroduced().toString());
@@ -45,7 +70,7 @@ public abstract class ComputerMapper {
 			builder.discontinued(computer.getDiscontinued().toString());
 		}
 		if (computer.getCompany() != null) {
-			builder.companyId(computer.getCompany().getId());
+			builder.companyId(Integer.toString(computer.getCompany().getId()));
 			builder.companyName(computer.getCompany().getName());
 		}
 		

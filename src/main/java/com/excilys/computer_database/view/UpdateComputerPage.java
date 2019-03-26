@@ -122,7 +122,7 @@ public class UpdateComputerPage extends Page {
 			return false;
 		}
 		
-		this.toChange = Optional.of(ComputerMapper.dtoToComputer(toChange.get()));
+		this.toChange = ComputerMapper.dtoToComputer(toChange.get());
 		
 		this.idComp = id.get();
 		

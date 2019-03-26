@@ -1,6 +1,10 @@
 package com.excilys.computer_database.util;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 public abstract class Util {
@@ -17,6 +21,18 @@ public abstract class Util {
 		try {
 			return Optional.of(Timestamp.valueOf(input));
 		} catch (IllegalArgumentException e) {
+			return Optional.empty();
+		}
+	}
+	
+	public static Optional<Timestamp> dateToTimestamp(String input) {
+		try {
+			System.out.println(input);
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = format.parse(input);
+			
+			return Optional.of(new Timestamp(date.getTime()));
+		} catch (ParseException e) {
 			return Optional.empty();
 		}
 	}

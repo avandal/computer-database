@@ -1,18 +1,15 @@
 package com.excilys.computer_database.dto;
 
-import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.model.ComputerBuilder;
-
 public class ComputerDTOBuilder {
-	private int id;
+	private String id;
 	private String name;
 	private String introduced;
 	private String discontinued;
 	
-	private int companyId;
+	private String companyId;
 	private String companyName;
 	
-	public ComputerDTOBuilder id(int id) {
+	public ComputerDTOBuilder id(String id) {
 		this.id = id;
 		return this;
 	}
@@ -32,7 +29,7 @@ public class ComputerDTOBuilder {
 		return this;
 	}
 	
-	public ComputerDTOBuilder companyId(int companyId) {
+	public ComputerDTOBuilder companyId(String companyId) {
 		this.companyId = companyId;
 		return this;
 	}
@@ -43,11 +40,11 @@ public class ComputerDTOBuilder {
 	}
 	
 	public ComputerDTOBuilder empty() {
-		id = 0;
+		id = null;
 		name = null;
 		introduced = null;
 		discontinued = null;
-		companyId = 0;
+		companyId = null;
 		companyName = null;
 		return this;
 	}

@@ -1,15 +1,15 @@
 package com.excilys.computer_database.dto;
 
 public class ComputerDTO {
-	private int id;
+	private String id;
 	private String name;
 	private String introduced;
 	private String discontinued;
 	
-	private int companyId;
+	private String companyId;
 	private String companyName;
 	
-	public ComputerDTO(int id, String name, String introduced, String discontinued, int companyId, String companyName) {
+	public ComputerDTO(String id, String name, String introduced, String discontinued, String companyId, String companyName) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -19,11 +19,11 @@ public class ComputerDTO {
 		this.companyName = companyName;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -51,11 +51,11 @@ public class ComputerDTO {
 		this.discontinued = discontinued;
 	}
 
-	public int getCompanyId() {
+	public String getCompanyId() {
 		return companyId;
 	}
 
-	public void setCompanyId(int companyId) {
+	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
 	}
 
