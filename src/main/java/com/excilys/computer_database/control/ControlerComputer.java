@@ -1,10 +1,5 @@
 package com.excilys.computer_database.control;
 
-import java.util.List;
-
-import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.service.ComputerService;
-
 public class ControlerComputer {
 	
 	private static volatile ControlerComputer instance;

@@ -1,59 +1,42 @@
 //package com.excilys.computer_database.persistence;
 //
-//import static org.powermock.api.mockito.PowerMockito.mockStatic;
-//import static org.powermock.api.mockito.PowerMockito.when;
+//import java.io.FileInputStream;
+//import java.util.List;
 //
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//
+//import org.dbunit.DBTestCase;
+//import org.dbunit.PropertiesBasedJdbcDatabaseTester;
+//import org.dbunit.dataset.IDataSet;
+//import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 //import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.Mock;
-//import org.powermock.core.classloader.annotations.PrepareForTest;
-//import org.powermock.modules.junit4.PowerMockRunner;
 //
-//import com.excilys.computer_database.mapper.CompanyMapper;
 //import com.excilys.computer_database.model.Company;
 //
-//import junit.framework.TestCase;
-//
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest(CompanyDAO.class)
-//public class CompanyDAOTest extends TestCase {
+//public class CompanyDAOTest extends DBTestCase {
 //	
-//	CompanyDAO companyDao;
+//	private static final String ROOT_URL = "src/test/java/com/excilys/computer_database/";
 //	
-//	@Mock
-//	Connection con;
+//	private CompanyDAO dao;
 //	
-//	@Mock
-//	ResultSet res;
-//	
-//	@Mock
-//	PreparedStatement stmt;
-//	
-//	@Mock
-//	Company company;
-//	
-//
-//	@Test
-//	public void testGetCompanyById() throws SQLException {
-//		mockStatic(DAO.class);
-////		
-////		dao = mock(DAO.class, Mockito.CALLS_REAL_METHODS);
+//	public CompanyDAOTest() {
+//		super();
 //		
-//		companyDao = CompanyDAO.getInstance();
+//		dao = CompanyDAO.getInstance();
 //		
-//		when(DAO.getConnection()).thenReturn(con);
-//		when(con.prepareStatement(CompanyDAO.SELECT_ONE_COMPANY)).thenReturn(stmt);
-//		when(stmt.executeQuery()).thenReturn(res);
-//		
-//		Company company = new Company(1, "A random name");
-//		when(CompanyMapper.resultSetCompany(res)).thenReturn(company.copy());
-//		when(companyDao.getCompanyById(company.getId())).thenReturn(this.company);
-//		
-//		assertEquals(company, this.company);
+//		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, DAO.DRIVER);
+//        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, DAO.URL);
+//        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, DAO.USER);
+//        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, DAO.PASSWORD);
+//        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_SCHEMA, "");
 //	}
+//
+//	@Override
+//	protected IDataSet getDataSet() throws Exception {
+//		return new FlatXmlDataSetBuilder().build(new FileInputStream(ROOT_URL + "data.xml"));
+//	}
+//	
+//	@Test
+//    public void testGetAll() {
+//		List<Company> companies = dao.companyList();
+//		assertEquals(companies.size(), 3);
+//    }
 //}

@@ -11,17 +11,18 @@ import org.slf4j.LoggerFactory;
 public abstract class DAO {
 	private static Connection connection = null;
 	
-	protected static String driver;
-	protected static String url;
-	protected static String user;
-	protected static String password;
+	protected static final String DATABASE = "computer-database-db";
+	protected static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+	protected static final String URL = "jdbc:mysql://localhost:3306/" + DATABASE;
+	protected static final String USER = "admincdb";
+	protected static final String PASSWORD = "qwerty1234";
 	
 	private static Logger logger = LoggerFactory.getLogger(DAO.class);
 	
 	private static void initConnection() {
 		try {
-			Class.forName(driver);
-			connection = DriverManager.getConnection(url, user, password);
+			Class.forName(DRIVER);
+			connection = DriverManager.getConnection(URL, USER, PASSWORD);
 		} catch (ClassNotFoundException e) {
 			logger.error("initConnection - Class not found");
 			e.printStackTrace();

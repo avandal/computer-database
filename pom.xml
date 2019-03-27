@@ -15,14 +15,16 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<mysql>8.0.15</mysql>
-		<junit>4.12</junit>
-		<slf4j>1.8.0-beta4</slf4j>
-		<mockito>2.25.0</mockito>
-		<powermock-core>1.7.0</powermock-core>
-		<powermock-api>1.7.0</powermock-api>
-		<powermock>2.0.0</powermock>
+		<dbunit>2.6.0</dbunit>
 		<jstl>1.2</jstl>
+		<junit>4.12</junit>
+		<mockito>2.25.0</mockito>
+		<mysql>8.0.15</mysql>
+		<powermock>2.0.0</powermock>
+		<powermock-api>1.7.0</powermock-api>
+		<powermock-core>1.7.0</powermock-core>
+		<servlet>3.0.1</servlet>
+		<slf4j>1.8.0-beta4</slf4j>
 	</properties>
 
 	<dependencies>
@@ -85,5 +87,19 @@
 			<version>${jstl}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.dbunit/dbunit -->
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>${dbunit}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

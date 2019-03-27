@@ -23,18 +23,13 @@ public class CompanyDAO extends DAO {
 	
 	private static volatile CompanyDAO instance;
 	
-	private CompanyDAO(String driver, String url, String user, String password) {
-		DAO.driver = driver;
-		DAO.url = url;
-		DAO.user = user;
-		DAO.password = password;
-	}
+	private CompanyDAO() {}
 	
-	public static CompanyDAO getInstance(String driver, String url, String user, String password) {
+	public static CompanyDAO getInstance() {
 		if (instance == null) {
 			synchronized(CompanyDAO.class) {
 				if (instance == null) {
-					instance = new CompanyDAO(driver, url, user, password);
+					instance = new CompanyDAO();
 				}
 			}
 		}

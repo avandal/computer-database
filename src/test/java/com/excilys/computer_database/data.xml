@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<company id="1" name="Apple Inc." />
+	<company id="2" name="Thinking Machines" />
+	<company id="3" name="RCA" />
+
+	<computer id="1" name="MacBook Pro 15.4 inch" introduced="" discontinued="" company_id="" />
+	<computer id="2" name="CM-2a" introduced="" discontinued="" company_id="2" />
+	<computer id="3" name="CM-200" introduced="" discontinued="" company_id="2" />
+	<computer id="4" name="titi" introduced="1991-12-12 20:00:00" discontinued="" company_id="2" />
+	<computer id="5" name="Apple IIe" introduced="" discontinued="" company_id="" />
+</dataset>

@@ -32,18 +32,13 @@ public class ComputerDAO extends DAO {
 	
 	private static volatile ComputerDAO instance;
 
-	private ComputerDAO(String driver, String url, String user, String password) {
-		DAO.driver = driver;
-		DAO.url = url;
-		DAO.user = user;
-		DAO.password = password;
-	}
+	private ComputerDAO() {}
 	
-	public static ComputerDAO getInstance(String driver, String url, String user, String password) {
+	public static ComputerDAO getInstance() {
 		if (instance == null) {
 			synchronized(ComputerDAO.class) {
 				if (instance == null) {
-					instance = new ComputerDAO(driver, url, user, password);
+					instance = new ComputerDAO();
 				}
 			}
 		}
@@ -68,7 +63,7 @@ public class ComputerDAO extends DAO {
 			logger.error("computerList - SQL error, incomplete list");
 			e.printStackTrace();
 		}
-
+		
 		return computer_list;
 	}
 
@@ -96,7 +91,7 @@ public class ComputerDAO extends DAO {
 
 	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		if (companyId != null) {
-			CompanyDAO companyDAO = CompanyDAO.getInstance(driver, url, user, password);
+			CompanyDAO companyDAO = CompanyDAO.getInstance();
 			
 			Optional<Company> company = companyDAO.getCompanyById(companyId);
 			

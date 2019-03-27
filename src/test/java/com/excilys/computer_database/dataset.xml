@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<table name="company">
+		<column>id</column>
+		<column>name</column>
+		<row>
+			<value>1</value>
+			<value>Apple Inc.</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Think Machines</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>RCA</value>
+		</row>
+	</table>
+	<table name="computer">
+		<column>id</column>
+		<column>name</column>
+		<column>introduced</column>
+		<column>discontinued</column>
+		<column>company_id</column>
+		<row>
+			<value>1</value>
+			<value>MacBook Pro 15.4 inch</value>
+			<null />
+			<null />
+			<value>1</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>CM-2a</value>
+			<null />
+			<null />
+			<value>2</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>CM-200</value>
+			<null />
+			<null />
+			<value>2</value>
+		</row>
+		<row>
+			<value>4</value>
+			<value>titi</value>
+			<value>1991-12-12 20:00:00</value>
+			<null />
+			<value>2</value>
+		</row>
+		<row>
+			<value>5</value>
+			<value>Apple IIe</value>
+			<null />
+			<null />
+			<null />
+		</row>
+	</table>
+</dataset>
