@@ -13,34 +13,38 @@ public class WebPage<T> {
 	private int index;
 	private int size;
 	
+	private String url;
+	
 	private static Logger logger = LoggerFactory.getLogger(WebPage.class);
 	
-	public WebPage(List<T> list, int index, int size) {
+	public WebPage(List<T> list, int index, int size, String url) {
 		this.list = list;
 		this.index = index;
 		this.size = size;
+		
+		this.url = url;
 	}
 	
-	private String formatUrl(String url, int index, int size) {
+	private String formatUrl(int index, int size) {
 		return String.format("%s?%s=%d&%s=%d", url, Dashboard.PAGE_INDEX_PARAM, index, Dashboard.PAGE_SIZE_PARAM, size);
 	}
 	
-	public String previousPage(String url) {
+	public String previousPage() {
 		int newPage = (index > 1) ? index - 1 : 1;
-		return formatUrl(url, newPage, size);
+		return formatUrl(newPage, size);
 	}
 	
-	public String nextPage(String url) {		
+	public String nextPage() {		
 		int newPage = (index * size < list.size()) ? index + 1 : index;
-		return formatUrl(url, newPage, size);
+		return formatUrl(newPage, size);
 	}
 	
-	public String indexAt(String url, int index) {
-		return formatUrl(url, index, size);
+	public String indexAt(int index) {
+		return formatUrl(index, size);
 	}
 	
-	public String setPageSize(String url, int size) {
-		return formatUrl(url, 1, size);
+	public String setPageSize(int size) {
+		return formatUrl(1, size);
 	}
 	
 	public PageSize[] sizes() {
@@ -70,25 +74,6 @@ public class WebPage<T> {
 	
 	public List<T> indexPage() {
 		return list.subList((index - 1) * size, lastId());
-	}
-	
-	public List<T> getList() {
-		return list;
-	}
-	public void setList(List<T> list) {
-		this.list = list;
-	}
-	public int getIndex() {
-		return index;
-	}
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	public int getSize() {
-		return size;
-	}
-	public void setSize(int size) {
-		this.size = size;
 	}
 	
 	

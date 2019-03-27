@@ -108,15 +108,15 @@
     	%>
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="${webPage.previousPage('dashboard')}"
+				<li><a href="${webPage.previousPage()}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 
 				<c:forEach var="i" begin="${webPage.getFirstIndex()}"
 					end="${webPage.getFirstIndex() + 4}">
-					<li><a href="${webPage.indexAt('dashboard', i)}">${i}</a></li>
+					<li><a href="${webPage.indexAt(i)}">${i}</a></li>
 				</c:forEach>
-				<li><a href="${webPage.nextPage('dashboard')}"
+				<li><a href="${webPage.nextPage()}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
@@ -124,16 +124,16 @@
 			<div class="btn-group btn-group-sm pull-right" role="group">
 
 				<c:forEach items="${webPage.sizes()}" var="pSize">
-					<a href="${webPage.setPageSize('dashboard', pSize.getSize())}"
+					<a href="${webPage.setPageSize(pSize.getSize())}"
 						class="btn btn-default">${pSize.getSize()}</a>
 				</c:forEach>
 
 			</div>
 		</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="resources/js/jquery.min.js"></script>
+	<script src="resources/js/bootstrap.min.js"></script>
+	<script src="resources/js/dashboard.js"></script>
 
 </body>
 </html>

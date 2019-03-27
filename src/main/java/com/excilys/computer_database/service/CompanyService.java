@@ -7,13 +7,13 @@ import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.persistence.CompanyDAO;
 
-public class CompanyService extends Service {
+public class CompanyService {
 	private CompanyDAO dao;
 	
 	private static volatile CompanyService instance;
 	
 	private CompanyService() {
-		this.dao = CompanyDAO.getInstance(DRIVER, URL, USER, PASSWORD);
+		this.dao = CompanyDAO.getInstance();
 	}
 	
 	public static CompanyService getInstance() {

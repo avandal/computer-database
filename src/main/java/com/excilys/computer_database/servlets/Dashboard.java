@@ -96,6 +96,7 @@ public class Dashboard extends HttpServlet {
 				.list(list)
 				.index(index)
 				.size(size.getSize())
+				.url("dashboard")
 				.build();
 		
 		request.setAttribute(WEB_PAGE_PARAM, webPage);

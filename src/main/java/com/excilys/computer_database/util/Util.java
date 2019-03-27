@@ -27,13 +27,19 @@ public abstract class Util {
 	
 	public static Optional<Timestamp> dateToTimestamp(String input) {
 		try {
-			System.out.println(input);
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = format.parse(input);
 			
 			return Optional.of(new Timestamp(date.getTime()));
 		} catch (ParseException e) {
-			return Optional.empty();
+			try {
+				DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+				Date date = format.parse(input);
+				
+				return Optional.of(new Timestamp(date.getTime()));
+			} catch (ParseException e1) {
+				return Optional.empty();
+			}
 		}
 	}
 	

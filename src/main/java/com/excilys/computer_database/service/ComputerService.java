@@ -1,7 +1,6 @@
 package com.excilys.computer_database.service;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,13 +12,13 @@ import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.service.exception.FailCreateException;
 import com.excilys.computer_database.util.Util;
 
-public class ComputerService extends Service {
+public class ComputerService {
 	private ComputerDAO dao;
 	
 	private static volatile ComputerService instance;
 	
 	private ComputerService() {
-		this.dao = ComputerDAO.getInstance(DRIVER, URL, USER, PASSWORD);
+		this.dao = ComputerDAO.getInstance();
 	}
 	
 	public static ComputerService getInstance() {
@@ -54,11 +53,34 @@ public class ComputerService extends Service {
 		if (name == null) {
 			throw new FailCreateException("Name cannot be empty");
 		}
-		if (!Util.dateToTimestamp(introduced).isPresent()) {
-			throw new FailCreateException("Introduced must be in a valid format");
-		}
-		if (!Util.dateToTimestamp(discontinued).isPresent()) {
-			throw new FailCreateException("Discontinued must be in a valid format");
+		
+		Timestamp retIntroduced = null;
+		Timestamp retDiscontinued = null;
+		
+		if ("".equals(introduced)) {
+			if (!"".equals(discontinued)) {
+				throw new FailCreateException("If the introduced date is null, the discontinued date must be null too");
+			}
+		} else {
+			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
+			
+			if (!optIntroduced.isPresent()) {
+				throw new FailCreateException("Introduced must be in a valid format");
+			}
+			retIntroduced = optIntroduced.get();
+			
+			if (!"".equals(discontinued)) {
+				Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
+				
+				if (!optDiscontinued.isPresent()) {
+					throw new FailCreateException("Discontinued must be in a valid format");
+				}
+				retDiscontinued = optDiscontinued.get();
+				
+				if (retIntroduced.after(retDiscontinued)) {
+					throw new FailCreateException("Discontinued must be after introduced");
+				}
+			}
 		}
 		if (!Util.parseInt(companyId).isPresent()) {
 			throw new FailCreateException("Invalid company id");
@@ -66,8 +88,8 @@ public class ComputerService extends Service {
 		
 		return createComputer(
 				name, 
-				Util.dateToTimestamp(introduced).get(), 
-				Util.dateToTimestamp(discontinued).get(),
+				retIntroduced, 
+				retDiscontinued,
 				Integer.parseInt(companyId) == 0 ? null : Integer.parseInt(companyId)
 			);
 	}

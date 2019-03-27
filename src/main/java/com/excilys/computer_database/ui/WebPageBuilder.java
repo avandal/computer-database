@@ -7,6 +7,8 @@ public class WebPageBuilder<T> {
 	private int index;
 	private int size;
 	
+	private String url;
+	
 	public WebPageBuilder<T> list(List<T> list) {
 		this.list = list;
 		return this;
@@ -22,7 +24,12 @@ public class WebPageBuilder<T> {
 		return this;
 	}
 	
+	public WebPageBuilder<T> url(String url) {
+		this.url = url;
+		return this;
+	}
+	
 	public WebPage<T> build() {
-		return new WebPage<T>(list, index, size);
+		return new WebPage<T>(list, index, size, url);
 	}
 }
