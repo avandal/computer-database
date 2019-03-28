@@ -1,18 +1,24 @@
 package com.excilys.computer_database.util;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class Util {
+	private static Logger logger = LoggerFactory.getLogger(Util.class);
 	
 	public static Optional<Integer> parseInt(String input) {
 		try {
 			return Optional.of(Integer.parseInt(input));
 		} catch (NumberFormatException e) {
+			logger.warn("parseInt - invalid input: " + input);
 			return Optional.empty();
 		}
 	}
@@ -21,26 +27,27 @@ public abstract class Util {
 		try {
 			return Optional.of(Timestamp.valueOf(input));
 		} catch (IllegalArgumentException e) {
+			logger.warn("parseTimestamp - Invalid input: " + input);
 			return Optional.empty();
 		}
 	}
 	
 	public static Optional<Timestamp> dateToTimestamp(String input) {
-		try {
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = format.parse(input);
-			
-			return Optional.of(new Timestamp(date.getTime()));
-		} catch (ParseException e) {
+		List<String> formats = Arrays.asList("dd/MM/yyyy", "yyyy-MM-dd");
+	
+		for (String format : formats) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 			try {
-				DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-				Date date = format.parse(input);
+				LocalDate parsedDate = LocalDate.parse(input, formatter);
+				Timestamp time = Timestamp.valueOf(parsedDate.atStartOfDay());
 				
-				return Optional.of(new Timestamp(date.getTime()));
-			} catch (ParseException e1) {
-				return Optional.empty();
+				return Optional.of(time);
+			} catch (DateTimeParseException e) {
+				logger.warn("dateToTimestamp - Invalid input `" + input + "` with this format: " + format);
 			}
 		}
+		
+		return Optional.empty();
 	}
 	
 	private static int sizeMax(String[] lines) {
