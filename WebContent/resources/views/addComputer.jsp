@@ -16,7 +16,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="dashboard"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -29,36 +29,96 @@
 					<form action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
+								<label for="computerName">Computer name</label> 
+								<input
 									type="text" name="computerName" class="form-control"
-									id="computerName" placeholder="Computer name" required>
-								<div id="errorName" class="alert alert-danger"></div>
+									id="computerName" placeholder="Computer name"
+									value="${computerName}" required>
+								<c:choose>
+									<c:when test = "${not empty errorName}">
+								<div id="errorName" class="alert alert-danger">
+									${errorName}
+								</div>
+									</c:when>
+									<c:otherwise>
+								<div id="errorName" class="alert alert-danger" style="display: none">
+								</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date <br /> <small
-									class="text-muted">(Please follow these formats: 
-									<i>dd/mm/yyyy</i> or <i>yyyy-mm-dd</i>)
-								</small></label> <input type="text" name="introduced" class="form-control"
-									id="introduced" placeholder="Introduced date">
-								<div id="errorIntroduced" class="alert alert-danger"
-									style="display: none"></div>
+								<label for="introduced">Introduced date <br />
+									<small class="text-muted">(Please follow these formats: 
+										<i>dd/mm/yyyy</i> or <i>yyyy-mm-dd</i>)
+									</small>
+								</label>
+								<input type="text" name="introduced" class="form-control"
+									id="introduced" placeholder="Introduced date"
+									value="${introduced}">
+								<c:choose>
+									<c:when test = "${not empty errorIntroduced}">
+								<div id="errorIntroduced" class="alert alert-danger">
+									${errorIntroduced}
+								</div>
+									</c:when>
+									<c:otherwise>
+								<div id="errorIntroduced" class="alert alert-danger" style="display: none">
+								</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date <br /> <small
-									class="text-muted">(Please follow these formats: 
-									<i>dd/mm/yyyy</i> or <i>yyyy-mm-dd</i>)
-								</small></label> <input type="text" name="discontinued" class="form-control"
-									id="discontinued" placeholder="Discontinued date">
-								<div id="errorDiscontinued" class="alert alert-danger"
-									style="display: none"></div>
+								<label for="discontinued">Discontinued date <br />
+									<small class="text-muted">(Please follow these formats: 
+										<i>dd/mm/yyyy</i> or <i>yyyy-mm-dd</i>)
+									</small>
+								</label>
+								<input type="text" name="discontinued" class="form-control"
+									id="discontinued" placeholder="Discontinued date"
+									value="${discontinued}">
+								<c:choose>
+									<c:when test = "${not empty errorDiscontinued}">
+								<div id="errorDiscontinued" class="alert alert-danger">
+									${errorDiscontinued}
+								</div>
+									</c:when>
+									<c:otherwise>
+								<div id="errorDiscontinued" class="alert alert-danger" style="display: none">
+								</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
+									${companyId}
+								<label for="companyId">Company</label>
+								<select
 									class="form-control" name="companyId" id="companyId">
 									<c:forEach items="${companyList}" var="company">
-										<option value="${company.getId()}">${company.getName()}</option>
+										<c:choose>
+										<c:when test="${companyId == null || companyId eq '0'}">
+											<option value="${company.getId()}" 
+												<c:if test="${company.getId() eq '0'}">selected="selected"</c:if>
+											>${company.getName()}</option>
+										</c:when>
+										<c:otherwise>
+											<option value="${company.getId()}" 
+												<c:if test="${company.getId() eq companyId}">selected="selected"</c:if>
+											>${company.getName()}</option>
+										</c:otherwise>
+										</c:choose>
 									</c:forEach>
 								</select>
+								<c:choose>
+									<c:when test = "${not empty errorCompany}">
+								<div id="errorCompany" class="alert alert-danger">
+									${errorCompany}
+								</div>
+									</c:when>
+									<c:otherwise>
+								<div id="errorCompany" class="alert alert-danger" style="display: none">
+								</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">

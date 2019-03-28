@@ -24,6 +24,16 @@ public class AddComputer extends HttpServlet {
 	
 	private static final String LIST_COMP_PARAM = "companyList";
 	private static final String STATUS_CREATE_PARAM = "status";
+	
+	private static final String NAME_PARAM = "computerName";
+	private static final String INTR_PARAM = "introduced";
+	private static final String DISC_PARAM = "discontinued";
+	private static final String COMP_PARAM = "companyId";
+	
+	private static final String ERROR_NAME = "errorName";
+	private static final String ERROR_INTR = "errorIntroduced";
+	private static final String ERROR_DISC = "errorDiscontinued";
+	private static final String ERROR_COMP = "errorCompany";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CompanyService service = CompanyService.getInstance();
@@ -40,10 +50,15 @@ public class AddComputer extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("computerName");
-		String introduced = request.getParameter("introduced");
-		String discontinued = request.getParameter("discontinued");
-		String company = request.getParameter("companyId");
+		String name = request.getParameter(NAME_PARAM);
+		String introduced = request.getParameter(INTR_PARAM);
+		String discontinued = request.getParameter(DISC_PARAM);
+		String company = request.getParameter(COMP_PARAM);
+		
+		request.setAttribute(NAME_PARAM, name);
+		request.setAttribute(INTR_PARAM, introduced);
+		request.setAttribute(DISC_PARAM, discontinued);
+		request.setAttribute(COMP_PARAM, company);
 		
 		ComputerService service = ComputerService.getInstance();
 		try {
@@ -54,11 +69,19 @@ public class AddComputer extends HttpServlet {
 			} else {
 				request.setAttribute(STATUS_CREATE_PARAM, "success");
 			}
+			
+			response.sendRedirect("dashboard");
 		} catch (FailCreateException e) {
+			switch (e.getConcerned()) {
+			case NAME : request.setAttribute(ERROR_NAME, e.getReason());break;
+			case INTRODUCED: request.setAttribute(ERROR_INTR, e.getReason());break;
+			case DISCONTINUED : request.setAttribute(ERROR_DISC, e.getReason());break;
+			case COMPANY : request.setAttribute(ERROR_COMP, e.getReason());break;
+			}
 			request.setAttribute(STATUS_CREATE_PARAM, "failed");
 			e.printStackTrace();
+			
+			doGet(request, response);
 		}
-		
-		doGet(request, response);
 	}
 }
