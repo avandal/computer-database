@@ -33,11 +33,13 @@ function errDiv(errElement, message) {
 		errElement
 		.empty()
 		.hide();
+		errElement.parent().removeClass("has-error").addClass("has-success");
 	} else {
 		errElement
 		.empty()
 		.append(message)
 		.show();
+		errElement.parent().removeClass("has-success").addClass("has-error");
 	}
 	
 	enableAdd();
