@@ -30,6 +30,7 @@ public class Dashboard extends HttpServlet {
 	public static final String NB_COMPUTERS = "nbComputers";
 	public static final String LIST_COMP_PARAM_FILTERED = "computerListFiltered";
 	public static final String WEB_PAGE_PARAM = "webPage";
+	public static final String SEARCH_PARAM = "search";
 
 	private PageSize size;
 	private int index;
@@ -85,7 +86,10 @@ public class Dashboard extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		service = ComputerService.getInstance();
-		list = service.getAll();
+		
+		String search = request.getParameter(SEARCH_PARAM);
+		
+		list = search == null || search.equals("") ? service.getAll() : service.searchByName(search);
 		
 		request.setAttribute(NB_COMPUTERS, list.size());
 		
@@ -96,6 +100,7 @@ public class Dashboard extends HttpServlet {
 				.list(list)
 				.index(index)
 				.size(size.getSize())
+				.search(search)
 				.url("dashboard")
 				.build();
 		

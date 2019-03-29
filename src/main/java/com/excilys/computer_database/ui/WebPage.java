@@ -12,39 +12,44 @@ public class WebPage<T> {
 	private List<T> list;
 	private int index;
 	private int size;
+	private String search;
 	
 	private String url;
 	
 	private static Logger logger = LoggerFactory.getLogger(WebPage.class);
 	
-	public WebPage(List<T> list, int index, int size, String url) {
+	public WebPage(List<T> list, int index, int size, String url, String search) {
 		this.list = list;
 		this.index = index;
 		this.size = size;
+		this.search = search;
 		
 		this.url = url;
 	}
 	
-	private String formatUrl(int index, int size) {
-		return String.format("%s?%s=%d&%s=%d", url, Dashboard.PAGE_INDEX_PARAM, index, Dashboard.PAGE_SIZE_PARAM, size);
+	private String formatUrl(int index, int size, String search) {
+		return String.format("%s?%s=%d&%s=%d&%s=%s", url, 
+				Dashboard.PAGE_INDEX_PARAM, index, 
+				Dashboard.PAGE_SIZE_PARAM, size, 
+				Dashboard.SEARCH_PARAM, search);
 	}
 	
 	public String previousPage() {
 		int newPage = (index > 1) ? index - 1 : 1;
-		return formatUrl(newPage, size);
+		return formatUrl(newPage, size, search);
 	}
 	
 	public String nextPage() {		
 		int newPage = (index * size < list.size()) ? index + 1 : index;
-		return formatUrl(newPage, size);
+		return formatUrl(newPage, size, search);
 	}
 	
 	public String indexAt(int index) {
-		return formatUrl(index, size);
+		return formatUrl(index, size, search);
 	}
 	
 	public String setPageSize(int size) {
-		return formatUrl(1, size);
+		return formatUrl(1, size, search);
 	}
 	
 	public PageSize[] sizes() {

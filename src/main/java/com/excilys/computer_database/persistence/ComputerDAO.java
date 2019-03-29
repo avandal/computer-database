@@ -23,6 +23,8 @@ public class ComputerDAO extends DAO {
 
 	private static final String SELECT_COMPUTER_DETAILS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
 			+ "from computer ct left join company cn on ct.company_id = cn.id where ct.id = ?";
+	private static final String SELECT_BY_NAME = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
+			+ "from computer ct left join company cn on ct.company_id = cn.id where ct.name like ? or cn.name like ?";
 
 	private static final String INSERT_COMPUTER = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
 	private static final String UPDATE_COMPUTER = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
@@ -86,6 +88,28 @@ public class ComputerDAO extends DAO {
 			e.printStackTrace();
 		}
 
+		return ret;
+	}
+	
+	public ArrayList<Computer> getByName(String name) {
+		ArrayList<Computer> ret = new ArrayList<>();
+		
+		try (Connection con = DAO.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(SELECT_BY_NAME);) {
+			
+			stmt.setString(1, "%" + name + "%");
+			stmt.setString(2, "%" + name + "%");
+			
+			try (ResultSet res = stmt.executeQuery();) {
+				while (res.next()) {
+					ret.add(ComputerMapper.resultSetComputer(res));
+				}
+			}
+		} catch (SQLException e) {
+			logger.error("getByName - SQL error");
+			e.printStackTrace();
+		}
+		
 		return ret;
 	}
 

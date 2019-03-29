@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
@@ -114,6 +113,10 @@ public class ComputerService {
 		}
 		
 		throw new FailCreateException(ConcernedField.COMPANY, FailCreateException.NONEXISTENT_COMPANY);
+	}
+	
+	public List<ComputerDTO> searchByName(String name) {
+		return dao.getByName(name).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
 	public int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued) {
