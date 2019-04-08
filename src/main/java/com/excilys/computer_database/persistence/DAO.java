@@ -12,8 +12,9 @@ public abstract class DAO {
 	private static Connection connection = null;
 	
 	protected static final String DATABASE = "computer-database-db";
+	protected static final String TIMEZONE = "?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	protected static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	protected static final String URL = "jdbc:mysql://localhost:3306/" + DATABASE;
+	protected static final String URL = "jdbc:mysql://localhost:3306/" + DATABASE + TIMEZONE;
 	protected static final String USER = "admincdb";
 	protected static final String PASSWORD = "qwerty1234";
 	

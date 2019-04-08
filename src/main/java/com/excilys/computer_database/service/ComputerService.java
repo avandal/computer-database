@@ -13,7 +13,7 @@ import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.service.exception.ConcernedField;
-import com.excilys.computer_database.service.exception.FailCreateException;
+import com.excilys.computer_database.service.exception.FailComputerException;
 import com.excilys.computer_database.util.Util;
 
 public class ComputerService {
@@ -55,10 +55,10 @@ public class ComputerService {
 		return dao.createComputer(name, introduced, discontinued, companyId);
 	}
 	
-	public int createComputer(String name, String introduced, String discontinued, String companyId) throws FailCreateException {
+	public int createComputer(String name, String introduced, String discontinued, String companyId) throws FailComputerException {
 		if ("".equals(name)) {
 			logger.warn("createComputer - Empty name");
-			throw new FailCreateException(ConcernedField.NAME, FailCreateException.NULL_NAME);
+			throw new FailComputerException(ConcernedField.NAME, FailComputerException.NULL_NAME);
 		}
 		
 		Timestamp retIntroduced = null;
@@ -67,14 +67,14 @@ public class ComputerService {
 		if ("".equals(introduced)) {
 			if (!"".equals(discontinued)) {
 				logger.warn("createComputer - Discontinued without introduced");
-				throw new FailCreateException(ConcernedField.DISCONTINUED, FailCreateException.DISC_WITHOUT_INTRO);
+				throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_WITHOUT_INTRO);
 			}
 		} else {
 			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
 			
 			if (!optIntroduced.isPresent()) {
 				logger.warn("createComputer - Introduced: Wrong format");
-				throw new FailCreateException(ConcernedField.INTRODUCED, FailCreateException.WRONG_FORMAT);
+				throw new FailComputerException(ConcernedField.INTRODUCED, FailComputerException.WRONG_FORMAT);
 			}
 			retIntroduced = optIntroduced.get();
 			
@@ -83,13 +83,13 @@ public class ComputerService {
 				
 				if (!optDiscontinued.isPresent()) {
 					logger.warn("createComputer - Discontinued: Wrong format");
-					throw new FailCreateException(ConcernedField.DISCONTINUED, FailCreateException.WRONG_FORMAT);
+					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.WRONG_FORMAT);
 				}
 				retDiscontinued = optDiscontinued.get();
 				
 				if (retIntroduced.after(retDiscontinued)) {
 					logger.warn("createComputer - Discontinued less then introduced");
-					throw new FailCreateException(ConcernedField.DISCONTINUED, FailCreateException.DISC_LESS_THAN_INTRO);
+					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_LESS_THAN_INTRO);
 				}
 			}
 		}
@@ -97,7 +97,7 @@ public class ComputerService {
 		Optional<Integer> optCompanyId = Util.parseInt(companyId);
 		if (!optCompanyId.isPresent()) {
 			logger.warn("createComputer - Invalid company id");
-			throw new FailCreateException(ConcernedField.COMPANY, FailCreateException.INVALID_COMPANY_ID);
+			throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.INVALID_COMPANY_ID);
 		}
 		
 		int intCompanyId = optCompanyId.get();
@@ -112,15 +112,77 @@ public class ComputerService {
 			return createComputer(name, retIntroduced, retDiscontinued, intCompanyId);
 		}
 		
-		throw new FailCreateException(ConcernedField.COMPANY, FailCreateException.NONEXISTENT_COMPANY);
+		logger.warn("createComputer - nonexistent company");
+		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
 	public List<ComputerDTO> searchByName(String name) {
 		return dao.getByName(name).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
-	public int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued) {
-		return dao.updateComputer(id, name, introduced, discontinued);
+	public int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+		return dao.updateComputer(id, name, introduced, discontinued, companyId);
+	}
+	
+	public int updateComputer(int id, String name, String introduced, String discontinued, String companyId) throws FailComputerException {
+		if ("".equals(name)) {
+			logger.warn("updateComputer - Empty name");
+			throw new FailComputerException(ConcernedField.NAME, FailComputerException.NULL_NAME);
+		}
+		
+		Timestamp retIntroduced = null;
+		Timestamp retDiscontinued = null;
+		
+		if ("".equals(introduced)) {
+			if (discontinued != null && !"".equals(discontinued)) {
+				logger.warn("updateComputer - Discontinued without introduced");
+				throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_WITHOUT_INTRO);
+			}
+		} else {
+			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
+			
+			if (!optIntroduced.isPresent()) {
+				logger.warn("updateComputer - Introduced: Wrong format");
+				throw new FailComputerException(ConcernedField.INTRODUCED, FailComputerException.WRONG_FORMAT);
+			}
+			retIntroduced = optIntroduced.get();
+			
+			if (discontinued != null && !"".equals(discontinued)) {
+				Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
+				
+				if (!optDiscontinued.isPresent()) {
+					logger.warn("updateComputer - Discontinued: Wrong format");
+					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.WRONG_FORMAT);
+				}
+				retDiscontinued = optDiscontinued.get();
+				
+				if (retIntroduced.after(retDiscontinued)) {
+					logger.warn("updateComputer - Discontinued less then introduced");
+					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_LESS_THAN_INTRO);
+				}
+			}
+		}
+		
+		Optional<Integer> optCompanyId = Util.parseInt(companyId);
+		if (!optCompanyId.isPresent()) {
+			logger.warn("updateComputer - Invalid company id");
+			throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.INVALID_COMPANY_ID);
+		}
+		
+		int intCompanyId = optCompanyId.get();
+		
+		if (intCompanyId <= 0) {
+			return updateComputer(id, name, retIntroduced, retDiscontinued, null);
+		}
+		
+		CompanyService companyService = CompanyService.getInstance();
+		
+		if (companyService.getById(intCompanyId).isPresent()) {
+			return updateComputer(id, name, retIntroduced, retDiscontinued, intCompanyId);
+		}
+		
+		logger.warn("updateComputer - Nonexistent company");
+		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
 	public int deleteComputer(int id) {

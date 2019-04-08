@@ -226,10 +226,12 @@ var checkDiscontinued = function() {
 
 $(document).ready(function() {
 	checkName();
+	checkIntroduced();
+	checkDiscontinued();
 
-	$("#discontinued").attr("disabled", true);
+//	$("#discontinued").attr("disabled", !checkIntroduced());
 	
-	$("#computerName").on("change paste keyup cut", checkName);
-	$("#introduced").on("change paste keyup cut", checkIntroduced);
-	$("#discontinued").on("change paste keyup cut", checkDiscontinued);
+	$("#computerName").on("load change paste keyup cut", checkName);
+	$("#introduced").on("load change paste keyup cut", checkIntroduced);
+	$("#discontinued").on("load change paste keyup cut", checkDiscontinued);
 });

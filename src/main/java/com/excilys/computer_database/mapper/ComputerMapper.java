@@ -64,10 +64,10 @@ public abstract class ComputerMapper {
 		builder.id(Integer.toString(computer.getId())).name(computer.getName());
 		
 		if (computer.getIntroduced() != null) {
-			builder.introduced(computer.getIntroduced().toString());
+			builder.introduced(Util.timestampToDate(computer.getIntroduced()));
 		}
 		if (computer.getDiscontinued() != null) {
-			builder.discontinued(computer.getDiscontinued().toString());
+			builder.discontinued(Util.timestampToDate(computer.getDiscontinued()));
 		}
 		if (computer.getCompany() != null) {
 			builder.companyId(Integer.toString(computer.getCompany().getId()));

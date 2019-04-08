@@ -2,7 +2,7 @@ package com.excilys.computer_database.service.exception;
 
 import com.excilys.computer_database.util.Util;
 
-public class FailCreateException extends Exception {
+public class FailComputerException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String NULL_NAME = "The computer must have a name.";
@@ -23,7 +23,7 @@ public class FailCreateException extends Exception {
 	private ConcernedField concerned;
 	private String reason;
 	
-	public FailCreateException(ConcernedField concerned, String reason) {
+	public FailComputerException(ConcernedField concerned, String reason) {
 		this.concerned = concerned;
 		this.reason = reason;
 	}

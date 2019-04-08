@@ -180,7 +180,7 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private void execUpdate() {
-		int status = service.updateComputer(idComp, nameComp, introducedComp, discontinuedComp);
+		int status = service.updateComputer(idComp, nameComp, introducedComp, discontinuedComp, null);
 		
 		if (status == 1) {
 			System.out.println(boxMessage("Computer successfully updated"));

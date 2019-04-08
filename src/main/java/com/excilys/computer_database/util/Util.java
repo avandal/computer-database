@@ -50,6 +50,17 @@ public abstract class Util {
 		return Optional.empty();
 	}
 	
+	public static String timestampToDate(Timestamp time) {
+		String timeFormat = "yyyy-MM-dd hh:mm:ss.n";
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timeFormat);
+		LocalDate parsedDate = LocalDate.parse(time.toString(), timeFormatter);
+		
+		String dateFormat = "dd/MM/yyyy";
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
+		String ret = parsedDate.format(dateFormatter);
+		return ret;
+	}
+	
 	private static int sizeMax(String[] lines) {
 		if (lines == null || lines.length <= 0) return 0;
 		

@@ -27,7 +27,7 @@ public class ComputerDAO extends DAO {
 			+ "from computer ct left join company cn on ct.company_id = cn.id where ct.name like ? or cn.name like ?";
 
 	private static final String INSERT_COMPUTER = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
-	private static final String UPDATE_COMPUTER = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
+	private static final String UPDATE_COMPUTER = "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?";
 	private static final String DELETE_COMPUTER = "delete from computer where id = ?";
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
@@ -159,7 +159,18 @@ public class ComputerDAO extends DAO {
 		return -1;
 	}
 
-	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued) {
+	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+		if (companyId != null) {
+			CompanyDAO companyDAO = CompanyDAO.getInstance();
+			
+			Optional<Company> company = companyDAO.getCompanyById(companyId);
+			
+			if (!company.isPresent()) {
+				logger.error("'updateComputer' method - This company id doesn't exist.");
+				return -2;
+			}
+		}
+		
 		try (Connection con = DAO.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(UPDATE_COMPUTER);) {
 			
@@ -176,7 +187,14 @@ public class ComputerDAO extends DAO {
 			} else {
 				stmt.setNull(3, java.sql.Types.TIMESTAMP);
 			}
-			stmt.setInt(4, computerId);
+			
+			if (companyId != null) {
+				stmt.setInt(4, companyId);
+			} else {
+				stmt.setNull(4, java.sql.Types.INTEGER);
+			}
+			
+			stmt.setInt(5, computerId);
 
 			int status = stmt.executeUpdate();
 
