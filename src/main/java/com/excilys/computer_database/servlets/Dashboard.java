@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.service.ComputerService;
+import com.excilys.computer_database.service.exception.FailComputerException;
 import com.excilys.computer_database.ui.WebPage;
 import com.excilys.computer_database.ui.WebPageBuilder;
 import com.excilys.computer_database.util.Util;
@@ -110,6 +111,18 @@ public class Dashboard extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String[] toDelete = request.getParameterValues("cb");
+		
+		if (toDelete != null) {
+			for (String computerId : toDelete) {
+				try {
+					service.deleteComputer(computerId);
+				} catch (FailComputerException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		doGet(request, response);
 	}
 }

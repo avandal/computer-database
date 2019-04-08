@@ -51,7 +51,7 @@ public class ComputerService {
 		return Optional.empty();
 	}
 	
-	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+	private int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		return dao.createComputer(name, introduced, discontinued, companyId);
 	}
 	
@@ -120,7 +120,7 @@ public class ComputerService {
 		return dao.getByName(name).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
-	public int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+	private int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		return dao.updateComputer(id, name, introduced, discontinued, companyId);
 	}
 	
@@ -185,7 +185,17 @@ public class ComputerService {
 		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
-	public int deleteComputer(int id) {
+	private int deleteComputer(int id) {
 		return dao.deleteComputer(id);
+	}
+	
+	public int deleteComputer(String id) throws FailComputerException {
+		Optional<Integer> optId = Util.parseInt(id);
+		
+		if (optId.isPresent()) {
+			return deleteComputer(optId.get());
+		}
+		
+		throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);
 	}
 }

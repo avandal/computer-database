@@ -5,6 +5,8 @@ import com.excilys.computer_database.util.Util;
 public class FailComputerException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
+	public static final String ID_ERROR = "The given id isn't correct.";
+	
 	public static final String NULL_NAME = "The computer must have a name.";
 	
 	public static final String OUT_OF_RANGE = "The given year is out of reasonable range.";

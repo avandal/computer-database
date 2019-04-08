@@ -1,7 +1,7 @@
 package com.excilys.computer_database.service.exception;
 
 public enum ConcernedField {
-	NAME("name"), INTRODUCED("introduced"), DISCONTINUED("discontinued"), COMPANY("company");
+	ID("id"), NAME("name"), INTRODUCED("introduced"), DISCONTINUED("discontinued"), COMPANY("company");
 	
 	private String value;
 	

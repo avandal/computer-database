@@ -110,6 +110,7 @@ public class EditComputer extends HttpServlet {
 			case INTRODUCED: request.setAttribute(ERROR_INTR, e.getReason());break;
 			case DISCONTINUED : request.setAttribute(ERROR_DISC, e.getReason());break;
 			case COMPANY : request.setAttribute(ERROR_COMP, e.getReason());break;
+			default : break;
 			}
 			e.printStackTrace();
 			
