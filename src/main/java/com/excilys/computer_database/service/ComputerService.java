@@ -14,6 +14,7 @@ import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.service.exception.ConcernedField;
 import com.excilys.computer_database.service.exception.FailComputerException;
+import com.excilys.computer_database.servlets.SortMode;
 import com.excilys.computer_database.util.Util;
 
 public class ComputerService {
@@ -38,8 +39,12 @@ public class ComputerService {
 		return instance;
 	}
 	
-	public List<ComputerDTO> getAll() {
-		return dao.computerList().stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
+	public List<ComputerDTO> getAll(SortMode orderMode) {		
+		return dao.computerList(orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
+	}
+	
+	public List<ComputerDTO> searchByName(String name, SortMode orderMode) {
+		return dao.getByName(name, orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
 	public Optional<ComputerDTO> getComputerDetails(int id) {
@@ -51,7 +56,7 @@ public class ComputerService {
 		return Optional.empty();
 	}
 	
-	private int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		return dao.createComputer(name, introduced, discontinued, companyId);
 	}
 	
@@ -116,11 +121,7 @@ public class ComputerService {
 		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
-	public List<ComputerDTO> searchByName(String name) {
-		return dao.getByName(name).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
-	}
-	
-	private int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+	public int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		return dao.updateComputer(id, name, introduced, discontinued, companyId);
 	}
 	
@@ -185,7 +186,7 @@ public class ComputerService {
 		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
-	private int deleteComputer(int id) {
+	public int deleteComputer(int id) {
 		return dao.deleteComputer(id);
 	}
 	

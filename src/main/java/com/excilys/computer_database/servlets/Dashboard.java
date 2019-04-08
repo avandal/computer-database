@@ -32,6 +32,7 @@ public class Dashboard extends HttpServlet {
 	public static final String LIST_COMP_PARAM_FILTERED = "computerListFiltered";
 	public static final String WEB_PAGE_PARAM = "webPage";
 	public static final String SEARCH_PARAM = "search";
+	public static final String ORDER_PARAM = "order";
 
 	private PageSize size;
 	private int index;
@@ -89,8 +90,10 @@ public class Dashboard extends HttpServlet {
 		service = ComputerService.getInstance();
 		
 		String search = request.getParameter(SEARCH_PARAM);
+		String order = request.getParameter(ORDER_PARAM);
+		SortMode mode = SortMode.getByValue(order);
 		
-		list = search == null || search.equals("") ? service.getAll() : service.searchByName(search);
+		list = search == null || search.equals("") ? service.getAll(mode) : service.searchByName(search, mode);
 		
 		request.setAttribute(NB_COMPUTERS, list.size());
 		
@@ -102,6 +105,7 @@ public class Dashboard extends HttpServlet {
 				.index(index)
 				.size(size.getSize())
 				.search(search)
+				.order(order)
 				.url("dashboard")
 				.build();
 		

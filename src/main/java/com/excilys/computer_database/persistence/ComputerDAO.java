@@ -47,12 +47,12 @@ public class ComputerDAO extends DAO {
 		return instance;
 	}
 
-	public ArrayList<Computer> computerList() {
+	public ArrayList<Computer> computerList(String order) {
 		ArrayList<Computer> computer_list = new ArrayList<>();
 
 		try (Connection con = DAO.getConnection();
 			 Statement stmt = con.createStatement();
-			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPUTERS);) {
+			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPUTERS + " " + order);) {
 			
 			while (res.next()) {
 				Computer computer = ComputerMapper.resultSetComputer(res);
@@ -91,11 +91,11 @@ public class ComputerDAO extends DAO {
 		return ret;
 	}
 	
-	public ArrayList<Computer> getByName(String name) {
+	public ArrayList<Computer> getByName(String name, String order) {
 		ArrayList<Computer> ret = new ArrayList<>();
 		
 		try (Connection con = DAO.getConnection();
-			 PreparedStatement stmt = con.prepareStatement(SELECT_BY_NAME);) {
+			 PreparedStatement stmt = con.prepareStatement(SELECT_BY_NAME + " " + order);) {
 			
 			stmt.setString(1, "%" + name + "%");
 			stmt.setString(2, "%" + name + "%");

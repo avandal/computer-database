@@ -7,6 +7,7 @@ public class WebPageBuilder<T> {
 	private int index;
 	private int size;
 	private String search;
+	private String order;
 	
 	private String url;
 	
@@ -30,12 +31,17 @@ public class WebPageBuilder<T> {
 		return this;
 	}
 	
+	public WebPageBuilder<T> order(String order) {
+		this.order = order;
+		return this;
+	}
+	
 	public WebPageBuilder<T> url(String url) {
 		this.url = url;
 		return this;
 	}
 	
 	public WebPage<T> build() {
-		return new WebPage<T>(list, index, size, url, search);
+		return new WebPage<T>(list, index, size, url, search, order);
 	}
 }

@@ -27,3 +27,12 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+.sort-mode {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.sort-mode>li {
+	vertical-align: middle;
+}

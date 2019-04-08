@@ -70,13 +70,44 @@
 										class="fa fa-trash-o fa-lg"></i>
 								</a>
 							</span></th>
-							<th>Computer name</th>
-							<th>Introduced date</th>
+							<th>
+								<ul class="list-inline sort-mode">
+									<li>
+										<a href="${webPage.orderByNameDesc()}" title="Sort by name"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByNameAsc()}" title="Sort by name"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+									</li>
+									<li>Computer name</li>
+								</ul>
+							</th>
+							<th>
+								<ul class="list-inline sort-mode">
+									<li>
+										<a href="${webPage.orderByIntroDesc()}" title="Sort by introduced date"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByIntroAsc()}" title="Sort by introduced date"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+									</li>
+									<li>Introduced date</li>
+								</ul>
+							</th>
 							<!-- Table header for Discontinued Date -->
-							<th>Discontinued date</th>
+							<th>
+								<ul class="list-inline sort-mode">
+									<li>
+										<a href="${webPage.orderByDiscDesc()}" title="Sort by discontinued date"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByDiscAsc()}" title="Sort by discontinued date"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+									</li>
+									<li>Discontinued date</li>
+								</ul>
+							</th>
 							<!-- Table header for Company -->
-							<th>Company</th>
-	
+							<th>
+								<ul class="list-inline sort-mode">
+									<li>
+										<a href="${webPage.orderByCompDesc()}" title="Sort by company name"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByCompAsc()}" title="Sort by company name"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+									</li>
+									<li>Company</li>
+								</ul>
+							</th>
 						</tr>
 					</thead>
 					<!-- Browse attribute computers -->
