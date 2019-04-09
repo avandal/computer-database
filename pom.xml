@@ -25,6 +25,7 @@
 		<powermock-core>1.7.0</powermock-core>
 		<servlet>3.0.1</servlet>
 		<slf4j>1.8.0-beta4</slf4j>
+		<Hikari>3.3.1</Hikari>
 	</properties>
 
 	<dependencies>
@@ -100,6 +101,12 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet}</version>
 			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${Hikari}</version>
 		</dependency>
 	</dependencies>
 </project>

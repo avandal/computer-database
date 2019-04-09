@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
-public class CompanyDAO extends DAO {
+public class CompanyDAO {
 	public static final String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ?";
 	public static final String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn";
 	
@@ -23,13 +23,17 @@ public class CompanyDAO extends DAO {
 	
 	private static volatile CompanyDAO instance;
 	
-	private CompanyDAO() {}
+	private String datasource;
 	
-	public static CompanyDAO getInstance() {
+	private CompanyDAO(String datasource) {
+		this.datasource = datasource;
+	}
+	
+	public static CompanyDAO getInstance(String datasource) {
 		if (instance == null) {
 			synchronized(CompanyDAO.class) {
 				if (instance == null) {
-					instance = new CompanyDAO();
+					instance = new CompanyDAO(datasource);
 				}
 			}
 		}
@@ -40,7 +44,7 @@ public class CompanyDAO extends DAO {
 		
 		Optional<Company> company = Optional.empty();
 		
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 PreparedStatement stmt = con.prepareStatement(SELECT_ONE_COMPANY);) {
 			
 			stmt.setInt(1, id);
@@ -65,7 +69,7 @@ public class CompanyDAO extends DAO {
 	public List<Company> companyList() {
 		ArrayList<Company> ret = new ArrayList<>();
 		
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 Statement stmt = con.createStatement();
 			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPANIES);) {
 			

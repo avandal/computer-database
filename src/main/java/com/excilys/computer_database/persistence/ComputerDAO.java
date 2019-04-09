@@ -17,7 +17,7 @@ import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 
-public class ComputerDAO extends DAO {
+public class ComputerDAO {
 	private static final String SELECT_ALL_COMPUTERS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
 			+ "from computer ct left join company cn on ct.company_id = cn.id";
 
@@ -33,14 +33,18 @@ public class ComputerDAO extends DAO {
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	private static volatile ComputerDAO instance;
-
-	private ComputerDAO() {}
 	
-	public static ComputerDAO getInstance() {
+	private String datasource;
+
+	private ComputerDAO(String datasource) {
+		this.datasource = datasource;
+	}
+	
+	public static ComputerDAO getInstance(String datasource) {
 		if (instance == null) {
 			synchronized(ComputerDAO.class) {
 				if (instance == null) {
-					instance = new ComputerDAO();
+					instance = new ComputerDAO(datasource);
 				}
 			}
 		}
@@ -50,7 +54,7 @@ public class ComputerDAO extends DAO {
 	public ArrayList<Computer> computerList(String order) {
 		ArrayList<Computer> computer_list = new ArrayList<>();
 
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 Statement stmt = con.createStatement();
 			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPUTERS + " " + order);) {
 			
@@ -72,7 +76,7 @@ public class ComputerDAO extends DAO {
 	public Optional<Computer> getComputerDetails(int computerId) {
 		Optional<Computer> ret = Optional.empty();
 
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 PreparedStatement stmt = con.prepareStatement(SELECT_COMPUTER_DETAILS);) {
 			
 			stmt.setInt(1, computerId);
@@ -94,7 +98,7 @@ public class ComputerDAO extends DAO {
 	public ArrayList<Computer> getByName(String name, String order) {
 		ArrayList<Computer> ret = new ArrayList<>();
 		
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 PreparedStatement stmt = con.prepareStatement(SELECT_BY_NAME + " " + order);) {
 			
 			stmt.setString(1, "%" + name + "%");
@@ -115,7 +119,7 @@ public class ComputerDAO extends DAO {
 
 	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		if (companyId != null) {
-			CompanyDAO companyDAO = CompanyDAO.getInstance();
+			CompanyDAO companyDAO = CompanyDAO.getInstance(datasource);
 			
 			Optional<Company> company = companyDAO.getCompanyById(companyId);
 			
@@ -125,7 +129,7 @@ public class ComputerDAO extends DAO {
 			}
 		}
 		
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 PreparedStatement stmt = con.prepareStatement(INSERT_COMPUTER);) {
 			
 			stmt.setString(1, name);
@@ -161,7 +165,7 @@ public class ComputerDAO extends DAO {
 
 	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		if (companyId != null) {
-			CompanyDAO companyDAO = CompanyDAO.getInstance();
+			CompanyDAO companyDAO = CompanyDAO.getInstance(datasource);
 			
 			Optional<Company> company = companyDAO.getCompanyById(companyId);
 			
@@ -171,7 +175,7 @@ public class ComputerDAO extends DAO {
 			}
 		}
 		
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 PreparedStatement stmt = con.prepareStatement(UPDATE_COMPUTER);) {
 			
 			stmt.setString(1, name);
@@ -207,7 +211,7 @@ public class ComputerDAO extends DAO {
 	}
 
 	public int deleteComputer(int computerId) {
-		try (Connection con = DAO.getConnection();
+		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
 			 PreparedStatement stmt = con.prepareStatement(DELETE_COMPUTER);) {
 			
 			stmt.setInt(1, computerId);

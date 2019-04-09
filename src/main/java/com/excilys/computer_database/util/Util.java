@@ -51,7 +51,7 @@ public abstract class Util {
 	}
 	
 	public static String timestampToDate(Timestamp time) {
-		String timeFormat = "yyyy-MM-dd hh:mm:ss.n";
+		String timeFormat = "yyyy-MM-dd HH:mm:ss.n";
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timeFormat);
 		LocalDate parsedDate = LocalDate.parse(time.toString(), timeFormatter);
 		

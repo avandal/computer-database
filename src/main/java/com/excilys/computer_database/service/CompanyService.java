@@ -14,15 +14,15 @@ public class CompanyService {
 	
 	private static volatile CompanyService instance;
 	
-	private CompanyService() {
-		this.dao = CompanyDAO.getInstance();
+	private CompanyService(String datasource) {
+		this.dao = CompanyDAO.getInstance(datasource);
 	}
 	
-	public static CompanyService getInstance() {
+	public static CompanyService getInstance(String datasource) {
 		if (instance == null) {
 			synchronized(CompanyService.class) {
 				if (instance == null) {
-					instance = new CompanyService();
+					instance = new CompanyService(datasource);
 				}
 			}
 		}

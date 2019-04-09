@@ -6,7 +6,11 @@ import com.excilys.computer_database.util.Util;
 
 public class MenuPage extends Page {
 	
-	public MenuPage() {}
+	private String datasource;
+	
+	public MenuPage(String datasource) {
+		this.datasource = datasource;
+	}
 
 	@Override
 	public String show() {
@@ -27,7 +31,7 @@ public class MenuPage extends Page {
 	private Page wrongTyped() {
 		System.out.println(Util.boxMessage("Error typing, " + BACK_MENU));
 		System.out.println();
-		return new MenuPage();
+		return new MenuPage(datasource);
 	}
 
 	@Override
@@ -42,27 +46,27 @@ public class MenuPage extends Page {
 			
 			switch (choice.get()) {
 			case 1 :
-				pageReturn = Optional.of(new ListComputerPage());
+				pageReturn = Optional.of(new ListComputerPage(datasource));
 				break;
 			
 			case 2 : 
-				pageReturn = Optional.of(new ListCompanyPage());
+				pageReturn = Optional.of(new ListCompanyPage(datasource));
 				break;
 			
 			case 3 :
-				pageReturn = Optional.of(new ShowComputerPage());
+				pageReturn = Optional.of(new ShowComputerPage(datasource));
 				break;
 			
 			case 4 : 
-				pageReturn = Optional.of(new CreateComputerPage());
+				pageReturn = Optional.of(new CreateComputerPage(datasource));
 				break;
 				
 			case 5 : 
-				pageReturn = Optional.of(new UpdateComputerPage());
+				pageReturn = Optional.of(new UpdateComputerPage(datasource));
 				break;
 			
 			case 6 :
-				pageReturn = Optional.of(new DeleteComputerPage());
+				pageReturn = Optional.of(new DeleteComputerPage(datasource));
 				break;
 			
 			case 7 : 

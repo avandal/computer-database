@@ -27,9 +27,12 @@ public class CreateComputerPage extends Page {
 	private int index = 1;
 	
 	private ComputerService service;
+	
+	private String datasource;
 
-	public CreateComputerPage() {
-		this.service = ComputerService.getInstance();
+	public CreateComputerPage(String datasource) {
+		this.datasource = datasource;
+		this.service = ComputerService.getInstance(datasource);
 	}
 
 	@Override
@@ -112,7 +115,7 @@ public class CreateComputerPage extends Page {
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(new MenuPage());
+			return Optional.of(new MenuPage(datasource));
 		}
 
 		boolean next = false;
@@ -140,7 +143,7 @@ public class CreateComputerPage extends Page {
 				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));
 			}
 
-			return Optional.of(new MenuPage());
+			return Optional.of(new MenuPage(datasource));
 		}
 
 		if (next) {

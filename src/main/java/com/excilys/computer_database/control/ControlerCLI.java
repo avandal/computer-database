@@ -2,6 +2,7 @@ package com.excilys.computer_database.control;
 
 import java.util.Optional;
 
+import com.excilys.computer_database.App;
 import com.excilys.computer_database.view.MenuPage;
 import com.excilys.computer_database.view.Page;
 
@@ -9,7 +10,7 @@ public class ControlerCLI {
 	private Page currentPage;
 
 	public ControlerCLI() {
-		this.currentPage = new MenuPage();
+		this.currentPage = new MenuPage(App.DATASOURCE);
 	}
 
 	public void run() {

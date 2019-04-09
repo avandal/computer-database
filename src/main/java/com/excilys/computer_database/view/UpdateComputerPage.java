@@ -58,8 +58,11 @@ public class UpdateComputerPage extends Page {
 	private boolean start = false;
 	private Item index = Item.MENU_ITEM;
 	
-	public UpdateComputerPage() {
-		service = ComputerService.getInstance();
+	private String datasource;
+	
+	public UpdateComputerPage(String datasource) {
+		this.datasource = datasource;
+		service = ComputerService.getInstance(datasource);
 	}
 	
 	private String currentChanges() {
@@ -200,7 +203,7 @@ public class UpdateComputerPage extends Page {
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted]"));
 			this.index = Item.MENU_ITEM;
-			return Optional.of(new MenuPage());
+			return Optional.of(new MenuPage(datasource));
 		}
 		
 		return Optional.empty();
@@ -247,10 +250,10 @@ public class UpdateComputerPage extends Page {
 			
 		case UPDATE_ITEM :
 			execUpdate();
-			return Optional.of(new MenuPage());
+			return Optional.of(new MenuPage(datasource));
 			
 		case QUIT_ITEM :
-			return Optional.of(new MenuPage());
+			return Optional.of(new MenuPage(datasource));
 			
 		default : break;
 		}

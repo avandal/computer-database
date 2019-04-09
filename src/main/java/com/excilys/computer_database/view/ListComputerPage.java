@@ -11,8 +11,11 @@ public class ListComputerPage extends Page {
 	
 	private ComputerService service;
 	
-	public ListComputerPage() {
-		service = ComputerService.getInstance();
+	private String datasource;
+	
+	public ListComputerPage(String datasource) {
+		this.datasource = datasource;
+		service = ComputerService.getInstance(datasource);
 	}
 
 	@Override
@@ -27,7 +30,7 @@ public class ListComputerPage extends Page {
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
-		return Optional.of(new MenuPage());
+		return Optional.of(new MenuPage(datasource));
 	}
 
 }

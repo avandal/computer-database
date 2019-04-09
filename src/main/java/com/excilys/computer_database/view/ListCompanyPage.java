@@ -8,7 +8,11 @@ import com.excilys.computer_database.service.CompanyService;
 
 public class ListCompanyPage extends Page {
 
-	public ListCompanyPage() {}
+	private String datasource;
+	
+	public ListCompanyPage(String datasource) {
+		this.datasource = datasource;
+	}
 
 	@Override
 	public String show() {
@@ -18,12 +22,12 @@ public class ListCompanyPage extends Page {
 
 	@Override
 	public Optional<Page> exec(String input) {
-		CompanyService service = CompanyService.getInstance();
+		CompanyService service = CompanyService.getInstance(datasource);
 		service.getAll().forEach(System.out::println);
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
-		return Optional.of(new MenuPage());
+		return Optional.of(new MenuPage(datasource));
 	}
 
 }

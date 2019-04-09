@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computer_database.App;
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.service.CompanyService;
@@ -35,7 +36,7 @@ public class AddComputer extends HttpServlet {
 	private static final String ERROR_COMP = "errorCompany";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CompanyService service = CompanyService.getInstance();
+		CompanyService service = CompanyService.getInstance(App.DATASOURCE);
 		List<CompanyDTO> companies = service.getAll();
 		companies.add(0, new CompanyDTOBuilder().empty().build());
 		
@@ -55,7 +56,7 @@ public class AddComputer extends HttpServlet {
 		request.setAttribute(DISC_PARAM, discontinued);
 		request.setAttribute(COMP_PARAM, company);
 		
-		ComputerService service = ComputerService.getInstance();
+		ComputerService service = ComputerService.getInstance(App.DATASOURCE);
 		try {
 			int status = service.createComputer(name, introduced, discontinued, company);
 			if (status == -1) {

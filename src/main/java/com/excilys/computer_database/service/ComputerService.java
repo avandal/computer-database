@@ -24,15 +24,18 @@ public class ComputerService {
 	
 	private static volatile ComputerService instance;
 	
-	private ComputerService() {
-		this.dao = ComputerDAO.getInstance();
+	private String datasource;
+	
+	private ComputerService(String datasource) {
+		this.datasource = datasource;
+		this.dao = ComputerDAO.getInstance(datasource);
 	}
 	
-	public static ComputerService getInstance() {
+	public static ComputerService getInstance(String datasource) {
 		if (instance == null) {
 			synchronized(ComputerService.class) {
 				if (instance == null) {
-					instance = new ComputerService();
+					instance = new ComputerService(datasource);
 				}
 			}
 		}
@@ -111,7 +114,7 @@ public class ComputerService {
 			return createComputer(name, retIntroduced, retDiscontinued, null);
 		}
 		
-		CompanyService companyService = CompanyService.getInstance();
+		CompanyService companyService = CompanyService.getInstance(datasource);
 		
 		if (companyService.getById(intCompanyId).isPresent()) {
 			return createComputer(name, retIntroduced, retDiscontinued, intCompanyId);
@@ -176,7 +179,7 @@ public class ComputerService {
 			return updateComputer(id, name, retIntroduced, retDiscontinued, null);
 		}
 		
-		CompanyService companyService = CompanyService.getInstance();
+		CompanyService companyService = CompanyService.getInstance(datasource);
 		
 		if (companyService.getById(intCompanyId).isPresent()) {
 			return updateComputer(id, name, retIntroduced, retDiscontinued, intCompanyId);
