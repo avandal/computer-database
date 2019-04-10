@@ -22,7 +22,7 @@ import com.excilys.computer_database.ui.WebPageBuilder;
 import com.excilys.computer_database.util.Util;
 
 @WebServlet(name = "Dashboard", urlPatterns = {"/dashboard"})
-public class Dashboard extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private static final String LIST_COMP_VIEW = "/resources/views/dashboard.jsp";
@@ -43,9 +43,9 @@ public class Dashboard extends HttpServlet {
 	
 	private List<ComputerDTO> list;
 	
-	private static Logger logger = LoggerFactory.getLogger(Dashboard.class);
+	private static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 	
-	public Dashboard() {
+	public DashboardServlet() {
 		service = AppConfig.context.getBean(ComputerService.class);
 	}
 
