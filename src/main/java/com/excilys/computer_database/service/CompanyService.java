@@ -12,21 +12,8 @@ import com.excilys.computer_database.persistence.CompanyDAO;
 public class CompanyService {
 	private CompanyDAO dao;
 	
-	private static volatile CompanyService instance;
-	
-	private CompanyService(String datasource) {
-		this.dao = CompanyDAO.getInstance(datasource);
-	}
-	
-	public static CompanyService getInstance(String datasource) {
-		if (instance == null) {
-			synchronized(CompanyService.class) {
-				if (instance == null) {
-					instance = new CompanyService(datasource);
-				}
-			}
-		}
-		return instance;
+	public CompanyService(CompanyDAO dao) {
+		this.dao = dao;
 	}
 	
 	public List<CompanyDTO> getAll() {

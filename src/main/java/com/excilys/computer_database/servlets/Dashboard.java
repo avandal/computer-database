@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computer_database.App;
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
@@ -44,6 +44,10 @@ public class Dashboard extends HttpServlet {
 	private List<ComputerDTO> list;
 	
 	private static Logger logger = LoggerFactory.getLogger(Dashboard.class);
+	
+	public Dashboard() {
+		service = AppConfig.context.getBean(ComputerService.class);
+	}
 
 	private int extractPageSize(HttpServletRequest request) {
 		String pageSizeParam = request.getParameter(PAGE_SIZE_PARAM);
@@ -88,8 +92,6 @@ public class Dashboard extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		service = ComputerService.getInstance(App.DATASOURCE);
-		
 		String search = request.getParameter(SEARCH_PARAM);
 		String order = request.getParameter(ORDER_PARAM);
 		SortMode mode = SortMode.getByValue(order);

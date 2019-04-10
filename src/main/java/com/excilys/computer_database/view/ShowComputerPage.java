@@ -4,6 +4,7 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.util.Optional;
 
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
@@ -16,7 +17,7 @@ public class ShowComputerPage extends Page {
 
 	public ShowComputerPage(String datasource) {
 		this.datasource = datasource;
-		service = ComputerService.getInstance(datasource);
+		service = AppConfig.context.getBean(ComputerService.class);
 	}
 
 	@Override

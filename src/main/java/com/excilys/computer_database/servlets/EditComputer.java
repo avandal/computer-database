@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computer_database.App;
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.dto.ComputerDTO;
@@ -49,10 +50,16 @@ public class EditComputer extends HttpServlet {
 	private static final String ERROR_COMP = "errorCompany";
 	
 	private static Logger logger = LoggerFactory.getLogger(EditComputer.class);
+	
+	private ComputerService computerService;
+	private CompanyService companyService;
+	
+	public EditComputer() {
+		computerService = AppConfig.context.getBean(ComputerService.class);
+		companyService = AppConfig.context.getBean(CompanyService.class);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ComputerService computerService = ComputerService.getInstance(App.DATASOURCE);
-		CompanyService companyService = CompanyService.getInstance(App.DATASOURCE);
 		List<CompanyDTO> companies = companyService.getAll();
 		companies.add(0, new CompanyDTOBuilder().empty().build());
 		
@@ -100,9 +107,8 @@ public class EditComputer extends HttpServlet {
 		
 		int computerId = optId.get();
 		
-		ComputerService service = ComputerService.getInstance(App.DATASOURCE);
 		try {
-			service.updateComputer(computerId, name, introduced, discontinued, company);
+			computerService.updateComputer(computerId, name, introduced, discontinued, company);
 			
 			response.sendRedirect("dashboard");
 		} catch (FailComputerException e) {

@@ -21,23 +21,10 @@ public class CompanyDAO {
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
-	private static volatile CompanyDAO instance;
-	
 	private String datasource;
 	
-	private CompanyDAO(String datasource) {
+	public CompanyDAO(String datasource) {
 		this.datasource = datasource;
-	}
-	
-	public static CompanyDAO getInstance(String datasource) {
-		if (instance == null) {
-			synchronized(CompanyDAO.class) {
-				if (instance == null) {
-					instance = new CompanyDAO(datasource);
-				}
-			}
-		}
-		return instance;
 	}
 	
 	public Optional<Company> getCompanyById(int id) {

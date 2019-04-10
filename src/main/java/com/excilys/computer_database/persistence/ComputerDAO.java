@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
@@ -32,23 +33,13 @@ public class ComputerDAO {
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
-	private static volatile ComputerDAO instance;
-	
 	private String datasource;
-
-	private ComputerDAO(String datasource) {
-		this.datasource = datasource;
-	}
 	
-	public static ComputerDAO getInstance(String datasource) {
-		if (instance == null) {
-			synchronized(ComputerDAO.class) {
-				if (instance == null) {
-					instance = new ComputerDAO(datasource);
-				}
-			}
-		}
-		return instance;
+	private CompanyDAO companyDAO;
+
+	public ComputerDAO(CompanyDAO companyDAO, String datasource) {
+		this.companyDAO = companyDAO;
+		this.datasource = datasource;
 	}
 
 	public ArrayList<Computer> computerList(String order) {
@@ -119,8 +110,6 @@ public class ComputerDAO {
 
 	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		if (companyId != null) {
-			CompanyDAO companyDAO = CompanyDAO.getInstance(datasource);
-			
 			Optional<Company> company = companyDAO.getCompanyById(companyId);
 			
 			if (!company.isPresent()) {
@@ -165,8 +154,6 @@ public class ComputerDAO {
 
 	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		if (companyId != null) {
-			CompanyDAO companyDAO = CompanyDAO.getInstance(datasource);
-			
 			Optional<Company> company = companyDAO.getCompanyById(companyId);
 			
 			if (!company.isPresent()) {
@@ -225,5 +212,9 @@ public class ComputerDAO {
 		}
 
 		return -1;
+	}
+	
+	public CompanyDAO getCompanyDAO() {
+		return companyDAO;
 	}
 }

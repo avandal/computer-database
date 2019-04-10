@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computer_database.App;
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.service.CompanyService;
@@ -34,10 +34,17 @@ public class AddComputer extends HttpServlet {
 	private static final String ERROR_INTR = "errorIntroduced";
 	private static final String ERROR_DISC = "errorDiscontinued";
 	private static final String ERROR_COMP = "errorCompany";
+	
+	private ComputerService computerService;
+	private CompanyService companyService;
+	
+	public AddComputer() {
+		computerService = AppConfig.context.getBean(ComputerService.class);
+		companyService = AppConfig.context.getBean(CompanyService.class);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CompanyService service = CompanyService.getInstance(App.DATASOURCE);
-		List<CompanyDTO> companies = service.getAll();
+		List<CompanyDTO> companies = companyService.getAll();
 		companies.add(0, new CompanyDTOBuilder().empty().build());
 		
 		request.setAttribute(LIST_COMP_PARAM, companies);
@@ -56,9 +63,8 @@ public class AddComputer extends HttpServlet {
 		request.setAttribute(DISC_PARAM, discontinued);
 		request.setAttribute(COMP_PARAM, company);
 		
-		ComputerService service = ComputerService.getInstance(App.DATASOURCE);
 		try {
-			int status = service.createComputer(name, introduced, discontinued, company);
+			int status = computerService.createComputer(name, introduced, discontinued, company);
 			if (status == -1) {
 				System.out.println("Error creating");
 				request.setAttribute(STATUS_CREATE_PARAM, "failed");
@@ -73,6 +79,7 @@ public class AddComputer extends HttpServlet {
 			case INTRODUCED: request.setAttribute(ERROR_INTR, e.getReason());break;
 			case DISCONTINUED : request.setAttribute(ERROR_DISC, e.getReason());break;
 			case COMPANY : request.setAttribute(ERROR_COMP, e.getReason());break;
+			default : break;
 			}
 			request.setAttribute(STATUS_CREATE_PARAM, "failed");
 			e.printStackTrace();

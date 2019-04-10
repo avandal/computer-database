@@ -5,6 +5,7 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
@@ -62,7 +63,7 @@ public class UpdateComputerPage extends Page {
 	
 	public UpdateComputerPage(String datasource) {
 		this.datasource = datasource;
-		service = ComputerService.getInstance(datasource);
+		service = AppConfig.context.getBean(ComputerService.class);
 	}
 	
 	private String currentChanges() {

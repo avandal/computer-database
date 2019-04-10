@@ -20,26 +20,13 @@ import com.excilys.computer_database.util.Util;
 public class ComputerService {
 	private ComputerDAO dao;
 	
+	private CompanyService companyService;
+	
 	private static Logger logger = LoggerFactory.getLogger(ComputerService.class);
 	
-	private static volatile ComputerService instance;
-	
-	private String datasource;
-	
-	private ComputerService(String datasource) {
-		this.datasource = datasource;
-		this.dao = ComputerDAO.getInstance(datasource);
-	}
-	
-	public static ComputerService getInstance(String datasource) {
-		if (instance == null) {
-			synchronized(ComputerService.class) {
-				if (instance == null) {
-					instance = new ComputerService(datasource);
-				}
-			}
-		}
-		return instance;
+	public ComputerService(ComputerDAO dao, CompanyService companyService) {
+		this.dao = dao;
+		this.companyService = companyService;
 	}
 	
 	public List<ComputerDTO> getAll(SortMode orderMode) {		
@@ -114,8 +101,6 @@ public class ComputerService {
 			return createComputer(name, retIntroduced, retDiscontinued, null);
 		}
 		
-		CompanyService companyService = CompanyService.getInstance(datasource);
-		
 		if (companyService.getById(intCompanyId).isPresent()) {
 			return createComputer(name, retIntroduced, retDiscontinued, intCompanyId);
 		}
@@ -178,8 +163,6 @@ public class ComputerService {
 		if (intCompanyId <= 0) {
 			return updateComputer(id, name, retIntroduced, retDiscontinued, null);
 		}
-		
-		CompanyService companyService = CompanyService.getInstance(datasource);
 		
 		if (companyService.getById(intCompanyId).isPresent()) {
 			return updateComputer(id, name, retIntroduced, retDiscontinued, intCompanyId);

@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.computer_database.App;
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.util.ScriptRunner;
@@ -20,7 +20,7 @@ public class ComputerDAOTest extends TestCase {
 	
 	@Before
 	public void setUp() {
-		this.dao = ComputerDAO.getInstance(App.DATASOURCE_TEST);
+		this.dao = AppConfig.context.getBean(ComputerDAO.class);
 		
 		try {
 			ScriptRunner.run();

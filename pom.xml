@@ -16,6 +16,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<dbunit>2.6.0</dbunit>
+		<Hikari>3.3.1</Hikari>
 		<jstl>1.2</jstl>
 		<junit>4.12</junit>
 		<mockito>2.25.0</mockito>
@@ -25,7 +26,7 @@
 		<powermock-core>1.7.0</powermock-core>
 		<servlet>3.0.1</servlet>
 		<slf4j>1.8.0-beta4</slf4j>
-		<Hikari>3.3.1</Hikari>
+		<spring>5.1.6.RELEASE</spring>
 	</properties>
 
 	<dependencies>
@@ -102,11 +103,29 @@
 			<version>${servlet}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
 			<version>${Hikari}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring}</version>
 		</dependency>
 	</dependencies>
 </project>

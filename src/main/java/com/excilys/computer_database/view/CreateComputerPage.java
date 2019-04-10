@@ -5,7 +5,7 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-import com.excilys.computer_database.persistence.ComputerDAO;
+import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
@@ -32,7 +32,7 @@ public class CreateComputerPage extends Page {
 
 	public CreateComputerPage(String datasource) {
 		this.datasource = datasource;
-		this.service = ComputerService.getInstance(datasource);
+		this.service = AppConfig.context.getBean(ComputerService.class);
 	}
 
 	@Override
