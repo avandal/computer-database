@@ -9,15 +9,20 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.TimeZone;
+
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 
+@Service("computerDAO")
 public class ComputerDAO {
 	private static final String SELECT_ALL_COMPUTERS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
 			+ "from computer ct left join company cn on ct.company_id = cn.id";
@@ -33,28 +38,28 @@ public class ComputerDAO {
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
-	private String datasource;
+	@Autowired
+	private DataSource datasource;
 	
 	private CompanyDAO companyDAO;
 
-	public ComputerDAO(CompanyDAO companyDAO, String datasource) {
+	public ComputerDAO(CompanyDAO companyDAO) {
 		this.companyDAO = companyDAO;
-		this.datasource = datasource;
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
 	public ArrayList<Computer> computerList(String order) {
 		ArrayList<Computer> computer_list = new ArrayList<>();
 
-		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
+		logger.debug("ComputerDAO - computerList : before try catch");
+		try (Connection con = datasource.getConnection();
 			 Statement stmt = con.createStatement();
 			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPUTERS + " " + order);) {
 			
+			logger.debug("ComputerDAO - computerList : entered in try catch");
+			
 			while (res.next()) {
-				Computer computer = ComputerMapper.resultSetComputer(res);
-
-				if (computer != null) {
-					computer_list.add(computer);
-				}
+				computer_list.add(ComputerMapper.resultSetComputer(res));
 			}
 		} catch (SQLException e) {
 			logger.error("computerList - SQL error, incomplete list");
@@ -67,7 +72,7 @@ public class ComputerDAO {
 	public Optional<Computer> getComputerDetails(int computerId) {
 		Optional<Computer> ret = Optional.empty();
 
-		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
+		try (Connection con = datasource.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(SELECT_COMPUTER_DETAILS);) {
 			
 			stmt.setInt(1, computerId);
@@ -89,7 +94,7 @@ public class ComputerDAO {
 	public ArrayList<Computer> getByName(String name, String order) {
 		ArrayList<Computer> ret = new ArrayList<>();
 		
-		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
+		try (Connection con = datasource.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(SELECT_BY_NAME + " " + order);) {
 			
 			stmt.setString(1, "%" + name + "%");
@@ -114,14 +119,18 @@ public class ComputerDAO {
 			
 			if (!company.isPresent()) {
 				logger.error("'createComputer' method - This company id doesn't exist.");
-				return -2;
+				return 0;
 			}
 		}
 		
-		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
+		try (Connection con = datasource.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(INSERT_COMPUTER);) {
 			
-			stmt.setString(1, name);
+			if (name != null) {
+				stmt.setString(1, name);
+			} else {
+				stmt.setNull(1, Types.VARCHAR);
+			}
 
 			if (introduced != null) {
 				stmt.setTimestamp(2, introduced);
@@ -149,7 +158,7 @@ public class ComputerDAO {
 			e.printStackTrace();
 		}
 
-		return -1;
+		return 0;
 	}
 
 	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
@@ -158,14 +167,18 @@ public class ComputerDAO {
 			
 			if (!company.isPresent()) {
 				logger.error("'updateComputer' method - This company id doesn't exist.");
-				return -2;
+				return 0;
 			}
 		}
 		
-		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
+		try (Connection con = datasource.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(UPDATE_COMPUTER);) {
 			
-			stmt.setString(1, name);
+			if (name != null) {
+				stmt.setString(1, name);
+			} else {
+				stmt.setNull(1, Types.VARCHAR);
+			}
 
 			if (introduced != null) {
 				stmt.setTimestamp(2, introduced);
@@ -194,11 +207,11 @@ public class ComputerDAO {
 			logger.error("updateComputer - SQL error");
 			e.printStackTrace();
 		}
-		return -1;
+		return 0;
 	}
 
 	public int deleteComputer(int computerId) {
-		try (Connection con = ConnectionPool.getInstance(datasource).getDataSource().getConnection();
+		try (Connection con = datasource.getConnection();
 			 PreparedStatement stmt = con.prepareStatement(DELETE_COMPUTER);) {
 			
 			stmt.setInt(1, computerId);
@@ -211,7 +224,7 @@ public class ComputerDAO {
 			e.printStackTrace();
 		}
 
-		return -1;
+		return 0;
 	}
 	
 	public CompanyDAO getCompanyDAO() {

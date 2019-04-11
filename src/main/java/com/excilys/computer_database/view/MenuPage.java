@@ -2,18 +2,20 @@ package com.excilys.computer_database.view;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computer_database.util.Util;
 
 public class MenuPage extends Page {
 	
-	private String datasource;
+	private Logger logger = LoggerFactory.getLogger(MenuPage.class);
 	
-	public MenuPage(String datasource) {
-		this.datasource = datasource;
-	}
+	public MenuPage() {}
 
 	@Override
 	public String show() {
+		logger.debug("MenuPage - Show");
 		System.out.println("Choose:");
 		System.out.println(PageDescriptor.LIST_COMPUTER);
 		System.out.println(PageDescriptor.LIST_COMPANY);
@@ -31,11 +33,12 @@ public class MenuPage extends Page {
 	private Page wrongTyped() {
 		System.out.println(Util.boxMessage("Error typing, " + BACK_MENU));
 		System.out.println();
-		return new MenuPage(datasource);
+		return new MenuPage();
 	}
 
 	@Override
 	public Optional<Page> exec(String input) {
+		logger.debug("MenuPage - Exec");
 		// TODO Auto-generated method stub
 		Optional<Integer> choice = Util.parseInt(input);
 		Optional<Page> pageReturn = Optional.empty();
@@ -46,27 +49,28 @@ public class MenuPage extends Page {
 			
 			switch (choice.get()) {
 			case 1 :
-				pageReturn = Optional.of(new ListComputerPage(datasource));
+				logger.debug("MenuPage - Exec : listComputer chosen");
+				pageReturn = Optional.of(new ListComputerPage());
 				break;
 			
 			case 2 : 
-				pageReturn = Optional.of(new ListCompanyPage(datasource));
+				pageReturn = Optional.of(new ListCompanyPage());
 				break;
 			
 			case 3 :
-				pageReturn = Optional.of(new ShowComputerPage(datasource));
+				pageReturn = Optional.of(new ShowComputerPage());
 				break;
 			
 			case 4 : 
-				pageReturn = Optional.of(new CreateComputerPage(datasource));
+				pageReturn = Optional.of(new CreateComputerPage());
 				break;
 				
 			case 5 : 
-				pageReturn = Optional.of(new UpdateComputerPage(datasource));
+				pageReturn = Optional.of(new UpdateComputerPage());
 				break;
 			
 			case 6 :
-				pageReturn = Optional.of(new DeleteComputerPage(datasource));
+				pageReturn = Optional.of(new DeleteComputerPage());
 				break;
 			
 			case 7 : 
@@ -82,4 +86,7 @@ public class MenuPage extends Page {
 		return pageReturn;
 	}
 	
+	public String toString() {
+		return "Menu";
+	}
 }

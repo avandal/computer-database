@@ -11,10 +11,8 @@ import com.excilys.computer_database.util.Util;
 public class DeleteComputerPage extends Page {
 	
 	private ComputerService service;
-	
-	private String datasource;
 
-	public DeleteComputerPage(String datasource) {
+	public DeleteComputerPage() {
 		service = AppConfig.context.getBean(ComputerService.class);
 	}
 
@@ -31,24 +29,24 @@ public class DeleteComputerPage extends Page {
 	public Optional<Page> exec(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(new DeleteComputerPage(datasource));
+			return Optional.of(new DeleteComputerPage());
 		}
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(new MenuPage(datasource));
+			return Optional.of(new MenuPage());
 		}
 
 		Optional<Integer> idInput = Util.parseInt(input);
 
 		if (!idInput.isPresent()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return Optional.of(new DeleteComputerPage(datasource));
+			return Optional.of(new DeleteComputerPage());
 		}
 
 		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return Optional.of(new DeleteComputerPage(datasource));
+			return Optional.of(new DeleteComputerPage());
 		}
 
 		int status = service.deleteComputer(idInput.get());
@@ -59,7 +57,10 @@ public class DeleteComputerPage extends Page {
 			System.out.println(boxMessage("[Problem] Fail deleting computer"));
 		}
 		
-		return Optional.of(new MenuPage(datasource));
+		return Optional.of(new MenuPage());
 	}
 
+	public String toString() {
+		return "Delete computer";
+	}
 }

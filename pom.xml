@@ -19,6 +19,7 @@
 		<Hikari>3.3.1</Hikari>
 		<jstl>1.2</jstl>
 		<junit>4.12</junit>
+		<logback>1.2.3</logback>
 		<mockito>2.25.0</mockito>
 		<mysql>8.0.15</mysql>
 		<powermock>2.0.0</powermock>
@@ -27,6 +28,7 @@
 		<servlet>3.0.1</servlet>
 		<slf4j>1.8.0-beta4</slf4j>
 		<spring>5.1.6.RELEASE</spring>
+		<spring-boot>2.1.3.RELEASE</spring-boot>
 	</properties>
 
 	<dependencies>
@@ -47,6 +49,19 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
@@ -127,5 +142,12 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot</artifactId>
+			<version>${spring-boot}</version>
+		</dependency>
+		
 	</dependencies>
 </project>

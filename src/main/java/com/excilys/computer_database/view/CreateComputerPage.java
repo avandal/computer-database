@@ -27,11 +27,8 @@ public class CreateComputerPage extends Page {
 	private int index = 1;
 	
 	private ComputerService service;
-	
-	private String datasource;
 
-	public CreateComputerPage(String datasource) {
-		this.datasource = datasource;
+	public CreateComputerPage() {
 		this.service = AppConfig.context.getBean(ComputerService.class);
 	}
 
@@ -115,7 +112,7 @@ public class CreateComputerPage extends Page {
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(new MenuPage(datasource));
+			return Optional.of(new MenuPage());
 		}
 
 		boolean next = false;
@@ -143,7 +140,7 @@ public class CreateComputerPage extends Page {
 				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));
 			}
 
-			return Optional.of(new MenuPage(datasource));
+			return Optional.of(new MenuPage());
 		}
 
 		if (next) {
@@ -151,5 +148,9 @@ public class CreateComputerPage extends Page {
 		}
 
 		return Optional.of(this);
+	}
+	
+	public String toString() {
+		return "CreateComputer";
 	}
 }

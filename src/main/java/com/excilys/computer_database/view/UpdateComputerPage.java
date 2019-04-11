@@ -59,10 +59,7 @@ public class UpdateComputerPage extends Page {
 	private boolean start = false;
 	private Item index = Item.MENU_ITEM;
 	
-	private String datasource;
-	
-	public UpdateComputerPage(String datasource) {
-		this.datasource = datasource;
+	public UpdateComputerPage() {
 		service = AppConfig.context.getBean(ComputerService.class);
 	}
 	
@@ -204,7 +201,7 @@ public class UpdateComputerPage extends Page {
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted]"));
 			this.index = Item.MENU_ITEM;
-			return Optional.of(new MenuPage(datasource));
+			return Optional.of(new MenuPage());
 		}
 		
 		return Optional.empty();
@@ -251,14 +248,18 @@ public class UpdateComputerPage extends Page {
 			
 		case UPDATE_ITEM :
 			execUpdate();
-			return Optional.of(new MenuPage(datasource));
+			return Optional.of(new MenuPage());
 			
 		case QUIT_ITEM :
-			return Optional.of(new MenuPage(datasource));
+			return Optional.of(new MenuPage());
 			
 		default : break;
 		}
 		
 		return Optional.of(this);
+	}
+	
+	public String toString() {
+		return "Update computer";
 	}
 }

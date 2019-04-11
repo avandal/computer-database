@@ -29,7 +29,8 @@ public class ComputerService {
 		this.companyService = companyService;
 	}
 	
-	public List<ComputerDTO> getAll(SortMode orderMode) {		
+	public List<ComputerDTO> getAll(SortMode orderMode) {
+		logger.debug("ComputerService - getAll : callings dao.computerList");
 		return dao.computerList(orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	

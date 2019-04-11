@@ -65,7 +65,7 @@ public class AddComputerServlet extends HttpServlet {
 		
 		try {
 			int status = computerService.createComputer(name, introduced, discontinued, company);
-			if (status == -1) {
+			if (status == 0) {
 				System.out.println("Error creating");
 				request.setAttribute(STATUS_CREATE_PARAM, "failed");
 			} else {

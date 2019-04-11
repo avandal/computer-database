@@ -13,4 +13,6 @@ public abstract class Page {
 	
 	public abstract String show();
 	public abstract Optional<Page> exec(String input);
+	
+	public abstract String toString();
 }

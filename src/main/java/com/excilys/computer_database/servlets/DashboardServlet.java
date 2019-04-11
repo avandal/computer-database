@@ -46,6 +46,7 @@ public class DashboardServlet extends HttpServlet {
 	private static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 	
 	public DashboardServlet() {
+		logger.debug("Constructeur");
 		service = AppConfig.context.getBean(ComputerService.class);
 	}
 
@@ -92,6 +93,7 @@ public class DashboardServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.debug("doGet");
 		String search = request.getParameter(SEARCH_PARAM);
 		String order = request.getParameter(ORDER_PARAM);
 		SortMode mode = SortMode.getByValue(order);

@@ -5,7 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computer_database.servlets.Dashboard;
+import com.excilys.computer_database.servlets.DashboardServlet;
 import com.excilys.computer_database.servlets.PageSize;
 import com.excilys.computer_database.servlets.SortMode;
 
@@ -32,10 +32,10 @@ public class WebPage<T> {
 	
 	private String formatUrl(int index, int size, String search, String order) {
 		return String.format("%s?%s=%d&%s=%d&%s=%s&%s=%s", url, 
-				Dashboard.PAGE_INDEX_PARAM, index, 
-				Dashboard.PAGE_SIZE_PARAM, size, 
-				Dashboard.SEARCH_PARAM, search,
-				Dashboard.ORDER_PARAM, order);
+				DashboardServlet.PAGE_INDEX_PARAM, index, 
+				DashboardServlet.PAGE_SIZE_PARAM, size, 
+				DashboardServlet.SEARCH_PARAM, search,
+				DashboardServlet.ORDER_PARAM, order);
 	}
 	
 	public String previousPage() {
