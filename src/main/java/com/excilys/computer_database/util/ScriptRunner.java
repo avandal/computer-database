@@ -7,13 +7,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import com.excilys.computer_database.App;
-import com.excilys.computer_database.persistence.ConnectionPool;
+import com.excilys.computer_database.AppConfigTest;
 
 public class ScriptRunner {
 	private static final String URL = "src/resources";
 	
-	public static void run() throws IOException {
+	private DataSource datasource;
+	
+	public void run() throws IOException {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+		datasource = context.getBean(DataSource.class);
+		
 		StringBuilder lines = new StringBuilder();
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(URL + App.CONFIG_TEST));
@@ -21,7 +30,7 @@ public class ScriptRunner {
 		bufferedReader.close();
 		
 		for (String line : lines.toString().split(";")) {
-			try (Connection connection = ConnectionPool.getInstance(App.DATASOURCE_TEST).getDataSource().getConnection();
+			try (Connection connection = datasource.getConnection();
 				 PreparedStatement statement = connection.prepareStatement(line);) {
 			
 				statement.executeUpdate(line);

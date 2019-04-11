@@ -5,10 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.excilys.computer_database.AppConfig;
+import com.excilys.computer_database.AppConfigTest;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.util.ScriptRunner;
 
@@ -17,17 +19,27 @@ import junit.framework.TestCase;
 public class CompanyDAOTest extends TestCase {
 	
 	private CompanyDAO dao = null;
+
+	private AnnotationConfigApplicationContext context;
 	
 	@Before
 	public void setUp() {
-		dao = AppConfig.context.getBean(CompanyDAO.class);
+		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+		
+		dao = context.getBean(CompanyDAO.class);
+		
 		
 		try {
-			ScriptRunner.run();
+			new ScriptRunner().run();
 		} catch (IOException e) {
 			System.out.println("Error finding file");
 			e.printStackTrace();
 		}
+	}
+	
+	@After
+	public void tearDown() {
+		context.close();
 	}
 	
 	@Test
