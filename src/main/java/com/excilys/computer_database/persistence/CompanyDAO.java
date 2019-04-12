@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +20,11 @@ import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
 public class CompanyDAO {
-	public static final String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ?";
-	public static final String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn";
+	public static final String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ? order by id";
+	public static final String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn order by id";
+	
+	public static final String DELETE_COMPUTERS_OF_COMPANY = "delete from computer where company_id = ?";
+	public static final String DELETE_COMPANY = "delete from company where id = ?";
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
@@ -51,10 +55,6 @@ public class CompanyDAO {
 		return company;
 	}
 	
-	
-	
-	
-	
 	public List<Company> companyList() {
 		ArrayList<Company> ret = new ArrayList<>();
 		
@@ -72,5 +72,35 @@ public class CompanyDAO {
 		}
 		
 		return ret;
+	}
+	
+	public int deleteCompany(Integer id) {
+		try (Connection con = datasource.getConnection();
+			 PreparedStatement deleteComputerStmt = con.prepareStatement(DELETE_COMPUTERS_OF_COMPANY);
+			 PreparedStatement deleteCompanyStmt = con.prepareStatement(DELETE_COMPANY);) {
+			
+			if (id != null) {
+				deleteComputerStmt.setInt(1, id);
+				deleteCompanyStmt.setInt(1, id);
+			} else {
+				deleteComputerStmt.setNull(1, Types.INTEGER);
+				deleteCompanyStmt.setNull(1, Types.INTEGER);
+			}
+			
+			int deleteCount = deleteComputerStmt.executeUpdate();
+			int status = deleteCompanyStmt.executeUpdate();
+			
+			if (status == 0) {
+				return -1;
+			}
+			
+			return deleteCount;
+			
+		} catch (SQLException e) {
+			logger.error("deleteCompany - SQL error");
+			e.printStackTrace();
+		}
+		
+		return -1;
 	}
 }

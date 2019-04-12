@@ -8,6 +8,7 @@ import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.persistence.CompanyDAO;
+import com.excilys.computer_database.util.Util;
 
 public class CompanyService {
 	private CompanyDAO dao;
@@ -27,5 +28,18 @@ public class CompanyService {
 			return Optional.of(CompanyMapper.companyToDTO(company.get()));
 		}
 		return Optional.empty();
+	}
+	
+	public int delete(String id) {
+		if ("".equals(id)) {
+			return dao.deleteCompany(null);
+		}
+		
+		Optional<Integer> optId = Util.parseInt(id);
+		if (optId.isPresent()) {
+			return dao.deleteCompany(optId.get());
+		}
+		
+		return -1;
 	}
 }

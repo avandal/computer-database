@@ -1,7 +1,6 @@
 package com.excilys.computer_database.service;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.excilys.computer_database.AppConfigTest;
 import com.excilys.computer_database.dto.ComputerDTO;
-import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.service.exception.FailComputerException;
 import com.excilys.computer_database.servlets.SortMode;
 import com.excilys.computer_database.util.ScriptRunner;
