@@ -28,7 +28,6 @@ public class CompanyDAOTest extends TestCase {
 		
 		dao = context.getBean(CompanyDAO.class);
 		
-		
 		try {
 			new ScriptRunner().run();
 		} catch (IOException e) {

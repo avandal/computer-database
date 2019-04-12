@@ -13,7 +13,7 @@ public enum SortMode {
 	COMP_ASC("comp_asc", "order by cn.name is null, cn.name asc"),
 	COMP_DESC("comp_desc", "order by cn.name desc"),
 	
-	DEFAULT("", "");
+	DEFAULT("", "order by ct.id asc");
 	
 	private String value;
 	private String suffix;

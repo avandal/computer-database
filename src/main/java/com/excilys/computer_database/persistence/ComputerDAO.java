@@ -24,12 +24,12 @@ import com.excilys.computer_database.model.Computer;
 
 @Service("computerDAO")
 public class ComputerDAO {
-	private static final String SELECT_ALL_COMPUTERS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
+	private static final String SELECT_ALL_COMPUTERS = "select ct.id, ct.name, ct.introduced, ct.discontinued, cn.id, cn.name "
 			+ "from computer ct left join company cn on ct.company_id = cn.id";
 
-	private static final String SELECT_COMPUTER_DETAILS = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
+	private static final String SELECT_COMPUTER_DETAILS = "select ct.id, ct.name, ct.introduced, ct.discontinued, cn.id, cn.name "
 			+ "from computer ct left join company cn on ct.company_id = cn.id where ct.id = ?";
-	private static final String SELECT_BY_NAME = "select cn.id, cn.name, ct.id, ct.name, ct.introduced, ct.discontinued "
+	private static final String SELECT_BY_NAME = "select ct.id, ct.name, ct.introduced, ct.discontinued, cn.id, cn.name "
 			+ "from computer ct left join company cn on ct.company_id = cn.id where ct.name like ? or cn.name like ?";
 
 	private static final String INSERT_COMPUTER = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
@@ -57,7 +57,6 @@ public class ComputerDAO {
 			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPUTERS + " " + order);) {
 			
 			logger.debug("ComputerDAO - computerList : entered in try catch");
-			
 			while (res.next()) {
 				computer_list.add(ComputerMapper.resultSetComputer(res));
 			}

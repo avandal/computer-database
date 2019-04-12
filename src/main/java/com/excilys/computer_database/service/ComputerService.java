@@ -52,7 +52,7 @@ public class ComputerService {
 	}
 	
 	public int createComputer(String name, String introduced, String discontinued, String companyId) throws FailComputerException {
-		if ("".equals(name)) {
+		if (name == null || "".equals(name)) {
 			logger.warn("createComputer - Empty name");
 			throw new FailComputerException(ConcernedField.NAME, FailComputerException.NULL_NAME);
 		}
@@ -60,7 +60,7 @@ public class ComputerService {
 		Timestamp retIntroduced = null;
 		Timestamp retDiscontinued = null;
 		
-		if ("".equals(introduced)) {
+		if (introduced == null || "".equals(introduced)) {
 			if (!"".equals(discontinued)) {
 				logger.warn("createComputer - Discontinued without introduced");
 				throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_WITHOUT_INTRO);
