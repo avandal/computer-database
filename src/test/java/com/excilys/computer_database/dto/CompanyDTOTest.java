@@ -31,17 +31,27 @@ public class CompanyDTOTest {
 	
 	@Test
 	public void testIdEquals() {
-		companyDTO1 = builderCompanyDTO1.id(2).build();
-		companyDTO2 = builderCompanyDTO2.id(3).build();
+		// null or not null
+		companyDTO1 = builderCompanyDTO1.id(null).build();
+		companyDTO2 = builderCompanyDTO2.id("no").build();
+		assertNotEquals(companyDTO1, companyDTO2);
 		
-		// Different ids
-		companyDTO1 = builderCompanyDTO1.id(2).build();
-		companyDTO2 = builderCompanyDTO2.id(3).build();
+		companyDTO1 = builderCompanyDTO1.id("no").build();
+		companyDTO2 = builderCompanyDTO2.id(null).build();
+		assertNotEquals(companyDTO1, companyDTO2);
+		
+		companyDTO1 = builderCompanyDTO1.id(null).build();
+		companyDTO2 = builderCompanyDTO2.id(null).build();
+		assertEquals(companyDTO1, companyDTO2);
+		
+		// Different
+		companyDTO1 = builderCompanyDTO1.id("one").build();
+		companyDTO2 = builderCompanyDTO2.id("two").build();
 		assertNotEquals(companyDTO1, companyDTO2);
 		
 		// Same value
-		companyDTO1 = builderCompanyDTO1.id(1).build();
-		companyDTO2 = builderCompanyDTO2.id(1).build();
+		companyDTO1 = builderCompanyDTO1.id("same").build();
+		companyDTO2 = builderCompanyDTO2.id("same").build();
 		assertEquals(companyDTO1, companyDTO2);
 	}
 	

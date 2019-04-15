@@ -1,10 +1,10 @@
 package com.excilys.computer_database.dto;
 
 public class CompanyDTOBuilder {
-	private int id;
+	private String id;
 	private String name;
 	
-	public CompanyDTOBuilder id(int id) {
+	public CompanyDTOBuilder id(String id) {
 		this.id = id;
 		return this;
 	}
@@ -15,7 +15,7 @@ public class CompanyDTOBuilder {
 	}
 	
 	public CompanyDTOBuilder empty() {
-		id = 0;
+		id = null;
 		name = null;
 		return this;
 	}

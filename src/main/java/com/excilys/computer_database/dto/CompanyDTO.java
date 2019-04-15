@@ -1,19 +1,19 @@
 package com.excilys.computer_database.dto;
 
 public class CompanyDTO {
-	private int id;
+	private String id;
 	private String name;
 	
-	public CompanyDTO(int id, String name) {
+	public CompanyDTO(String id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -33,7 +33,7 @@ public class CompanyDTO {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -47,7 +47,10 @@ public class CompanyDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		CompanyDTO other = (CompanyDTO) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		if (name == null) {
 			if (other.name != null)

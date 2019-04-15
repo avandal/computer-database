@@ -49,10 +49,10 @@ public class CompanyServiceTest extends TestCase {
 	public void testGetAll() {
 		List<CompanyDTO> reference = Arrays.asList(
 				new CompanyDTO[] {
-						new CompanyDTO(1, "Apple Inc."),
-						new CompanyDTO(2, "Thinking Machines"),
-						new CompanyDTO(3, "RCA"),
-						new CompanyDTO(4, "Netronics")
+						new CompanyDTO("1", "Apple Inc."),
+						new CompanyDTO("2", "Thinking Machines"),
+						new CompanyDTO("3", "RCA"),
+						new CompanyDTO("4", "Netronics")
 				}
 			);
 		
@@ -63,7 +63,7 @@ public class CompanyServiceTest extends TestCase {
 	
 	@Test
 	public void testGetById() {
-		CompanyDTO reference = new CompanyDTO(1, "Apple Inc.");
+		CompanyDTO reference = new CompanyDTO("1", "Apple Inc.");
 		Optional<CompanyDTO> toTest = companyService.getById(1);
 		
 		assertTrue(toTest.isPresent());
@@ -89,9 +89,9 @@ public class CompanyServiceTest extends TestCase {
 		
 		List<CompanyDTO> companyReference = Arrays.asList(
 				new CompanyDTO[] {
-						new CompanyDTO(2, "Thinking Machines"),
-						new CompanyDTO(3, "RCA"),
-						new CompanyDTO(4, "Netronics")
+						new CompanyDTO("2", "Thinking Machines"),
+						new CompanyDTO("3", "RCA"),
+						new CompanyDTO("4", "Netronics")
 				}
 			);
 		

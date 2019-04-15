@@ -7,6 +7,7 @@ import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
+import com.excilys.computer_database.util.Util;
 
 public abstract class CompanyMapper {
 
@@ -21,14 +22,14 @@ public abstract class CompanyMapper {
 	
 	public static Company dtoToCompany(CompanyDTO dto) {
 		return new CompanyBuilder()
-				.id(dto.getId())
+				.id(!Util.parseInt(dto.getId()).isPresent() ? 0 : Util.parseInt(dto.getId()).get())	
 				.name(dto.getName())
 				.build();
 	}
 	
 	public static CompanyDTO companyToDTO(Company company) {
 		return new CompanyDTOBuilder()
-				.id(company.getId())
+				.id(Integer.toString(company.getId()))
 				.name(company.getName())
 				.build();
 	}
