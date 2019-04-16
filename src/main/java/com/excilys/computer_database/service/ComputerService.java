@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.mapper.ComputerMapper;
@@ -17,6 +18,7 @@ import com.excilys.computer_database.service.exception.FailComputerException;
 import com.excilys.computer_database.servlets.SortMode;
 import com.excilys.computer_database.util.Util;
 
+@Service
 public class ComputerService {
 	private ComputerDAO dao;
 	

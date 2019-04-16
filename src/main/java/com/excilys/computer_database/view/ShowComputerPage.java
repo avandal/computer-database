@@ -4,18 +4,24 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
+
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
+@Component
 public class ShowComputerPage extends Page {
 	
+	@Autowired
 	private ComputerService service;
+	
+	@Autowired
+	private GenericApplicationContext context;
 
-	public ShowComputerPage() {
-		service = AppConfig.context.getBean(ComputerService.class);
-	}
+	private ShowComputerPage() {}
 
 	@Override
 	public String show() {
@@ -29,12 +35,12 @@ public class ShowComputerPage extends Page {
 	private Optional<Page> initialCheck(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(new ShowComputerPage());
+			return Optional.of(context.getBean(ShowComputerPage.class));
 		}
 		
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(new MenuPage());
+			return Optional.of(context.getBean(MenuPage.class));
 		}
 		
 		return Optional.empty();
@@ -43,12 +49,12 @@ public class ShowComputerPage extends Page {
 	private Optional<Page> invalidInput(Optional<Integer> idInput) {
 		if (!idInput.isPresent()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return Optional.of(new ShowComputerPage());
+			return Optional.of(context.getBean(ShowComputerPage.class));
 		}
 		
 		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return Optional.of(new ShowComputerPage());
+			return Optional.of(context.getBean(ShowComputerPage.class));
 		}
 		
 		return Optional.empty();
@@ -79,7 +85,7 @@ public class ShowComputerPage extends Page {
 		
 		System.out.println(boxMessage(M_BACK_MENU));
 		
-		return Optional.of(new MenuPage());
+		return Optional.of(context.getBean(MenuPage.class));
 	}
 	
 	public String toString() {

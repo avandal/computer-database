@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.excilys.computer_database.persistence.CompanyDAO;
 import com.excilys.computer_database.persistence.ComputerDAO;
@@ -76,11 +77,22 @@ public class AppConfigTest {
 
 	@Bean
 	public DataSource datasource() {
-		DataSource datasource = DataSourceBuilder.create().url(env.getProperty("jdbcUrl"))
-				.driverClassName(env.getProperty("driverClassName")).username(env.getProperty("db.username"))
-				.password(env.getProperty("db.password")).build();
+		DataSource datasource = DataSourceBuilder
+				.create()
+				.url(env.getProperty("jdbcUrl"))
+				.driverClassName(env.getProperty("driverClassName"))
+				.username(env.getProperty("db.username"))
+				.password(env.getProperty("db.password"))
+				.build();
 
 		return datasource;
+	}
+	
+	@Bean
+	public JdbcTemplate jdbcTemplate() {
+		JdbcTemplate jdbc = new JdbcTemplate();
+		jdbc.setDataSource(datasource());
+		return jdbc;
 	}
 
 	@Bean
@@ -95,11 +107,11 @@ public class AppConfigTest {
 
 	@Bean
 	public ComputerDAO computerDAO() {
-		return new ComputerDAO(companyDAO());
+		return new ComputerDAO(jdbcTemplate(), companyDAO());
 	}
 
 	@Bean
 	public CompanyDAO companyDAO() {
-		return new CompanyDAO();
+		return new CompanyDAO(jdbcTemplate());
 	}
 }

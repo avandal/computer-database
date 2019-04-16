@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.persistence.CompanyDAO;
 import com.excilys.computer_database.util.Util;
 
+@Service
 public class CompanyService {
 	private CompanyDAO dao;
 	

@@ -4,18 +4,22 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.view.MenuPage;
 import com.excilys.computer_database.view.Page;
 
+@Component
 public class ControlerCLI {
 	private Page currentPage;
 	
 	Logger logger = LoggerFactory.getLogger(ControlerCLI.class);
-	
 
-	public ControlerCLI() {
-		this.currentPage = new MenuPage();
+	@Autowired
+	private ControlerCLI(GenericApplicationContext context) {
+		this.currentPage = context.getBean(MenuPage.class);
 	}
 
 	public void run() {

@@ -1,27 +1,29 @@
 package com.excilys.computer_database.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
+@Repository
 public class CompanyDAO {
-	public static final String SELECT_ONE_COMPANY = "select cn.id, cn.name from company cn where cn.id = ? order by id";
-	public static final String SELECT_ALL_COMPANIES = "select cn.id, cn.name from company cn order by id";
+	public static final String ID_CN_ALIAS = "id_company";
+	public static final String NAME_CN_ALIAS = "name_company";
+	
+	private static final String ID_COMPANY = "cn.id as " + ID_CN_ALIAS;
+	private static final String NAME_COMPANY = "cn.name as " + NAME_CN_ALIAS;
+	
+	public static final String SELECT_ONE_COMPANY = "select " + ID_COMPANY + ", " + NAME_COMPANY + " from company cn where cn.id = ? order by id";
+	public static final String SELECT_ALL_COMPANIES = "select " + ID_COMPANY + ", " + NAME_COMPANY + " from company cn order by id";
 	
 	public static final String DELETE_COMPUTERS_OF_COMPANY = "delete from computer where company_id = ?";
 	public static final String DELETE_COMPANY = "delete from company where id = ?";
@@ -29,78 +31,37 @@ public class CompanyDAO {
 	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	@Autowired
-	private DataSource datasource;
+	private JdbcTemplate jdbcTemplate;
 	
-	public CompanyDAO() {}
+	public CompanyDAO(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 	
 	public Optional<Company> getCompanyById(int id) {
-		
-		Optional<Company> company = Optional.empty();
-		
-		try (Connection con = datasource.getConnection();
-			 PreparedStatement stmt = con.prepareStatement(SELECT_ONE_COMPANY);) {
-			
-			stmt.setInt(1, id);
-			
-			try (ResultSet res = stmt.executeQuery();) {
-			
-				if (res.next()) {
-					company = Optional.of(CompanyMapper.resultSetCompany(res));
-				}
-			}
-		} catch (SQLException e) {
-			logger.error("getCompanyId - SQL error");
-			e.printStackTrace();
+		try {
+			return Optional.of(jdbcTemplate.queryForObject(SELECT_ONE_COMPANY, new Object[] {id}, new CompanyMapper()));
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
 		}
-		return company;
 	}
 	
 	public List<Company> companyList() {
-		ArrayList<Company> ret = new ArrayList<>();
-		
-		try (Connection con = datasource.getConnection();
-			 Statement stmt = con.createStatement();
-			 ResultSet res = stmt.executeQuery(SELECT_ALL_COMPANIES);) {
-			
-			while(res.next()) {
-				Company company = CompanyMapper.resultSetCompany(res);
-				ret.add(company);
-			}
-		} catch (SQLException e) {
-			logger.error("companyList - SQL error, incomplete list");
-			e.printStackTrace();
-		}
-		
-		return ret;
+		return jdbcTemplate.query(SELECT_ALL_COMPANIES, new CompanyMapper());
 	}
 	
 	public int deleteCompany(Integer id) {
-		try (Connection con = datasource.getConnection();
-			 PreparedStatement deleteComputerStmt = con.prepareStatement(DELETE_COMPUTERS_OF_COMPANY);
-			 PreparedStatement deleteCompanyStmt = con.prepareStatement(DELETE_COMPANY);) {
-			
-			if (id != null) {
-				deleteComputerStmt.setInt(1, id);
-				deleteCompanyStmt.setInt(1, id);
-			} else {
-				deleteComputerStmt.setNull(1, Types.INTEGER);
-				deleteCompanyStmt.setNull(1, Types.INTEGER);
-			}
-			
-			int deleteCount = deleteComputerStmt.executeUpdate();
-			int status = deleteCompanyStmt.executeUpdate();
+		try {
+			int deleteCount = jdbcTemplate.update(DELETE_COMPUTERS_OF_COMPANY, new Object[] {id});
+			int status = jdbcTemplate.update(DELETE_COMPANY, new Object[] {id});
 			
 			if (status == 0) {
 				return -1;
 			}
 			
 			return deleteCount;
-			
-		} catch (SQLException e) {
-			logger.error("deleteCompany - SQL error");
-			e.printStackTrace();
+		} catch (DataAccessException e) {
+			logger.error("Error when deleting company " + id);
+			return -1;
 		}
-		
-		return -1;
 	}
 }

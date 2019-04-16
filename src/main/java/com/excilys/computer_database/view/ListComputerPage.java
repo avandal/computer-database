@@ -6,20 +6,27 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
 
-import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.servlets.SortMode;
 
+@Component
 public class ListComputerPage extends Page {
 	
+	@Autowired
 	private ComputerService service;
+	
+	@Autowired
+	private GenericApplicationContext context;
 	
 	private Logger logger = LoggerFactory.getLogger(ListComputerPage.class);
 	
-	public ListComputerPage() {
+	private ListComputerPage() {
 		logger.debug("ListComputerPage - Constructor");
-		service = AppConfig.context.getBean(ComputerService.class);
+//		service = AppConfig.context.getBean(ComputerService.class);
 	}
 
 	@Override
@@ -36,7 +43,7 @@ public class ListComputerPage extends Page {
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
-		return Optional.of(new MenuPage());
+		return Optional.of(context.getBean(MenuPage.class));
 	}
 	
 	public String toString() {

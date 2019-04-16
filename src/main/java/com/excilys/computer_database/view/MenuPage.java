@@ -4,14 +4,21 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.util.Util;
 
+@Component
 public class MenuPage extends Page {
 	
 	private Logger logger = LoggerFactory.getLogger(MenuPage.class);
 	
-	public MenuPage() {}
+	@Autowired
+	private GenericApplicationContext context;
+	
+	private MenuPage() {}
 
 	@Override
 	public String show() {
@@ -33,7 +40,7 @@ public class MenuPage extends Page {
 	private Page wrongTyped() {
 		System.out.println(Util.boxMessage("Error typing, " + BACK_MENU));
 		System.out.println();
-		return new MenuPage();
+		return context.getBean(MenuPage.class);
 	}
 
 	@Override
@@ -50,27 +57,27 @@ public class MenuPage extends Page {
 			switch (choice.get()) {
 			case 1 :
 				logger.debug("MenuPage - Exec : listComputer chosen");
-				pageReturn = Optional.of(new ListComputerPage());
+				pageReturn = Optional.of(context.getBean(ListComputerPage.class));
 				break;
 			
 			case 2 : 
-				pageReturn = Optional.of(new ListCompanyPage());
+				pageReturn = Optional.of(context.getBean(ListCompanyPage.class));
 				break;
 			
 			case 3 :
-				pageReturn = Optional.of(new ShowComputerPage());
+				pageReturn = Optional.of(context.getBean(ShowComputerPage.class));
 				break;
 			
 			case 4 : 
-				pageReturn = Optional.of(new CreateComputerPage());
+				pageReturn = Optional.of(context.getBean(CreateComputerPage.class));
 				break;
 				
 			case 5 : 
-				pageReturn = Optional.of(new UpdateComputerPage());
+				pageReturn = Optional.of(context.getBean(UpdateComputerPage.class));
 				break;
 			
 			case 6 :
-				pageReturn = Optional.of(new DeleteComputerPage());
+				pageReturn = Optional.of(context.getBean(DeleteComputerPage.class));
 				break;
 			
 			case 7 : 

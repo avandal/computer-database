@@ -5,10 +5,14 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-import com.excilys.computer_database.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
+
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
+@Component
 public class CreateComputerPage extends Page {
 
 	private final static String MSG_NAME = "Please give a computer name ('abort' to abort)";
@@ -26,11 +30,13 @@ public class CreateComputerPage extends Page {
 
 	private int index = 1;
 	
+	@Autowired
 	private ComputerService service;
-
-	public CreateComputerPage() {
-		this.service = AppConfig.context.getBean(ComputerService.class);
-	}
+	
+	@Autowired
+	private GenericApplicationContext context;
+	
+	private CreateComputerPage() {}
 
 	@Override
 	public String show() {
@@ -112,7 +118,7 @@ public class CreateComputerPage extends Page {
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(new MenuPage());
+			return Optional.of(context.getBean(MenuPage.class));
 		}
 
 		boolean next = false;
@@ -140,7 +146,7 @@ public class CreateComputerPage extends Page {
 				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));
 			}
 
-			return Optional.of(new MenuPage());
+			return Optional.of(context.getBean(MenuPage.class));
 		}
 
 		if (next) {

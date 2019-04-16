@@ -4,16 +4,24 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
+
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
+@Component
 public class DeleteComputerPage extends Page {
 	
+	@Autowired
 	private ComputerService service;
+	
+	@Autowired
+	private GenericApplicationContext context;
 
-	public DeleteComputerPage() {
-		service = AppConfig.context.getBean(ComputerService.class);
+	private DeleteComputerPage() {
+//		service = AppConfig.context.getBean(ComputerService.class);
 	}
 
 	@Override
@@ -34,7 +42,7 @@ public class DeleteComputerPage extends Page {
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(new MenuPage());
+			return Optional.of(context.getBean(MenuPage.class));
 		}
 
 		Optional<Integer> idInput = Util.parseInt(input);
@@ -57,7 +65,7 @@ public class DeleteComputerPage extends Page {
 			System.out.println(boxMessage("[Problem] Fail deleting computer"));
 		}
 		
-		return Optional.of(new MenuPage());
+		return Optional.of(context.getBean(MenuPage.class));
 	}
 
 	public String toString() {

@@ -4,21 +4,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
+import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.util.Util;
 
-public abstract class ComputerMapper {
+public class ComputerMapper implements RowMapper<Computer> {
 
 	public ComputerMapper() {}
 	
+	@Override
+	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+		return resultSetComputer(rs);
+	}
+	
 	public static Computer resultSetComputer(ResultSet res) throws SQLException {
 		return new ComputerBuilder()
-				.id(res.getInt("ct.id"))
-				.name(res.getString("ct.name"))
+				.id(res.getInt(ComputerDAO.ID_CT_ALIAS))
+				.name(res.getString(ComputerDAO.NAME_CT_ALIAS))
 				.introduced(res.getTimestamp("ct.introduced"))
 				.discontinued(res.getTimestamp("ct.discontinued"))
 				.company(CompanyMapper.resultSetCompany(res))
@@ -38,15 +46,23 @@ public abstract class ComputerMapper {
 		}
 		builder.name(dto.getName());
 		
-		if (dto.getIntroduced() == null || !Util.parseTimestamp(dto.getIntroduced()).isPresent()) {
+		if (dto.getIntroduced() != null && !Util.dateToTimestamp(dto.getIntroduced()).isPresent()) {
 			return Optional.empty();
 		}
-		builder.introduced(Util.parseTimestamp(dto.getIntroduced()).get());
+		if (dto.getIntroduced() == null) {
+			builder.introduced(null);
+		} else {
+			builder.introduced(Util.dateToTimestamp(dto.getIntroduced()).get());
+		}
 		
-		if (dto.getDiscontinued() == null || !Util.parseTimestamp(dto.getDiscontinued()).isPresent()) {
+		if (dto.getDiscontinued() != null && !Util.dateToTimestamp(dto.getDiscontinued()).isPresent()) {
 			return Optional.empty();
 		}
-		builder.discontinued(Util.parseTimestamp(dto.getDiscontinued()).get());
+		if (dto.getDiscontinued() == null) {
+			builder.discontinued(null);
+		} else {
+			builder.discontinued(Util.dateToTimestamp(dto.getDiscontinued()).get());
+		}
 		
 		if (dto.getCompanyId() != null && Util.parseInt(dto.getCompanyId()).isPresent()) {
 			builder.company(new Company(Util.parseInt(dto.getCompanyId()).get(), null));

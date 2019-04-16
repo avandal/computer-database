@@ -4,23 +4,21 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-
-import com.excilys.computer_database.persistence.CompanyDAO;
-import com.excilys.computer_database.persistence.ComputerDAO;
-import com.excilys.computer_database.service.CompanyService;
-import com.excilys.computer_database.service.ComputerService;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
-@ComponentScan(basePackages = {"persistence","service"})
+@ComponentScan(basePackages = {"com.excilys.computer_database.control", 
+							   "com.excilys.computer_database.view", 
+							   "com.excilys.computer_database.persistence",
+							   "com.excilys.computer_database.service"})
 @PropertySource("classpath:/datasource.properties")
 public class AppConfig {
-	public static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+//	public static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 	
 	@Autowired
 	Environment env;
@@ -39,22 +37,29 @@ public class AppConfig {
 	}
 	
 	@Bean
-	public ComputerService computerService() {
-		return new ComputerService(computerDAO(), companyService());
+	public JdbcTemplate jdbcTemplate() {
+		JdbcTemplate jdbc = new JdbcTemplate();
+		jdbc.setDataSource(datasource());
+		return jdbc;
 	}
 	
-	@Bean
-	public CompanyService companyService() {
-		return new CompanyService(companyDAO());
-	}
-	
-	@Bean
-	public ComputerDAO computerDAO() {
-		return new ComputerDAO(companyDAO());
-	}
-	
-	@Bean
-	public CompanyDAO companyDAO() {
-		return new CompanyDAO();
-	}
+//	@Bean
+//	public ComputerService computerService() {
+//		return new ComputerService(computerDAO(), companyService());
+//	}
+//	
+//	@Bean
+//	public CompanyService companyService() {
+//		return new CompanyService(companyDAO());
+//	}
+//	
+//	@Bean
+//	public ComputerDAO computerDAO() {
+//		return new ComputerDAO(jdbcTemplate(), companyDAO());
+//	}
+//	
+//	@Bean
+//	public CompanyDAO companyDAO() {
+//		return new CompanyDAO(jdbcTemplate());
+//	}
 }

@@ -5,13 +5,17 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-import com.excilys.computer_database.AppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.stereotype.Component;
+
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
+@Component
 public class UpdateComputerPage extends Page {
 	
 	private static enum Item {
@@ -45,7 +49,11 @@ public class UpdateComputerPage extends Page {
 		}
 	}
 	
+	@Autowired
 	private ComputerService service;
+	
+	@Autowired
+	private GenericApplicationContext context;
 	
 	private final static String MSG_ID = "Please give a computer id ('abort' to abort)";
 										
@@ -59,9 +67,7 @@ public class UpdateComputerPage extends Page {
 	private boolean start = false;
 	private Item index = Item.MENU_ITEM;
 	
-	public UpdateComputerPage() {
-		service = AppConfig.context.getBean(ComputerService.class);
-	}
+	private UpdateComputerPage() {}
 	
 	private String currentChanges() {
 		String ret = "Now:\n";
@@ -201,7 +207,7 @@ public class UpdateComputerPage extends Page {
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted]"));
 			this.index = Item.MENU_ITEM;
-			return Optional.of(new MenuPage());
+			return Optional.of(context.getBean(MenuPage.class));
 		}
 		
 		return Optional.empty();
@@ -248,10 +254,10 @@ public class UpdateComputerPage extends Page {
 			
 		case UPDATE_ITEM :
 			execUpdate();
-			return Optional.of(new MenuPage());
+			return Optional.of(context.getBean(MenuPage.class));
 			
 		case QUIT_ITEM :
-			return Optional.of(new MenuPage());
+			return Optional.of(context.getBean(MenuPage.class));
 			
 		default : break;
 		}
