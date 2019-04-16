@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
@@ -39,16 +39,15 @@ public class DashboardServlet extends HttpServlet {
 	private int index;
 	
 	private WebPage<ComputerDTO> webPage;
+	
+	@Autowired
 	private ComputerService service;
 	
 	private List<ComputerDTO> list;
 	
 	private static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 	
-	public DashboardServlet() {
-		logger.debug("Constructeur");
-		service = AppConfig.context.getBean(ComputerService.class);
-	}
+	private DashboardServlet() {}
 
 	private int extractPageSize(HttpServletRequest request) {
 		String pageSizeParam = request.getParameter(PAGE_SIZE_PARAM);

@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.view.MenuPage;
@@ -15,11 +14,11 @@ import com.excilys.computer_database.view.Page;
 public class ControlerCLI {
 	private Page currentPage;
 	
-	Logger logger = LoggerFactory.getLogger(ControlerCLI.class);
+	private Logger logger = LoggerFactory.getLogger(ControlerCLI.class);
 
 	@Autowired
-	private ControlerCLI(GenericApplicationContext context) {
-		this.currentPage = context.getBean(MenuPage.class);
+	private ControlerCLI(MenuPage currentPage) {
+		this.currentPage = currentPage;
 	}
 
 	public void run() {

@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.dto.ComputerDTO;
@@ -53,7 +52,7 @@ public class UpdateComputerPage extends Page {
 	private ComputerService service;
 	
 	@Autowired
-	private GenericApplicationContext context;
+	private MenuPage menuPage;
 	
 	private final static String MSG_ID = "Please give a computer id ('abort' to abort)";
 										
@@ -207,7 +206,7 @@ public class UpdateComputerPage extends Page {
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted]"));
 			this.index = Item.MENU_ITEM;
-			return Optional.of(context.getBean(MenuPage.class));
+			return Optional.of(menuPage);
 		}
 		
 		return Optional.empty();
@@ -254,10 +253,10 @@ public class UpdateComputerPage extends Page {
 			
 		case UPDATE_ITEM :
 			execUpdate();
-			return Optional.of(context.getBean(MenuPage.class));
+			return Optional.of(menuPage);
 			
 		case QUIT_ITEM :
-			return Optional.of(context.getBean(MenuPage.class));
+			return Optional.of(menuPage);
 			
 		default : break;
 		}

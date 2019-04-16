@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.service.ComputerService;
@@ -34,7 +33,7 @@ public class CreateComputerPage extends Page {
 	private ComputerService service;
 	
 	@Autowired
-	private GenericApplicationContext context;
+	private MenuPage menuPage;
 	
 	private CreateComputerPage() {}
 
@@ -118,7 +117,7 @@ public class CreateComputerPage extends Page {
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(context.getBean(MenuPage.class));
+			return Optional.of(menuPage);
 		}
 
 		boolean next = false;
@@ -146,7 +145,7 @@ public class CreateComputerPage extends Page {
 				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));
 			}
 
-			return Optional.of(context.getBean(MenuPage.class));
+			return Optional.of(menuPage);
 		}
 
 		if (next) {

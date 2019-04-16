@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.util.Util;
@@ -16,7 +15,25 @@ public class MenuPage extends Page {
 	private Logger logger = LoggerFactory.getLogger(MenuPage.class);
 	
 	@Autowired
-	private GenericApplicationContext context;
+	private ListComputerPage listComputerPage;
+	
+	@Autowired
+	private ListCompanyPage listCompanyPage;
+	
+	@Autowired
+	private ShowComputerPage showComputerPage;
+	
+	@Autowired
+	private CreateComputerPage createComputerPage;
+	
+	@Autowired
+	private UpdateComputerPage updateComputerPage;
+	
+	@Autowired
+	private DeleteComputerPage deleteComputerPage;
+	
+	@Autowired
+	private MenuPage menuPage;
 	
 	private MenuPage() {}
 
@@ -40,7 +57,7 @@ public class MenuPage extends Page {
 	private Page wrongTyped() {
 		System.out.println(Util.boxMessage("Error typing, " + BACK_MENU));
 		System.out.println();
-		return context.getBean(MenuPage.class);
+		return menuPage;
 	}
 
 	@Override
@@ -57,27 +74,27 @@ public class MenuPage extends Page {
 			switch (choice.get()) {
 			case 1 :
 				logger.debug("MenuPage - Exec : listComputer chosen");
-				pageReturn = Optional.of(context.getBean(ListComputerPage.class));
+				pageReturn = Optional.of(listComputerPage);
 				break;
 			
 			case 2 : 
-				pageReturn = Optional.of(context.getBean(ListCompanyPage.class));
+				pageReturn = Optional.of(listCompanyPage);
 				break;
 			
 			case 3 :
-				pageReturn = Optional.of(context.getBean(ShowComputerPage.class));
+				pageReturn = Optional.of(showComputerPage);
 				break;
 			
 			case 4 : 
-				pageReturn = Optional.of(context.getBean(CreateComputerPage.class));
+				pageReturn = Optional.of(createComputerPage);
 				break;
 				
 			case 5 : 
-				pageReturn = Optional.of(context.getBean(UpdateComputerPage.class));
+				pageReturn = Optional.of(updateComputerPage);
 				break;
 			
 			case 6 :
-				pageReturn = Optional.of(context.getBean(DeleteComputerPage.class));
+				pageReturn = Optional.of(deleteComputerPage);
 				break;
 			
 			case 7 : 

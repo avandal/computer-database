@@ -12,9 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.excilys.computer_database.App;
-import com.excilys.computer_database.AppConfig;
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.dto.ComputerDTO;
@@ -51,13 +50,13 @@ public class EditComputerServlet extends HttpServlet {
 	
 	private static Logger logger = LoggerFactory.getLogger(EditComputerServlet.class);
 	
+	@Autowired
 	private ComputerService computerService;
+	
+	@Autowired
 	private CompanyService companyService;
 	
-	public EditComputerServlet() {
-		computerService = AppConfig.context.getBean(ComputerService.class);
-		companyService = AppConfig.context.getBean(CompanyService.class);
-	}
+	private EditComputerServlet() {}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<CompanyDTO> companies = companyService.getAll();

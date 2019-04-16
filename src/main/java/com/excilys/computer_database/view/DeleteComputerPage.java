@@ -5,7 +5,6 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.service.ComputerService;
@@ -18,11 +17,12 @@ public class DeleteComputerPage extends Page {
 	private ComputerService service;
 	
 	@Autowired
-	private GenericApplicationContext context;
+	private MenuPage menuPage;
+	
+	@Autowired
+	private DeleteComputerPage deleteComputerPage;
 
-	private DeleteComputerPage() {
-//		service = AppConfig.context.getBean(ComputerService.class);
-	}
+	private DeleteComputerPage() {}
 
 	@Override
 	public String show() {
@@ -37,24 +37,24 @@ public class DeleteComputerPage extends Page {
 	public Optional<Page> exec(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(new DeleteComputerPage());
+			return Optional.of(deleteComputerPage);
 		}
 
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(context.getBean(MenuPage.class));
+			return Optional.of(menuPage);
 		}
 
 		Optional<Integer> idInput = Util.parseInt(input);
 
 		if (!idInput.isPresent()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return Optional.of(new DeleteComputerPage());
+			return Optional.of(deleteComputerPage);
 		}
 
 		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return Optional.of(new DeleteComputerPage());
+			return Optional.of(deleteComputerPage);
 		}
 
 		int status = service.deleteComputer(idInput.get());
@@ -65,7 +65,7 @@ public class DeleteComputerPage extends Page {
 			System.out.println(boxMessage("[Problem] Fail deleting computer"));
 		}
 		
-		return Optional.of(context.getBean(MenuPage.class));
+		return Optional.of(menuPage);
 	}
 
 	public String toString() {

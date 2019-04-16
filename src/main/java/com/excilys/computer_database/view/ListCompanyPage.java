@@ -5,7 +5,6 @@ import static com.excilys.computer_database.util.Util.boxMessage;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.service.CompanyService;
@@ -14,10 +13,10 @@ import com.excilys.computer_database.service.CompanyService;
 public class ListCompanyPage extends Page {
 	
 	@Autowired
-	private GenericApplicationContext context;
+	private CompanyService service;
 	
 	@Autowired
-	private CompanyService service;
+	private MenuPage menuPage;
 	
 	private ListCompanyPage() {}
 
@@ -33,7 +32,7 @@ public class ListCompanyPage extends Page {
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
-		return Optional.of(context.getBean(MenuPage.class));
+		return Optional.of(menuPage);
 	}
 	
 	public String toString() {
