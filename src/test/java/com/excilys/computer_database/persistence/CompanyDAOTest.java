@@ -21,8 +21,8 @@ import junit.framework.TestCase;
 
 public class CompanyDAOTest extends TestCase {
 	
-	private CompanyDAO companyDAO = null;
-	private ComputerDAO computerDAO = null;
+	private CompanyDAO companyDAO;
+	private ComputerDAO computerDAO;
 
 	private AnnotationConfigApplicationContext context;
 	

@@ -11,6 +11,7 @@ import org.mockito.Mock;
 
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
+import com.excilys.computer_database.persistence.CompanyDAO;
 
 import junit.framework.TestCase;
 
@@ -25,8 +26,8 @@ public class CompanyMapperTest extends TestCase {
 		
 		Company expected = new CompanyBuilder().random().build();
 		
-		when(res.getInt("cn.id")).thenReturn(expected.getId());
-		when(res.getString("cn.name")).thenReturn(expected.getName());
+		when(res.getInt(CompanyDAO.ID_CN_ALIAS)).thenReturn(expected.getId());
+		when(res.getString(CompanyDAO.NAME_CN_ALIAS)).thenReturn(expected.getName());
 		
 		Company initial = CompanyMapper.resultSetCompany(res);
 		
