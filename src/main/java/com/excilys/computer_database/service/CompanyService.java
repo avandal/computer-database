@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computer_database.dto.CompanyDTO;
@@ -14,11 +15,11 @@ import com.excilys.computer_database.util.Util;
 
 @Service
 public class CompanyService {
+	
+	@Autowired
 	private CompanyDAO dao;
 	
-	public CompanyService(CompanyDAO dao) {
-		this.dao = dao;
-	}
+	private CompanyService(CompanyDAO dao) {}
 	
 	public List<CompanyDTO> getAll() {
 		return dao.companyList().stream().map(c -> CompanyMapper.companyToDTO(c)).collect(Collectors.toList());

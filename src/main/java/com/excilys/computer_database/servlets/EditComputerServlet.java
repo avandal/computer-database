@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
@@ -22,6 +25,7 @@ import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
 import com.excilys.computer_database.util.Util;
 
+@Configurable
 @WebServlet(name = "EditComputer", urlPatterns = {"/editComputer"})
 public class EditComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -56,7 +60,13 @@ public class EditComputerServlet extends HttpServlet {
 	@Autowired
 	private CompanyService companyService;
 	
-	private EditComputerServlet() {}
+	public EditComputerServlet() {}
+	
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<CompanyDTO> companies = companyService.getAll();

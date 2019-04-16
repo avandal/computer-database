@@ -33,9 +33,7 @@ public class CompanyDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	public CompanyDAO(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+	private CompanyDAO() {}
 	
 	public Optional<Company> getCompanyById(int id) {
 		try {

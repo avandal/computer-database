@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computer_database.dto.ComputerDTO;
@@ -20,16 +21,16 @@ import com.excilys.computer_database.util.Util;
 
 @Service
 public class ComputerService {
+	
+	@Autowired
 	private ComputerDAO dao;
 	
+	@Autowired
 	private CompanyService companyService;
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerService.class);
 	
-	public ComputerService(ComputerDAO dao, CompanyService companyService) {
-		this.dao = dao;
-		this.companyService = companyService;
-	}
+	private ComputerService() {}
 	
 	public List<ComputerDTO> getAll(SortMode orderMode) {
 		logger.debug("ComputerService - getAll : callings dao.computerList");
@@ -63,7 +64,8 @@ public class ComputerService {
 		Timestamp retDiscontinued = null;
 		
 		if (introduced == null || "".equals(introduced)) {
-			if (!"".equals(discontinued)) {
+			if (discontinued != null && !"".equals(discontinued)) {
+				System.out.println(discontinued);
 				logger.warn("createComputer - Discontinued without introduced");
 				throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_WITHOUT_INTRO);
 			}

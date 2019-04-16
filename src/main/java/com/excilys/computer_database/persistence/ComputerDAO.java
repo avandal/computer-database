@@ -46,11 +46,10 @@ public class ComputerDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	@Autowired
 	private CompanyDAO companyDAO;
 
-	public ComputerDAO(JdbcTemplate jdbcTemplate, CompanyDAO companyDAO) {
-		this.jdbcTemplate = jdbcTemplate;
-		this.companyDAO = companyDAO;
+	private ComputerDAO() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
