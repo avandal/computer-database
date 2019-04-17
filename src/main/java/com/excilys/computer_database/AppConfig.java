@@ -15,8 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @ComponentScan(basePackages = {"com.excilys.computer_database.control", 
 							   "com.excilys.computer_database.view", 
 							   "com.excilys.computer_database.persistence",
-							   "com.excilys.computer_database.service",
-							   "com.excilys.computer_database.servlets"})
+							   "com.excilys.computer_database.service"})
 @PropertySource("classpath:/datasource.properties")
 public class AppConfig {
 //	public static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);

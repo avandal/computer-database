@@ -1,6 +1,7 @@
 package com.excilys.computer_database.ui;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,33 @@ public class WebPage<T> {
 	
 	private static Logger logger = LoggerFactory.getLogger(WebPage.class);
 	
-	public WebPage(List<T> list, int index, int size, String url, String search, String order) {
+	private void fixSize(Optional<Integer> size) {
+		if (size.isPresent()) {
+			this.size = PageSize.getById(size.get()).getSize();
+		} else {
+			logger.warn("extractPageSize - Undefined pageSize input, set to default");
+			this.size = PageSize.SHOW_10.getSize();
+		}
+	}
+	
+	private void fixIndex(Optional<Integer> optIndex) {
+		if (optIndex.isPresent()) {
+			index = optIndex.get();
+			
+			if ((index - 1) * size > list.size() || index <= 0) {
+				logger.warn("extractPageIndex - Trying to get an invalid page (index out of bound), set to default 1");
+				index = 1;
+			}
+		} else {
+			logger.warn("extractPageIndex - Undefined pageIndex input, set to default 1");
+			index = 1;
+		}
+	}
+	
+	public WebPage(List<T> list, Optional<Integer> size, Optional<Integer> index, String url, String search, String order) {
 		this.list = list;
-		this.index = index;
-		this.size = size;
+		fixSize(size);
+		fixIndex(index);
 		this.search = search == null ? "" : search;
 		this.order = order;
 		
@@ -112,5 +136,13 @@ public class WebPage<T> {
 	
 	public String order(String mode) {
 		return formatUrl(index, size, search, mode);
+	}
+	
+	public int getSize() {
+		return this.size;
+	}
+	
+	public int getIndex() {
+		return this.index;
 	}
 }

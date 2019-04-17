@@ -1,11 +1,12 @@
 package com.excilys.computer_database.ui;
 
 import java.util.List;
+import java.util.Optional;
 
 public class WebPageBuilder<T> {
 	private List<T> list;
-	private int index;
-	private int size;
+	private Optional<Integer> size;
+	private Optional<Integer> index;
 	private String search;
 	private String order;
 	
@@ -16,13 +17,13 @@ public class WebPageBuilder<T> {
 		return this;
 	}
 	
-	public WebPageBuilder<T> index(int index) {
-		this.index = index;
+	public WebPageBuilder<T> size(Optional<Integer> size) {
+		this.size = size;
 		return this;
 	}
 	
-	public WebPageBuilder<T> size(int size) {
-		this.size = size;
+	public WebPageBuilder<T> index(Optional<Integer> index) {
+		this.index = index;
 		return this;
 	}
 	
@@ -42,6 +43,6 @@ public class WebPageBuilder<T> {
 	}
 	
 	public WebPage<T> build() {
-		return new WebPage<T>(list, index, size, url, search, order);
+		return new WebPage<T>(list, size, index, url, search, order);
 	}
 }
