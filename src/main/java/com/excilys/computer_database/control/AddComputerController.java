@@ -74,13 +74,14 @@ public class AddComputerController {
 			int status = computerService.createComputer(name, introduced, discontinued, company);
 			
 			if (status == 0) {
-				System.out.println("Error creating");
+				logger.error(String.format("Fail creating the computer : %s, %s, %s, %s", name, introduced, discontinued, company));
 				model.addAttribute(STATUS_CREATE_PARAM, "failed");
 			} else {
+				logger.info(String.format("Successfully created the computer : %s, %s, %s, %s", name, introduced, discontinued, company));
 				model.addAttribute(STATUS_CREATE_PARAM, "success");
 			}
 			
-			return DashboardController.VIEW;
+			return "redirect:" + DashboardController.VIEW;
 		} catch (FailComputerException e) {
 			logger.error(String.format("post - Fail creating the computer : %s, %s, %s, %s", name, introduced, discontinued, company));
 			

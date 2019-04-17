@@ -15,7 +15,7 @@ public class CompanyDTOBuilder {
 	}
 	
 	public CompanyDTOBuilder empty() {
-		id = null;
+		id = "0";
 		name = null;
 		return this;
 	}

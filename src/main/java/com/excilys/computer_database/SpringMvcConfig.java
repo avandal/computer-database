@@ -26,6 +26,6 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/ressources/**").addResourceLocations("/ressources/");
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 }

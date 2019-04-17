@@ -82,7 +82,7 @@ public class EditComputerController {
 			logger.error("get - Invalid computer ID (" + id.get() + "), back to dashboard");
 		}
 		
-		return DashboardController.VIEW;
+		return "redirect:" + DashboardController.VIEW;
 	}
 	
 	@PostMapping({"editComputer"})
@@ -102,7 +102,7 @@ public class EditComputerController {
 		Optional<Integer> optId = Util.parseInt(args.get(COMPUTER_ID_PARAM));
 		if (!optId.isPresent()) {
 			logger.warn("post - invalid computer ID");
-			return DashboardController.VIEW;
+			return "redirect:" + DashboardController.VIEW;
 		}
 		
 		int computerId = optId.get();
@@ -111,7 +111,7 @@ public class EditComputerController {
 			computerService.updateComputer(computerId, name, introduced, discontinued, company);
 			logger.info("Computer successfully updated, back to dashboard");
 			
-			return DashboardController.VIEW;
+			return "redirect:" + DashboardController.VIEW;
 		} catch (FailComputerException e) {
 			switch (e.getConcerned()) {
 			case NAME : model.addAttribute(ERROR_NAME, e.getReason());break;
