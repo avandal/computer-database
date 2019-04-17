@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page import="com.excilys.computer_database.dto.ComputerDTO"%>
 <!DOCTYPE html>
 <html>
@@ -20,6 +21,10 @@
         <div class="container">
             <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
         </div>
+		<div id="lang">
+			<a href="#" onclick="changeLanguage('en')"><img class="lang_flag" src="<c:url value="/resources/assets/en-flag.png" />"/></a>
+			<a href="#" onclick="changeLanguage('fr')"><img class="lang_flag" src="<c:url value="/resources/assets/fr-flag.png" />"/></a>
+		</div>
     </header>
     <section id="main">
         <div class="container">
@@ -28,14 +33,14 @@
                     <div class="label label-default pull-right">
                         id: ${computerId}
                     </div>
-                    <h1>Edit Computer</h1>
+                    <h1><spring:message code="edit_computer.title" /></h1>
 
                     <form action="editComputer" method="POST">
                         <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                         	<input type="hidden" name="computerId" value="${computerId}" />
                             <div class="form-group">
-                                <label for="computerName">Computer name (${originalComputerName} originally)</label>
+                                <label for="computerName"><spring:message code="edit_computer.name" /> (${originalComputerName} <spring:message code="edit_computer.originally" />)</label>
                                 <input type="text" class="form-control" id="computerName" name="computerName" 
                                 	placeholder="${originalComputerName}" value="${originalComputerName}">
                                 <c:choose>
@@ -51,7 +56,8 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date (${originalIntroduced} originally)</label>
+                                <label for="introduced"><spring:message code="edit_computer.intro" /> (${originalIntroduced} 
+                                	<spring:message code="edit_computer.originally" />)</label>
                                 <input type="text" class="form-control" id="introduced" name="introduced" 
                                 	placeholder="${originalIntroduced}" value="${originalIntroduced}">
                                 <c:choose>
@@ -67,7 +73,8 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date (${originalDiscontinued} originally)</label>
+                                <label for="discontinued"><spring:message code="edit_computer.disc" /> (${originalDiscontinued} 
+                                	<spring:message code="edit_computer.originally" />)</label>
                                 <input type="text" class="form-control" id="discontinued" name="discontinued" 
                                 	placeholder="${originalDiscontinued}" value="${originalDiscontinued}">
                                 <c:choose>
@@ -83,7 +90,8 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company (${originalCompanyName} originally)</label>
+                                <label for="companyId"><spring:message code="edit_computer.comp" /> (${originalCompanyName} 
+                                	<spring:message code="edit_computer.originally" />)</label>
                                 <select class="form-control" id="companyId" name="companyId">
                                     <c:forEach items="${companyList}" var="company">
                                     	<option value="${company.getId()}" 
@@ -105,9 +113,9 @@
                             </div>
                         </fieldset>
                         <div class="actions pull-right">
-                            <input id="add" type="submit" value="Edit" class="btn btn-primary">
-                            or
-                            <a href="dashboard" class="btn btn-default">Cancel</a>
+                            <input id="add" type="submit" value="<spring:message code="edit_computer.edit" />" class="btn btn-primary">
+                            <spring:message code="or" />
+                            <a href="dashboard" class="btn btn-default"><spring:message code="edit_computer.cancel" /></a>
                         </div>
                     </form>
                 </div>
@@ -117,5 +125,6 @@
     <script src="resources/js/jquery.min.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/validator.js"></script>
+	<script src="resources/js/lang.js"></script>
 </body>
 </html>

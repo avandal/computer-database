@@ -36,3 +36,14 @@ input[type='checkbox'] {
 .sort-mode>li {
 	vertical-align: middle;
 }
+
+#lang {
+	float: right;
+	margin-right: 5%;
+}
+
+.lang_flag {
+	width: 32px;
+	height: auto;
+	margin-left: 10px;
+}

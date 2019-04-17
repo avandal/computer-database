@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page import="com.excilys.computer_database.dto.ComputerDTO"%>
 <!DOCTYPE html>
 <html>
@@ -16,8 +17,11 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="dashboard"><spring:message code="title" /></a>
+		</div>
+		<div id="lang">
+			<a href="#" onclick="changeLanguage('en')"><img class="lang_flag" src="<c:url value="/resources/assets/en-flag.png" />"/></a>
+			<a href="#" onclick="changeLanguage('fr')"><img class="lang_flag" src="<c:url value="/resources/assets/fr-flag.png" />"/></a>
 		</div>
 	</header>
 
@@ -25,14 +29,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1>Add Computer</h1>
+					<h1><spring:message code="add_computer.title" /></h1>
 					<form action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> 
+								<label for="computerName"><spring:message code="add_computer.name" /></label> 
 								<input
 									type="text" name="computerName" class="form-control"
-									id="computerName" placeholder="Computer name"
+									id="computerName" placeholder="<spring:message code="add_computer.name" />"
 									value="${computerName}" required>
 								<c:choose>
 									<c:when test = "${not empty errorName}">
@@ -47,13 +51,14 @@
 								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date <br />
-									<small class="text-muted">(Please follow these formats: 
-										<i>dd/mm/yyyy</i> or <i>yyyy-mm-dd</i>)
+								<label for="introduced"><spring:message code="add_computer.intro" /> <br />
+									<small class="text-muted">(<spring:message code="add_computer.format.please" /> 
+										<i><spring:message code="add_computer.format.slash" /></i> <spring:message code="or" /> 
+										<i><spring:message code="add_computer.format.dash" /></i>)
 									</small>
 								</label>
 								<input type="text" name="introduced" class="form-control"
-									id="introduced" placeholder="Introduced date"
+									id="introduced" placeholder="<spring:message code="add_computer.intro" />"
 									value="${introduced}">
 								<c:choose>
 									<c:when test = "${not empty errorIntroduced}">
@@ -68,13 +73,14 @@
 								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date <br />
-									<small class="text-muted">(Please follow these formats: 
-										<i>dd/mm/yyyy</i> or <i>yyyy-mm-dd</i>)
+								<label for="discontinued"><spring:message code="add_computer.disc" /> <br />
+									<small class="text-muted">(<spring:message code="add_computer.format.please" /> 
+										<i><spring:message code="add_computer.format.slash" /></i> <spring:message code="or" /> 
+										<i><spring:message code="add_computer.format.dash" /></i>)
 									</small>
 								</label>
 								<input type="text" name="discontinued" class="form-control"
-									id="discontinued" placeholder="Discontinued date"
+									id="discontinued" placeholder="<spring:message code="add_computer.disc" />"
 									value="${discontinued}">
 								<c:choose>
 									<c:when test = "${not empty errorDiscontinued}">
@@ -90,7 +96,7 @@
 							</div>
 							<div class="form-group">
 									${companyId}
-								<label for="companyId">Company</label>
+								<label for="companyId"><spring:message code="add_computer.comp" /></label>
 								<select
 									class="form-control" name="companyId" id="companyId">
 									<c:forEach items="${companyList}" var="company">
@@ -122,8 +128,9 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary" id="add">
-							or <a href=<c:url value = "dashboard" /> class="btn btn-default">Cancel</a>
+							<input type="submit" value="<spring:message code="add_computer.add" />" class="btn btn-primary" id="add">
+							<spring:message code="or" /> <a href=<c:url value = "dashboard" /> class="btn btn-default">
+							<spring:message code="add_computer.cancel" /></a>
 							<c:choose>
 								<c:when test="${status.equals('void')}"></c:when>
 								<c:when test="${status.equals('success')}">Computer successfully created!</c:when>
@@ -139,5 +146,6 @@
 	<script src="resources/js/jquery.min.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/validator.js"></script>
+	<script src="resources/js/lang.js"></script>
 </body>
 </html>

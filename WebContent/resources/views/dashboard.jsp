@@ -8,30 +8,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href=<c:url value = "/resources/css/bootstrap.min.css" />
+<link href=<c:url value="/resources/css/bootstrap.min.css" />
 	rel="stylesheet" media="screen">
-<link href=<c:url value = "/resources/css/font-awesome.css" />
+<link href=<c:url value="/resources/css/font-awesome.css" />
 	rel="stylesheet" media="screen">
-<link href=<c:url value = "/resources/css/main.css" /> rel="stylesheet"
+<link href=<c:url value="/resources/css/main.css" /> rel="stylesheet"
 	media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href=<c:url value = "dashboard" />>
-				Application - Computer Database </a>
+			<a class="navbar-brand" href=<c:url value="dashboard" />>
+				<spring:message code="title" /></a>
+		</div>
+		<div id="lang">
+			<a href="#" onclick="changeLanguage('en')"><img class="lang_flag" src="<c:url value="/resources/assets/en-flag.png" />"/></a>
+			<a href="#" onclick="changeLanguage('fr')"><img class="lang_flag" src="<c:url value="/resources/assets/fr-flag.png" />"/></a>
 		</div>
 	</header>
 
 	<section id="main">
+	
 		<div class="container">
 			<h1 id="homeTitle">
 				<c:choose>
 					<c:when test="${ nbComputers > 0}">
-	                	${ nbComputers } Computers found - ${webPage.firstId()}/${webPage.lastId()}
+	                	${ nbComputers } <spring:message code="dashboard.nb_computer" /> - ${webPage.firstId()}/${webPage.lastId()}
 	                </c:when>
 					<c:otherwise>
-	                	No computer found
+	                	<spring:message code="dashboard.no_computer" />
 	                </c:otherwise>
 				</c:choose>
 			</h1>
@@ -40,16 +45,16 @@
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="dashboard.search.placeholder" />" /> <input
+							type="submit" id="searchsubmit" value="<spring:message code="dashboard.search.value" />"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href=<c:url value = "addComputer" />>Add Computer</a> <a
+						href=<c:url value="addComputer" />><spring:message code="dashboard.add_computer" /></a> <a
 						class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.edit_computer" /></a>
 				</div>
 			</div>
 		</div>
@@ -74,39 +79,39 @@
 							<th>
 								<ul class="list-inline sort-mode">
 									<li>
-										<a href="${webPage.orderByNameDesc()}" title="Sort by name"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
-										<a href="${webPage.orderByNameAsc()}" title="Sort by name"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+										<a href="${webPage.orderByNameDesc()}" title="<spring:message code="dashboard.sort.name" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByNameAsc()}" title="<spring:message code="dashboard.sort.name" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li>Computer name</li>
+									<li><spring:message code="dashboard.table.name" /></li>
 								</ul>
 							</th>
 							<th>
 								<ul class="list-inline sort-mode">
 									<li>
-										<a href="${webPage.orderByIntroDesc()}" title="Sort by introduced date"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
-										<a href="${webPage.orderByIntroAsc()}" title="Sort by introduced date"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+										<a href="${webPage.orderByIntroDesc()}" title="<spring:message code="dashboard.sort.intro" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByIntroAsc()}" title="<spring:message code="dashboard.sort.intro" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li>Introduced date</li>
+									<li><spring:message code="dashboard.table.intro" /></li>
 								</ul>
 							</th>
 							<!-- Table header for Discontinued Date -->
 							<th>
 								<ul class="list-inline sort-mode">
 									<li>
-										<a href="${webPage.orderByDiscDesc()}" title="Sort by discontinued date"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
-										<a href="${webPage.orderByDiscAsc()}" title="Sort by discontinued date"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+										<a href="${webPage.orderByDiscDesc()}" title="<spring:message code="dashboard.sort.disc" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByDiscAsc()}" title="<spring:message code="dashboard.sort.disc" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li>Discontinued date</li>
+									<li><spring:message code="dashboard.table.disc" /></li>
 								</ul>
 							</th>
 							<!-- Table header for Company -->
 							<th>
 								<ul class="list-inline sort-mode">
 									<li>
-										<a href="${webPage.orderByCompDesc()}" title="Sort by company name"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
-										<a href="${webPage.orderByCompAsc()}" title="Sort by company name"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
+										<a href="${webPage.orderByCompDesc()}" title="<spring:message code="dashboard.sort.comp" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
+										<a href="${webPage.orderByCompAsc()}" title="<spring:message code="dashboard.sort.comp" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li>Company</li>
+									<li><spring:message code="dashboard.table.comp" /></li>
 								</ul>
 							</th>
 						</tr>
@@ -166,6 +171,6 @@
 	<script src="resources/js/jquery.min.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/dashboard.js"></script>
-
+	<script src="resources/js/lang.js"></script>
 </body>
 </html>
