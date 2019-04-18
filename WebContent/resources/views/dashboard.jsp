@@ -147,17 +147,22 @@
     	%>
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="${webPage.previousPage()}"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
+				<c:if test="${webPage.getFirstIndex() > 1}">
+					<li><a href="${webPage.previousPage()}"
+						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a></li>
+				</c:if>
 
 				<c:forEach var="i" begin="${webPage.getFirstIndex()}"
-					end="${webPage.getFirstIndex() + 4}">
-					<li><a href="${webPage.indexAt(i)}">${i}</a></li>
+					end="${webPage.getLastIndex()}">
+					<li class="<c:if test="${webPage.getIndex() == i}">active</c:if>"><a href="${webPage.indexAt(i)}">${i}</a></li>
 				</c:forEach>
-				<li><a href="${webPage.nextPage()}"
-					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
+				
+				<c:if test="${webPage.getLastIndex() < webPage.getPageCount()}">
+					<li><a href="${webPage.nextPage()}"
+						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+					</a></li>
+				</c:if>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">

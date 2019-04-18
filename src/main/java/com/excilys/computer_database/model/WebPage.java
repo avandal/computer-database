@@ -1,4 +1,4 @@
-package com.excilys.computer_database.ui;
+package com.excilys.computer_database.model;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,17 +84,38 @@ public class WebPage<T> {
 		return PageSize.values();
 	}
 	
+	public int getPageCount() {
+		return (int) Math.ceil((double)list.size() / size);
+	}
+	
 	public int getFirstIndex() {
-		int s = list.size();
-		if (index - 2 <= 1) {
-			logger.warn("getFirstIndex - trying access to invalid index (< 1), set to 1");
+		int pageCount = getPageCount();
+		
+		if (index <= 3) {
 			return 1;
 		}
-		if ((index + 1) * size < s) {
+		
+		if ((index + 2) <= pageCount) {
 			return index - 2;
 		}
-		logger.warn("getFirstIndex - Trying access to invalid index (> max), set to max");
-		return s / size - 3 - (s % size == 0 ? 1 : 0);
+		
+		return (Math.max(pageCount - 4, 1));
+	}
+	
+	public int getLastIndex() {
+		int s = list.size();
+		
+		if (index <= 3) {
+			return Math.min(getPageCount(), 5);
+		}
+		
+		for (int i = 1; i >= 0; i--) {
+			if (s > (index + i) * size) {
+				return index + (i + 1);
+			}
+		}
+		
+		return index;
 	}
 	
 	public int firstId() {
