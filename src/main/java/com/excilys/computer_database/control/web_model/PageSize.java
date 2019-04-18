@@ -1,4 +1,4 @@
-package com.excilys.computer_database.servlets;
+package com.excilys.computer_database.control.web_model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

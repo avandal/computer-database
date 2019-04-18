@@ -13,8 +13,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.excilys.computer_database.AppConfigTest;
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.ComputerDTO;
-import com.excilys.computer_database.model.Company;
-import com.excilys.computer_database.servlets.SortMode;
+import com.excilys.computer_database.model.SortMode;
 import com.excilys.computer_database.util.ScriptRunner;
 
 import junit.framework.TestCase;

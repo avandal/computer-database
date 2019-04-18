@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 							   "com.excilys.computer_database.service"})
 @PropertySource("classpath:/datasource.properties")
 public class AppConfig {
-//	public static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 	
 	@Autowired
 	Environment env;
@@ -42,24 +41,4 @@ public class AppConfig {
 		jdbc.setDataSource(datasource());
 		return jdbc;
 	}
-	
-//	@Bean
-//	public ComputerService computerService() {
-//		return new ComputerService(computerDAO(), companyService());
-//	}
-//	
-//	@Bean
-//	public CompanyService companyService() {
-//		return new CompanyService(companyDAO());
-//	}
-//	
-//	@Bean
-//	public ComputerDAO computerDAO() {
-//		return new ComputerDAO(jdbcTemplate(), companyDAO());
-//	}
-//	
-//	@Bean
-//	public CompanyDAO companyDAO() {
-//		return new CompanyDAO(jdbcTemplate());
-//	}
 }

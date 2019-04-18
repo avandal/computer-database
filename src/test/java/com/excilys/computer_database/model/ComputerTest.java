@@ -10,7 +10,6 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 public class ComputerTest extends TestCase {
-	
 	private ComputerBuilder builderComputer1 = new ComputerBuilder();
 	private ComputerBuilder builderComputer2 = new ComputerBuilder();
 	
@@ -172,5 +171,4 @@ public class ComputerTest extends TestCase {
 		
 		assertEquals(computer1, computer2);
 	}
-
 }

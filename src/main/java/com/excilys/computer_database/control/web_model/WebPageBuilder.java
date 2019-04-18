@@ -1,4 +1,4 @@
-package com.excilys.computer_database.model;
+package com.excilys.computer_database.control.web_model;
 
 import java.util.List;
 import java.util.Optional;

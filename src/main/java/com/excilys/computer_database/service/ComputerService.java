@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.SortMode;
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.service.exception.ConcernedField;
 import com.excilys.computer_database.service.exception.FailComputerException;
-import com.excilys.computer_database.servlets.SortMode;
 import com.excilys.computer_database.util.Util;
 
 @Service

@@ -13,7 +13,6 @@ import com.excilys.computer_database.util.Util;
 
 @Component
 public class CreateComputerPage extends Page {
-
 	private final static String MSG_NAME = "Please give a computer name ('abort' to abort)";
 	private final static String MSG_INTRODUCED = "Please give an introduced date ('abort' to abort, "
 												+ "'null' to set null)";

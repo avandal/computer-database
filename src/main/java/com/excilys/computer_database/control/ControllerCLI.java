@@ -11,13 +11,13 @@ import com.excilys.computer_database.view.MenuPage;
 import com.excilys.computer_database.view.Page;
 
 @Component
-public class ControlerCLI {
+public class ControllerCLI {
 	private Page currentPage;
 	
-	private Logger logger = LoggerFactory.getLogger(ControlerCLI.class);
+	private Logger logger = LoggerFactory.getLogger(ControllerCLI.class);
 
 	@Autowired
-	private ControlerCLI(MenuPage currentPage) {
+	private ControllerCLI(MenuPage currentPage) {
 		this.currentPage = currentPage;
 	}
 

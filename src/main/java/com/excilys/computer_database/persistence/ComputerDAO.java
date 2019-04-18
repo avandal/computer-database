@@ -79,25 +79,6 @@ public class ComputerDAO {
 			logger.warn("There is no computer with name like " + name);
 			return new ArrayList<Computer>();
 		}
-//		ArrayList<Computer> ret = new ArrayList<>();
-//		
-//		try (Connection con = datasource.getConnection();
-//			 PreparedStatement stmt = con.prepareStatement(SELECT_BY_NAME + " " + order);) {
-//			
-//			stmt.setString(1, "%" + name + "%");
-//			stmt.setString(2, "%" + name + "%");
-//			
-//			try (ResultSet res = stmt.executeQuery();) {
-//				while (res.next()) {
-//					ret.add(ComputerMapper.resultSetComputer(res));
-//				}
-//			}
-//		} catch (SQLException e) {
-//			logger.error("getByName - SQL error");
-//			e.printStackTrace();
-//		}
-//		
-//		return ret;
 	}
 
 	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
@@ -128,9 +109,5 @@ public class ComputerDAO {
 
 	public int deleteComputer(int computerId) {
 		return jdbcTemplate.update(DELETE_COMPUTER, new Object[] {computerId});
-	}
-	
-	public CompanyDAO getCompanyDAO() {
-		return companyDAO;
 	}
 }

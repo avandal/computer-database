@@ -19,7 +19,7 @@ public class CompanyService {
 	@Autowired
 	private CompanyDAO dao;
 	
-	private CompanyService(CompanyDAO dao) {}
+	private CompanyService() {}
 	
 	public List<CompanyDTO> getAll() {
 		return dao.companyList().stream().map(c -> CompanyMapper.companyToDTO(c)).collect(Collectors.toList());

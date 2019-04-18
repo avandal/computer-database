@@ -8,7 +8,6 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 public class CompanyTest extends TestCase {
-	
 	private CompanyBuilder builderCompany1 = new CompanyBuilder();
 	private CompanyBuilder builderCompany2 = new CompanyBuilder();
 	

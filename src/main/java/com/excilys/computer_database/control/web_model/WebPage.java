@@ -1,4 +1,4 @@
-package com.excilys.computer_database.model;
+package com.excilys.computer_database.control.web_model;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,8 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computer_database.control.DashboardController;
-import com.excilys.computer_database.servlets.PageSize;
-import com.excilys.computer_database.servlets.SortMode;
+import com.excilys.computer_database.model.SortMode;
 
 public class WebPage<T> {
 	private List<T> list;

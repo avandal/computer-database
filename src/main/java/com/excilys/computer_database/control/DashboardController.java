@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.excilys.computer_database.control.web_model.WebPage;
+import com.excilys.computer_database.control.web_model.WebPageBuilder;
 import com.excilys.computer_database.dto.ComputerDTO;
-import com.excilys.computer_database.model.WebPage;
-import com.excilys.computer_database.model.WebPageBuilder;
+import com.excilys.computer_database.model.SortMode;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
-import com.excilys.computer_database.servlets.SortMode;
 import com.excilys.computer_database.util.Util;
 
 @Controller

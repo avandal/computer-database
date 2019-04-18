@@ -13,11 +13,9 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration
 public class SpringWebInitializer implements WebApplicationInitializer {
 	
-	private AnnotationConfigWebApplicationContext ctx;
-	
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		ctx = new AnnotationConfigWebApplicationContext();
+		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 		ctx.register(AppConfig.class);
 		ctx.register(SpringMvcConfig.class);
 		ctx.setServletContext(servletContext);
@@ -30,5 +28,4 @@ public class SpringWebInitializer implements WebApplicationInitializer {
 		registration.setLoadOnStartup(1);
 		registration.addMapping("/");
 	}
-	
 }

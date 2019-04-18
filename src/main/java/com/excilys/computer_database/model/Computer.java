@@ -15,10 +15,6 @@ public class Computer {
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.company = company;
-	}	
-	
-	public int getId() {
-		return id;
 	}
 
 	@Override
@@ -76,6 +72,10 @@ public class Computer {
 			return false;
 		
 		return true;
+	}	
+	
+	public int getId() {
+		return id;
 	}
 
 	public void setId(int id) {

@@ -27,15 +27,8 @@ public class ScriptRunner {
 		
 		for (String line : lines.toString().split(";")) {
 			jdbcTemplate.update(line);
-//			try (Connection connection = datasource.getConnection();
-//				 PreparedStatement statement = connection.prepareStatement(line);) {
-//			
-//				statement.executeUpdate(line);
-//			} catch (SQLException e) {
-//				System.out.println("Error when executing script");
-//				e.printStackTrace();
-//			}
 		}
+		
 		context.close();
 	}
 }

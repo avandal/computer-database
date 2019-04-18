@@ -1,4 +1,4 @@
-package com.excilys.computer_database.servlets;
+package com.excilys.computer_database.model;
 
 public enum SortMode {
 	NAME_ASC("name_asc", "order by ct.name asc"), 

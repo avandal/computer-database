@@ -21,7 +21,6 @@ import com.excilys.computer_database.service.exception.FailComputerException;
 
 @Controller
 public class AddComputerController {
-	
 	static final String VIEW = "addComputer";
 	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	

@@ -11,7 +11,6 @@ import com.excilys.computer_database.util.Util;
 
 @Component
 public class MenuPage extends Page {
-	
 	private Logger logger = LoggerFactory.getLogger(MenuPage.class);
 	
 	@Autowired
