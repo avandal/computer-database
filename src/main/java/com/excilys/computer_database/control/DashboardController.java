@@ -23,7 +23,7 @@ import com.excilys.computer_database.util.Util;
 
 @Controller
 public class DashboardController {
-	public static final String VIEW = "dashboard";
+	static final String VIEW = "dashboard";
 	
 	public static final String PAGE_SIZE_PARAM = "pageSize";
 	public static final String PAGE_INDEX_PARAM = "pageIndex";

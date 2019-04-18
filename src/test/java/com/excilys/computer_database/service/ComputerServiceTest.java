@@ -286,7 +286,7 @@ public class ComputerServiceTest extends TestCase {
 		ComputerDTO reference = new ComputerDTO("1", name, introduced, discontinued, companyId, companyName);
 		
 		try {
-			assertEquals(service.updateComputer(1, name, introduced, discontinued, companyId), 1);
+			assertEquals(service.updateComputer("1", name, introduced, discontinued, companyId), 1);
 		} catch (FailComputerException e) {
 			fail("Should have updated the computer");
 		}
@@ -308,7 +308,7 @@ public class ComputerServiceTest extends TestCase {
 		ComputerDTO reference = new ComputerDTO("1", name, introduced, discontinued, companyId, companyName);
 		
 		try {
-			assertEquals(service.updateComputer(1, name, introduced, discontinued, companyId), 1);
+			assertEquals(service.updateComputer("1", name, introduced, discontinued, companyId), 1);
 		} catch (FailComputerException e) {
 			fail("Should have updated the computer");
 		}
@@ -328,49 +328,49 @@ public class ComputerServiceTest extends TestCase {
 		String companyId = thinkingId;
 		
 		try {
-			service.updateComputer(1, "", introduced, discontinued, companyId);
+			service.updateComputer("1", "", introduced, discontinued, companyId);
 			fail("Should have thrown this FailComputerException: '" + FailComputerException.NULL_NAME + "'");
 		} catch (FailComputerException e) {
 			assertTrue(true);
 		}
 		
 		try {
-			service.updateComputer(1, name, "", discontinued, companyId);
+			service.updateComputer("1", name, "", discontinued, companyId);
 			fail("Should have thrown this FailComputerException: '" + FailComputerException.DISC_WITHOUT_INTRO + "'");
 		} catch (FailComputerException e) {
 			assertTrue(true);
 		}
 		
 		try {
-			service.updateComputer(1, name, "wrong format", discontinued, companyId);
+			service.updateComputer("1", name, "wrong format", discontinued, companyId);
 			fail("Should have thrown this FailComputerException: '" + FailComputerException.WRONG_FORMAT + "'");
 		} catch (FailComputerException e) {
 			assertTrue(true);
 		}
 		
 		try {
-			service.updateComputer(1, name, introduced, "Wrong format", companyId);
+			service.updateComputer("1", name, introduced, "Wrong format", companyId);
 			fail("Should have thrown this FailComputerException: '" + FailComputerException.WRONG_FORMAT + "'");
 		} catch (FailComputerException e) {
 			assertTrue(true);
 		}
 		
 		try {
-			service.updateComputer(1, name, introduced, beforeDisc, companyId);
+			service.updateComputer("1", name, introduced, beforeDisc, companyId);
 			fail("Should have thrown this FailComputerException: '" + FailComputerException.DISC_LESS_THAN_INTRO + "'");
 		} catch (FailComputerException e) {
 			assertTrue(true);
 		}
 		
 		try {
-			service.updateComputer(1, name, introduced, discontinued, "Wrong id");
+			service.updateComputer("1", name, introduced, discontinued, "Wrong id");
 			fail("Should have thrown this FailComputerException: '" + FailComputerException.INVALID_COMPANY_ID + "'");
 		} catch (FailComputerException e) {
 			assertTrue(true);
 		}
 		
 		try {
-			service.updateComputer(1, name, introduced, discontinued, "42");
+			service.updateComputer("1", name, introduced, discontinued, "42");
 			fail("Should have thrown this FailComputerException: '" + FailComputerException.NONEXISTENT_COMPANY + "'");
 		} catch (FailComputerException e) {
 			assertTrue(true);

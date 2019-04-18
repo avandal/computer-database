@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page import="com.excilys.computer_database.dto.ComputerDTO"%>
 <!DOCTYPE html>
 <html>
@@ -35,14 +36,13 @@
                     </div>
                     <h1><spring:message code="edit_computer.title" /></h1>
 
-                    <form action="editComputer" method="POST">
-                        <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
+                    <form:form action="editComputer" modelAttribute="computer" method="POST">
                         <fieldset>
-                        	<input type="hidden" name="computerId" value="${computerId}" />
+                        	<form:input path="id" type="hidden" name="computerId" value="${computerId}" />
                             <div class="form-group">
-                                <label for="computerName"><spring:message code="edit_computer.name" /> (${originalComputerName} <spring:message code="edit_computer.originally" />)</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" 
-                                	placeholder="${originalComputerName}" value="${originalComputerName}">
+                                <form:label path="name" for="computerName"><spring:message code="edit_computer.name" /> (${originalComputerName} <spring:message code="edit_computer.originally" />)</form:label>
+                                <form:input path="name" type="text" class="form-control" id="computerName" name="computerName" 
+                                	placeholder="${originalComputerName}" value="${originalComputerName}" />
                                 <c:choose>
 									<c:when test = "${not empty errorName}">
 								<div id="errorName" class="alert alert-danger">
@@ -56,10 +56,10 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <label for="introduced"><spring:message code="edit_computer.intro" /> (${originalIntroduced} 
-                                	<spring:message code="edit_computer.originally" />)</label>
-                                <input type="text" class="form-control" id="introduced" name="introduced" 
-                                	placeholder="${originalIntroduced}" value="${originalIntroduced}">
+                                <form:label path="introduced" for="introduced"><spring:message code="edit_computer.intro" /> (${originalIntroduced} 
+                                	<spring:message code="edit_computer.originally" />)</form:label>
+                                <form:input path="introduced" type="text" class="form-control" id="introduced" name="introduced" 
+                                	placeholder="${originalIntroduced}" value="${originalIntroduced}" />
                                 <c:choose>
 									<c:when test = "${not empty errorIntroduced}">
 								<div id="errorIntroduced" class="alert alert-danger">
@@ -73,10 +73,10 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <label for="discontinued"><spring:message code="edit_computer.disc" /> (${originalDiscontinued} 
-                                	<spring:message code="edit_computer.originally" />)</label>
-                                <input type="text" class="form-control" id="discontinued" name="discontinued" 
-                                	placeholder="${originalDiscontinued}" value="${originalDiscontinued}">
+                                <form:label path="discontinued" for="discontinued"><spring:message code="edit_computer.disc" /> (${originalDiscontinued} 
+                                	<spring:message code="edit_computer.originally" />)</form:label>
+                                <form:input path="discontinued" type="text" class="form-control" id="discontinued" name="discontinued" 
+                                	placeholder="${originalDiscontinued}" value="${originalDiscontinued}" />
                                 <c:choose>
 									<c:when test = "${not empty errorDiscontinued}">
 								<div id="errorDiscontinued" class="alert alert-danger">
@@ -90,15 +90,15 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <label for="companyId"><spring:message code="edit_computer.comp" /> (${originalCompanyName} 
-                                	<spring:message code="edit_computer.originally" />)</label>
-                                <select class="form-control" id="companyId" name="companyId">
+                                <form:label path="companyId" for="companyId"><spring:message code="edit_computer.comp" /> (${originalCompanyName} 
+                                	<spring:message code="edit_computer.originally" />)</form:label>
+                                <form:select path="companyId" class="form-control" id="companyId" name="companyId">
                                     <c:forEach items="${companyList}" var="company">
                                     	<option value="${company.getId()}" 
 											<c:if test="${company.getId() eq originalCompanyId}">selected="selected"</c:if>
 										>${company.getName()}</option>
                                     </c:forEach>
-                                </select>
+                                </form:select>
                                 <c:choose>
 									<c:when test = "${not empty errorCompany}">
 								<div id="errorCompany" class="alert alert-danger">
@@ -117,7 +117,7 @@
                             <spring:message code="or" />
                             <a href="dashboard" class="btn btn-default"><spring:message code="edit_computer.cancel" /></a>
                         </div>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>

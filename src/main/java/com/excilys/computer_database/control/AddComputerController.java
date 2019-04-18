@@ -1,7 +1,6 @@
 package com.excilys.computer_database.control;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
+import com.excilys.computer_database.dto.ComputerDTO;
+import com.excilys.computer_database.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
@@ -21,7 +22,8 @@ import com.excilys.computer_database.service.exception.FailComputerException;
 @Controller
 public class AddComputerController {
 	
-	public static final String VIEW = "addComputer";
+	static final String VIEW = "addComputer";
+	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	
 	private static final String LIST_COMP_PARAM = "companyList";
 	private static final String STATUS_CREATE_PARAM = "status";
@@ -45,8 +47,10 @@ public class AddComputerController {
 	private CompanyService companyService;
 	
 	@GetMapping({"addComputer"})
-	public String get(@RequestParam(required = false) Map<String, String> args, Model model) {
+	public String get(Model model) {
 		logger.info("entering get");
+
+		model.addAttribute("computer", new ComputerDTOBuilder().empty().build());
 		
 		List<CompanyDTO> companies = companyService.getAll();
 		companies.add(0, new CompanyDTOBuilder().empty().build());
@@ -57,33 +61,28 @@ public class AddComputerController {
 	}
 	
 	@PostMapping({"addComputer"})
-	public String post(@RequestParam(required = false) Map<String, String> args, Model model) {
+	public String post(@ModelAttribute("computer") ComputerDTO computer, Model model) {
 		logger.info("entering post");
 		
-		String name = args.get(NAME_PARAM);
-		String introduced = args.get(INTR_PARAM);
-		String discontinued = args.get(DISC_PARAM);
-		String company = args.get(COMP_PARAM);
-		
-		model.addAttribute(NAME_PARAM, name);
-		model.addAttribute(INTR_PARAM, introduced);
-		model.addAttribute(DISC_PARAM, discontinued);
-		model.addAttribute(COMP_PARAM, company);
-		
 		try {
-			int status = computerService.createComputer(name, introduced, discontinued, company);
+			int status = computerService.createComputer(computer);
 			
 			if (status == 0) {
-				logger.error(String.format("Fail creating the computer : %s, %s, %s, %s", name, introduced, discontinued, company));
+				logger.error(String.format("Fail creating the computer : %s", computer));
 				model.addAttribute(STATUS_CREATE_PARAM, "failed");
 			} else {
-				logger.info(String.format("Successfully created the computer : %s, %s, %s, %s", name, introduced, discontinued, company));
+				logger.info(String.format("Successfully created the computer : %s", computer));
 				model.addAttribute(STATUS_CREATE_PARAM, "success");
 			}
 			
-			return "redirect:" + DashboardController.VIEW;
+			return REDIRECT_DASHBOARD;
 		} catch (FailComputerException e) {
-			logger.error(String.format("post - Fail creating the computer : %s, %s, %s, %s", name, introduced, discontinued, company));
+			logger.error(String.format("post - Fail creating the computer : %s", computer));
+			
+			model.addAttribute(NAME_PARAM, computer.getName());
+			model.addAttribute(INTR_PARAM, computer.getIntroduced());
+			model.addAttribute(DISC_PARAM, computer.getDiscontinued());
+			model.addAttribute(COMP_PARAM, computer.getCompanyId());
 			
 			switch (e.getConcerned()) {
 			case NAME : model.addAttribute(ERROR_NAME, e.getReason());break;
@@ -95,7 +94,7 @@ public class AddComputerController {
 			
 			model.addAttribute(STATUS_CREATE_PARAM, "failed");
 			
-			return get(args, model);
+			return get(model);
 		}
 	}
 }

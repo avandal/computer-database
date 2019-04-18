@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page import="com.excilys.computer_database.dto.ComputerDTO"%>
 <!DOCTYPE html>
 <html>
@@ -30,14 +31,14 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1><spring:message code="add_computer.title" /></h1>
-					<form action="addComputer" method="POST">
+					<form:form action="addComputer" modelAttribute="computer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName"><spring:message code="add_computer.name" /></label> 
-								<input
+								<form:label path="name" for="computerName"><spring:message code="add_computer.name" var="computer_name" /></form:label> 
+								<form:input path="name"
 									type="text" name="computerName" class="form-control"
-									id="computerName" placeholder="<spring:message code="add_computer.name" />"
-									value="${computerName}" required>
+									id="computerName" placeholder="${computer_name}"
+									value="${computerName}" />
 								<c:choose>
 									<c:when test = "${not empty errorName}">
 								<div id="errorName" class="alert alert-danger">
@@ -51,15 +52,15 @@
 								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="introduced"><spring:message code="add_computer.intro" /> <br />
+								<form:label path="introduced" for="introduced"><spring:message code="add_computer.intro" var="computer_intro" /> <br />
 									<small class="text-muted">(<spring:message code="add_computer.format.please" /> 
 										<i><spring:message code="add_computer.format.slash" /></i> <spring:message code="or" /> 
 										<i><spring:message code="add_computer.format.dash" /></i>)
 									</small>
-								</label>
-								<input type="text" name="introduced" class="form-control"
-									id="introduced" placeholder="<spring:message code="add_computer.intro" />"
-									value="${introduced}">
+								</form:label>
+								<form:input path="introduced" type="text" name="introduced" class="form-control"
+									id="introduced" placeholder="${computer_intro}"
+									value="${introduced}" />
 								<c:choose>
 									<c:when test = "${not empty errorIntroduced}">
 								<div id="errorIntroduced" class="alert alert-danger">
@@ -73,15 +74,15 @@
 								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="discontinued"><spring:message code="add_computer.disc" /> <br />
+								<form:label path="discontinued" for="discontinued"><spring:message code="add_computer.disc" var="computer_disc" /> <br />
 									<small class="text-muted">(<spring:message code="add_computer.format.please" /> 
 										<i><spring:message code="add_computer.format.slash" /></i> <spring:message code="or" /> 
 										<i><spring:message code="add_computer.format.dash" /></i>)
 									</small>
-								</label>
-								<input type="text" name="discontinued" class="form-control"
-									id="discontinued" placeholder="<spring:message code="add_computer.disc" />"
-									value="${discontinued}">
+								</form:label>
+								<form:input path="discontinued" type="text" name="discontinued" class="form-control"
+									id="discontinued" placeholder="${computer_disc}"
+									value="${discontinued}" />
 								<c:choose>
 									<c:when test = "${not empty errorDiscontinued}">
 								<div id="errorDiscontinued" class="alert alert-danger">
@@ -97,7 +98,7 @@
 							<div class="form-group">
 									${companyId}
 								<label for="companyId"><spring:message code="add_computer.comp" /></label>
-								<select
+								<form:select path="companyId"
 									class="form-control" name="companyId" id="companyId">
 									<c:forEach items="${companyList}" var="company">
 										<c:choose>
@@ -113,7 +114,7 @@
 										</c:otherwise>
 										</c:choose>
 									</c:forEach>
-								</select>
+								</form:select>
 								<c:choose>
 									<c:when test = "${not empty errorCompany}">
 								<div id="errorCompany" class="alert alert-danger">
@@ -138,7 +139,7 @@
 								<c:otherwise></c:otherwise>
 							</c:choose>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

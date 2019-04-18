@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.dto.ComputerDTO;
+import com.excilys.computer_database.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
@@ -23,7 +25,8 @@ import com.excilys.computer_database.util.Util;
 
 @Controller
 public class EditComputerController {
-	public static final String VIEW = "editComputer";
+	static final String VIEW = "editComputer";
+	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	
 	private static final String LIST_COMP_PARAM = "companyList";
 	
@@ -65,6 +68,8 @@ public class EditComputerController {
 		if (id.isPresent()) {
 			Optional<ComputerDTO> optComputer = computerService.getComputerDetails(id.get());
 			if (optComputer.isPresent()) {
+				model.addAttribute("computer", new ComputerDTOBuilder().empty().build());
+				
 				model.addAttribute(COMPUTER_ID_PARAM, id.get());
 				
 				ComputerDTO computer = optComputer.get();
@@ -73,7 +78,7 @@ public class EditComputerController {
 				model.addAttribute(ORIGINAL_INTR_PARAM, computer.getIntroduced());
 				model.addAttribute(ORIGINAL_DISC_PARAM, computer.getDiscontinued());
 				model.addAttribute(ORIGINAL_COMP_ID_PARAM, computer.getCompanyId());
-				model.addAttribute(ORIGINAL_COMP_NAME_PARAM, computer.getCompanyName() == null ? "No one" : computer.getCompanyName());
+				model.addAttribute(ORIGINAL_COMP_NAME_PARAM, "".equals(computer.getCompanyName()) ? "No one" : computer.getCompanyName());
 				
 				return VIEW;
 			}
@@ -82,37 +87,30 @@ public class EditComputerController {
 			logger.error("get - Invalid computer ID (" + id.get() + "), back to dashboard");
 		}
 		
-		return "redirect:" + DashboardController.VIEW;
+		return REDIRECT_DASHBOARD;
 	}
 	
 	@PostMapping({"editComputer"})
-	public String post(@RequestParam(required = false) Map<String, String> args, Model model) {
+	public String post(@ModelAttribute("computer") ComputerDTO computer, Model model) {
 		logger.info("entering post");
 		
-		String name = args.get(NAME_PARAM);
-		String introduced = args.get(INTR_PARAM);
-		String discontinued = args.get(DISC_PARAM);
-		String company = args.get(COMP_PARAM);
-		
-		model.addAttribute(NAME_PARAM, name);
-		model.addAttribute(INTR_PARAM, introduced);
-		model.addAttribute(DISC_PARAM, discontinued);
-		model.addAttribute(COMP_PARAM, company);
-		
-		Optional<Integer> optId = Util.parseInt(args.get(COMPUTER_ID_PARAM));
+		Optional<Integer> optId = Util.parseInt(computer.getId());
 		if (!optId.isPresent()) {
 			logger.warn("post - invalid computer ID");
-			return "redirect:" + DashboardController.VIEW;
+			return REDIRECT_DASHBOARD;
 		}
 		
-		int computerId = optId.get();
-		
 		try {
-			computerService.updateComputer(computerId, name, introduced, discontinued, company);
+			computerService.updateComputer(computer);
 			logger.info("Computer successfully updated, back to dashboard");
 			
-			return "redirect:" + DashboardController.VIEW;
+			return REDIRECT_DASHBOARD;
 		} catch (FailComputerException e) {
+			model.addAttribute(NAME_PARAM, computer.getName());
+			model.addAttribute(INTR_PARAM, computer.getIntroduced());
+			model.addAttribute(DISC_PARAM, computer.getDiscontinued());
+			model.addAttribute(COMP_PARAM, computer.getCompanyId());
+			
 			switch (e.getConcerned()) {
 			case NAME : model.addAttribute(ERROR_NAME, e.getReason());break;
 			case INTRODUCED: model.addAttribute(ERROR_INTR, e.getReason());break;
@@ -122,7 +120,7 @@ public class EditComputerController {
 			}
 			e.printStackTrace();
 			
-			return get(args, model);
+			return get(Map.of(COMPUTER_ID_PARAM, computer.getId()), model);
 		}
 	}
 }

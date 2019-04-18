@@ -114,11 +114,15 @@ public class ComputerService {
 		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
+	public int createComputer(ComputerDTO computer) throws FailComputerException {
+		return createComputer(computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId());
+	}
+	
 	public int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
 		return dao.updateComputer(id, name, introduced, discontinued, companyId);
 	}
 	
-	public int updateComputer(int id, String name, String introduced, String discontinued, String companyId) throws FailComputerException {
+	public int updateComputer(String id, String name, String introduced, String discontinued, String companyId) throws FailComputerException {
 		if ("".equals(name)) {
 			logger.warn("updateComputer - Empty name");
 			throw new FailComputerException(ConcernedField.NAME, FailComputerException.NULL_NAME);
@@ -127,12 +131,13 @@ public class ComputerService {
 		Timestamp retIntroduced = null;
 		Timestamp retDiscontinued = null;
 		
-		if ("".equals(introduced)) {
+		if (introduced == null || "".equals(introduced)) {
 			if (discontinued != null && !"".equals(discontinued)) {
 				logger.warn("updateComputer - Discontinued without introduced");
 				throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_WITHOUT_INTRO);
 			}
 		} else {
+			System.out.println(introduced);
 			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
 			
 			if (!optIntroduced.isPresent()) {
@@ -166,15 +171,27 @@ public class ComputerService {
 		int intCompanyId = optCompanyId.get();
 		
 		if (intCompanyId <= 0) {
-			return updateComputer(id, name, retIntroduced, retDiscontinued, null);
+			if (Util.parseInt(id).isPresent()) {
+				return updateComputer(Util.parseInt(id).get(), name, retIntroduced, retDiscontinued, null);
+			} else {
+				throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);
+			}
 		}
 		
 		if (companyService.getById(intCompanyId).isPresent()) {
-			return updateComputer(id, name, retIntroduced, retDiscontinued, intCompanyId);
+			if (Util.parseInt(id).isPresent()) {
+				return updateComputer(Util.parseInt(id).get(), name, retIntroduced, retDiscontinued, intCompanyId);
+			} else {
+				throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);
+			}
 		}
 		
 		logger.warn("updateComputer - Nonexistent company");
 		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
+	}
+	
+	public int updateComputer(ComputerDTO computer) throws FailComputerException {
+		return updateComputer(computer.getId(), computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId());
 	}
 	
 	public int deleteComputer(int id) {

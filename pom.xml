@@ -15,7 +15,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<dbunit>2.6.0</dbunit>
 		<Hikari>3.3.1</Hikari>
 		<jstl>1.2</jstl>
 		<junit>4.12</junit>
@@ -57,14 +56,12 @@
 			<version>${logback}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${logback}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -79,7 +76,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito -->
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito2</artifactId>
@@ -87,8 +83,6 @@
 			<scope>test</scope>
 		</dependency>
 
-
-		<!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
@@ -96,20 +90,10 @@
 			<scope>test</scope>
 		</dependency>
 
-
-		<!-- https://mvnrepository.com/artifact/jstl/jstl -->
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl}</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.dbunit/dbunit -->
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>${dbunit}</version>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -166,7 +150,5 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring}</version>
 		</dependency>
-
-
 	</dependencies>
 </project>
