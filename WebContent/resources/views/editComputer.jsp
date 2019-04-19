@@ -40,7 +40,7 @@
                         <fieldset>
                         	<form:input path="id" type="hidden" name="computerId" value="${computerId}" />
                             <div class="form-group">
-                                <form:label path="name" for="computerName"><spring:message code="edit_computer.name" /> (${originalComputerName} <spring:message code="edit_computer.originally" />)</form:label>
+                                <form:label path="name" for="computerName"><spring:message code="computer.name" /> (${originalComputerName} <spring:message code="edit_computer.originally" />)</form:label>
                                 <form:input path="name" type="text" class="form-control" id="computerName" name="computerName" 
                                 	placeholder="${originalComputerName}" value="${originalComputerName}" />
                                 <c:choose>
@@ -56,7 +56,7 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <form:label path="introduced" for="introduced"><spring:message code="edit_computer.intro" /> (${originalIntroduced} 
+                                <form:label path="introduced" for="introduced"><spring:message code="computer.intro" /> (${originalIntroduced} 
                                 	<spring:message code="edit_computer.originally" />)</form:label>
                                 <form:input path="introduced" type="text" class="form-control" id="introduced" name="introduced" 
                                 	placeholder="${originalIntroduced}" value="${originalIntroduced}" />
@@ -73,7 +73,7 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <form:label path="discontinued" for="discontinued"><spring:message code="edit_computer.disc" /> (${originalDiscontinued} 
+                                <form:label path="discontinued" for="discontinued"><spring:message code="computer.disc" /> (${originalDiscontinued} 
                                 	<spring:message code="edit_computer.originally" />)</form:label>
                                 <form:input path="discontinued" type="text" class="form-control" id="discontinued" name="discontinued" 
                                 	placeholder="${originalDiscontinued}" value="${originalDiscontinued}" />
@@ -90,7 +90,7 @@
 								</c:choose>
                             </div>
                             <div class="form-group">
-                                <form:label path="companyId" for="companyId"><spring:message code="edit_computer.comp" /> (${originalCompanyName} 
+                                <form:label path="companyId" for="companyId"><spring:message code="computer.comp" /> (${originalCompanyName} 
                                 	<spring:message code="edit_computer.originally" />)</form:label>
                                 <form:select path="companyId" class="form-control" id="companyId" name="companyId">
                                     <c:forEach items="${companyList}" var="company">
@@ -115,7 +115,7 @@
                         <div class="actions pull-right">
                             <input id="add" type="submit" value="<spring:message code="edit_computer.edit" />" class="btn btn-primary">
                             <spring:message code="or" />
-                            <a href="dashboard" class="btn btn-default"><spring:message code="edit_computer.cancel" /></a>
+                            <a href="dashboard" class="btn btn-default"><spring:message code="cancel" /></a>
                         </div>
                     </form:form>
                 </div>

@@ -84,7 +84,7 @@
 										<a href="${webPage.orderByNameDesc()}" title="<spring:message code="dashboard.sort.name" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
 										<a href="${webPage.orderByNameAsc()}" title="<spring:message code="dashboard.sort.name" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li><spring:message code="dashboard.table.name" /></li>
+									<li><spring:message code="computer.name" /></li>
 								</ul>
 							</th>
 							<th>
@@ -93,7 +93,7 @@
 										<a href="${webPage.orderByIntroDesc()}" title="<spring:message code="dashboard.sort.intro" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
 										<a href="${webPage.orderByIntroAsc()}" title="<spring:message code="dashboard.sort.intro" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li><spring:message code="dashboard.table.intro" /></li>
+									<li><spring:message code="computer.intro" /></li>
 								</ul>
 							</th>
 							<!-- Table header for Discontinued Date -->
@@ -103,7 +103,7 @@
 										<a href="${webPage.orderByDiscDesc()}" title="<spring:message code="dashboard.sort.disc" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
 										<a href="${webPage.orderByDiscAsc()}" title="<spring:message code="dashboard.sort.disc" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li><spring:message code="dashboard.table.disc" /></li>
+									<li><spring:message code="computer.disc" /></li>
 								</ul>
 							</th>
 							<!-- Table header for Company -->
@@ -113,7 +113,7 @@
 										<a href="${webPage.orderByCompDesc()}" title="<spring:message code="dashboard.sort.comp" /> (desc.)"><i class="fa fa-chevron-up" style="font-size: 10px"></i></a><br />
 										<a href="${webPage.orderByCompAsc()}" title="<spring:message code="dashboard.sort.comp" /> (asc.)"><i class="fa fa-chevron-down" style="font-size: 10px"></i></a>
 									</li>
-									<li><spring:message code="dashboard.table.comp" /></li>
+									<li><spring:message code="computer.comp" /></li>
 								</ul>
 							</th>
 						</tr>
