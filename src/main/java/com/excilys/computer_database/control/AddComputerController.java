@@ -7,7 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -18,6 +22,7 @@ import com.excilys.computer_database.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
+import com.excilys.computer_database.validator.ComputerDTOValidator;
 
 @Controller
 public class AddComputerController {
@@ -45,6 +50,11 @@ public class AddComputerController {
 	@Autowired
 	private CompanyService companyService;
 	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(new ComputerDTOValidator());
+	}
+	
 	@GetMapping({"addComputer"})
 	public String get(Model model) {
 		logger.info("entering get");
@@ -59,9 +69,26 @@ public class AddComputerController {
 		return VIEW;
 	}
 	
+	private boolean setStackTrace(Model model, BindingResult result) {
+		if (result.hasErrors()) {
+			StringBuilder stacktrace = new StringBuilder();
+			result.getAllErrors().forEach(System.out::println);
+			result.getAllErrors().forEach(stacktrace::append);
+			model.addAttribute("log", stacktrace);
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@PostMapping({"addComputer"})
-	public String post(@ModelAttribute("computer") ComputerDTO computer, Model model) {
+	public String post(@ModelAttribute("computer") @Validated ComputerDTO computer, BindingResult result, Model model) {
 		logger.info("entering post");
+		
+		if (setStackTrace(model, result)) {
+			logger.info("post - There is errors");
+			return VIEW;
+		}
 		
 		try {
 			int status = computerService.createComputer(computer);

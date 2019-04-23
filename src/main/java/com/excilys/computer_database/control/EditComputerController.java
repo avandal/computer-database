@@ -9,7 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +26,7 @@ import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.service.exception.FailComputerException;
 import com.excilys.computer_database.util.Util;
+import com.excilys.computer_database.validator.ComputerDTOValidator;
 
 @Controller
 public class EditComputerController {
@@ -55,6 +60,11 @@ public class EditComputerController {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(new ComputerDTOValidator());
+	}
 	
 	@GetMapping({"editComputer"})
 	public String get(@RequestParam(required = false) Map<String, String> args, Model model) {
@@ -91,8 +101,13 @@ public class EditComputerController {
 	}
 	
 	@PostMapping({"editComputer"})
-	public String post(@ModelAttribute("computer") ComputerDTO computer, Model model) {
+	public String post(@Validated @ModelAttribute("computer") ComputerDTO computer, BindingResult result, Model model) {
 		logger.info("entering post");
+		
+		if (result.hasErrors()) {
+			logger.info("post - There is errors");
+			return get(Map.of(COMPUTER_ID_PARAM, computer.getId()), model);
+		}
 		
 		Optional<Integer> optId = Util.parseInt(computer.getId());
 		if (optId.isEmpty()) {

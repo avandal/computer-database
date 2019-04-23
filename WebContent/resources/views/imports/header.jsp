@@ -1,5 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 		<a class="navbar-brand" href=<c:url value="dashboard" />>

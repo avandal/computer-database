@@ -32,6 +32,7 @@
 									type="text" name="computerName" class="form-control"
 									id="computerName" placeholder="${computer_name}"
 									value="${computerName}" />
+								<form:errors path="name" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorName}">
 								<div id="errorName" class="alert alert-danger">
@@ -55,6 +56,7 @@
 								<form:input path="introduced" type="text" name="introduced" class="form-control"
 									id="introduced" placeholder="${computer_intro}"
 									value="${introduced}" />
+								<form:errors path="introduced" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorIntroduced}">
 								<div id="errorIntroduced" class="alert alert-danger">
@@ -78,6 +80,7 @@
 								<form:input path="discontinued" type="text" name="discontinued" class="form-control"
 									id="discontinued" placeholder="${computer_disc}"
 									value="${discontinued}" />
+								<form:errors path="introduced" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorDiscontinued}">
 								<div id="errorDiscontinued" class="alert alert-danger">
@@ -96,20 +99,21 @@
 								<form:select path="companyId"
 									class="form-control" name="companyId" id="companyId">
 									<c:forEach items="${companyList}" var="company">
-										<c:choose>
-										<c:when test="${companyId == null || companyId eq '0'}">
-											<option value="${company.getId()}" 
-												<c:if test="${company.getId() eq '0'}">selected="selected"</c:if>
-											>${company.getName()}</option>
-										</c:when>
-										<c:otherwise>
+<%-- 										<c:choose> --%>
+<%-- 										<c:when test="${companyId == null || companyId eq '0'}"> --%>
+<%-- 											<form:option value="${company.getId()}" --%>
+<%-- 												<c:if test="${company.getId() eq '0'}">selected="selected"</c:if> --%>
+<%-- 											>${company.getName()}</form:option> --%>
+<%-- 										</c:when> --%>
+<%-- 										<c:otherwise> --%>
 											<option value="${company.getId()}" 
 												<c:if test="${company.getId() eq companyId}">selected="selected"</c:if>
 											>${company.getName()}</option>
-										</c:otherwise>
-										</c:choose>
+<%-- 										</c:otherwise> --%>
+<%-- 										</c:choose> --%>
 									</c:forEach>
 								</form:select>
+								<form:errors path="companyId" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorCompany}">
 								<div id="errorCompany" class="alert alert-danger">

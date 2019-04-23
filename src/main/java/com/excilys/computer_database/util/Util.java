@@ -33,6 +33,10 @@ public abstract class Util {
 	}
 	
 	public static Optional<Timestamp> dateToTimestamp(String input) {
+		if (input == null || input.trim().equals("")) {
+			logger.warn("Empty input");
+			return Optional.empty();
+		}
 		List<String> formats = Arrays.asList("dd/MM/yyyy", "yyyy-MM-dd");
 	
 		for (String format : formats) {

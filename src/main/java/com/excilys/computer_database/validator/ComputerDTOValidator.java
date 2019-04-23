@@ -17,6 +17,8 @@ public class ComputerDTOValidator implements Validator {
 	private static final String INTRO_WRONG_FORMAT = "error.validator.intro.format";
 	private static final String DISC_WRONG_FORMAT = "error.validator.disc.format";
 	private static final String DISC_WITHOUT_INTRO = "error.validator.disc.without_intro";
+	private static final String DISC_LESS_THAN_INTRO = "error.validator.disc.less_than_intro";
+	private static final String INVALID_COMPANY = "error.validator.comp.invalid";
 	
 	Logger logger = LoggerFactory.getLogger(ComputerDTOValidator.class);
 
@@ -28,6 +30,7 @@ public class ComputerDTOValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		if (target == null) {
+			logger.error("Target is null");
 			return;
 		}
 		
@@ -44,6 +47,7 @@ public class ComputerDTOValidator implements Validator {
 		if (introduced != null && !introduced.trim().equals("")
 			&& Util.dateToTimestamp(introduced).isEmpty()) {
 			
+				logger.error("Introduced wrong format");
 				errors.rejectValue("introduced", INTRO_WRONG_FORMAT);
 		}
 	}
@@ -53,19 +57,43 @@ public class ComputerDTOValidator implements Validator {
 		String discontinued = computer.getDiscontinued();
 		
 		Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
-		Optional<Timestamp> optTsd = Util.dateToTimestamp(discontinued);
+		Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
 		
 		if (introduced == null || introduced.trim().equals("")) {
 			if (discontinued != null && !discontinued.trim().equals("")) {
+				logger.error("Discontinued without introducted");
 				errors.rejectValue("discontinued", DISC_WITHOUT_INTRO);
 			}
 		} else {
-			if (discontinued != null && !discontinued.trim().equals("")) {
-				if (optTsd.isEmpty()) {
-					errors.rejectValue("discontinued", DISC_WRONG_FORMAT);
+			if (discontinued == null || discontinued.trim().equals("")) {
+				return;
+			}
+			
+			if (optDiscontinued.isEmpty()) {
+				logger.error("Discontinued wrong format");
+				errors.rejectValue("discontinued", DISC_WRONG_FORMAT);
+			} else {
+				if (optIntroduced.isEmpty()) {
+					return;
+				}
+				
+				Timestamp intro = optIntroduced.get();
+				Timestamp disc = optDiscontinued.get();
+				
+				if (disc.before(intro)) {
+					logger.error("Discontinued less than introduced");
+					errors.rejectValue("discontinued", DISC_LESS_THAN_INTRO);
 				}
 			}
-			Timestamp tsi = optIntroduced.get();
+		}
+	}
+	
+	private void checkCompany(ComputerDTO computer, Errors errors) {
+		Optional<Integer> optCompany = Util.parseInt(computer.getCompanyId());
+		
+		if (optCompany.isEmpty()) {
+			logger.error("Invalid company id");
+			errors.rejectValue("companyId", INVALID_COMPANY);
 		}
 	}
 	
@@ -80,5 +108,6 @@ public class ComputerDTOValidator implements Validator {
 		checkName(computer, errors);
 		checkIntroduced(computer, errors);
 		checkDiscontinued(computer, errors);
+		checkCompany(computer, errors);
 	}
 }
