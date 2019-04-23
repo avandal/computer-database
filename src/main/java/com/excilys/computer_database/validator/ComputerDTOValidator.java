@@ -42,7 +42,7 @@ public class ComputerDTOValidator implements Validator {
 		String introduced = computer.getIntroduced();
 		
 		if (introduced != null && !introduced.trim().equals("")
-			&& !Util.dateToTimestamp(introduced).isPresent()) {
+			&& Util.dateToTimestamp(introduced).isEmpty()) {
 			
 				errors.rejectValue("introduced", INTRO_WRONG_FORMAT);
 		}
@@ -61,7 +61,7 @@ public class ComputerDTOValidator implements Validator {
 			}
 		} else {
 			if (discontinued != null && !discontinued.trim().equals("")) {
-				if (!optTsd.isPresent()) {
+				if (optTsd.isEmpty()) {
 					errors.rejectValue("discontinued", DISC_WRONG_FORMAT);
 				}
 			}

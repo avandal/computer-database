@@ -85,7 +85,7 @@ public class ComputerDAO {
 		if (companyId != null) {
 			Optional<Company> company = companyDAO.getCompanyById(companyId);
 			
-			if (!company.isPresent()) {
+			if (company.isEmpty()) {
 				logger.error("'createComputer' method - This company id doesn't exist.");
 				return 0;
 			}
@@ -98,7 +98,7 @@ public class ComputerDAO {
 		if (companyId != null) {
 			Optional<Company> company = companyDAO.getCompanyById(companyId);
 			
-			if (!company.isPresent()) {
+			if (company.isEmpty()) {
 				logger.error("'updateComputer' method - This company id doesn't exist.");
 				return 0;
 			}

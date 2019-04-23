@@ -30,7 +30,7 @@ public class CompanyMapper implements RowMapper<Company> {
 	
 	public static Company dtoToCompany(CompanyDTO dto) {
 		return new CompanyBuilder()
-				.id(!Util.parseInt(dto.getId()).isPresent() ? 0 : Util.parseInt(dto.getId()).get())	
+				.id(Util.parseInt(dto.getId()).isEmpty() ? 0 : Util.parseInt(dto.getId()).get())	
 				.name(dto.getName())
 				.build();
 	}

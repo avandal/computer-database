@@ -30,7 +30,7 @@ public class ControllerCLI {
 			String input = this.currentPage.show();
 			Optional<Page> page = this.currentPage.exec(input);
 			
-			if (!page.isPresent()) {
+			if (page.isEmpty()) {
 				loop = false;
 				logger.debug("ControlerCLI - Run : Exit");
 			} else {

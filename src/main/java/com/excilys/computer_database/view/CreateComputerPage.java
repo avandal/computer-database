@@ -81,7 +81,7 @@ public class CreateComputerPage extends Page {
 
 		Optional<Timestamp> time = Util.parseTimestamp(input);
 
-		if (!time.isPresent()) {
+		if (time.isEmpty()) {
 			System.out.println(boxMessage("Wrong format"));
 			return false;
 		}
@@ -98,7 +98,7 @@ public class CreateComputerPage extends Page {
 
 		Optional<Integer> id = Util.parseInt(input);
 
-		if (!id.isPresent()) {
+		if (id.isEmpty()) {
 			System.out.println(boxMessage("Must be an integer"));
 			return false;
 		}

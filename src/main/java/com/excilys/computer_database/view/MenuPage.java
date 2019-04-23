@@ -66,7 +66,7 @@ public class MenuPage extends Page {
 		Optional<Integer> choice = Util.parseInt(input);
 		Optional<Page> pageReturn = Optional.empty();
 		
-		if (!choice.isPresent()) {
+		if (choice.isEmpty()) {
 			pageReturn = Optional.of(wrongTyped());
 		} else {
 			

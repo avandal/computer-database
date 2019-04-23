@@ -47,7 +47,7 @@ public class DeleteComputerPage extends Page {
 
 		Optional<Integer> idInput = Util.parseInt(input);
 
-		if (!idInput.isPresent()) {
+		if (idInput.isEmpty()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
 			return Optional.of(deleteComputerPage);
 		}

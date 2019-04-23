@@ -49,7 +49,7 @@ public class ShowComputerPage extends Page {
 	}
 
 	private Optional<Page> invalidInput(Optional<Integer> idInput) {
-		if (!idInput.isPresent()) {
+		if (idInput.isEmpty()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
 			return Optional.of(showComputerPage);
 		}

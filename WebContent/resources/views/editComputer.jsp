@@ -18,15 +18,8 @@
 	media="screen">
 </head>
 <body>
-    <header class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
-        </div>
-		<div id="lang">
-			<a href="#" onclick="changeLanguage('en')"><img class="lang_flag" src="<c:url value="/resources/assets/en-flag.png" />"/></a>
-			<a href="#" onclick="changeLanguage('fr')"><img class="lang_flag" src="<c:url value="/resources/assets/fr-flag.png" />"/></a>
-		</div>
-    </header>
+    <%@include file="/resources/views/imports/header.jsp" %>
+    
     <section id="main">
         <div class="container">
             <div class="row">

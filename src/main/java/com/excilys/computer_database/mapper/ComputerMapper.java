@@ -36,7 +36,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 	public static Optional<Computer> dtoToComputer(ComputerDTO dto) {
 		ComputerBuilder builder = new ComputerBuilder();
 		
-		if (dto.getId() == null || !Util.parseInt(dto.getId()).isPresent()) {
+		if (dto.getId() == null || Util.parseInt(dto.getId()).isEmpty()) {
 			return Optional.empty();
 		}
 		builder.id(Util.parseInt(dto.getId()).get());
@@ -46,7 +46,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 		}
 		builder.name(dto.getName());
 		
-		if (dto.getIntroduced() != null && !Util.dateToTimestamp(dto.getIntroduced()).isPresent()) {
+		if (dto.getIntroduced() != null && Util.dateToTimestamp(dto.getIntroduced()).isEmpty()) {
 			return Optional.empty();
 		}
 		if (dto.getIntroduced() == null) {
@@ -55,7 +55,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 			builder.introduced(Util.dateToTimestamp(dto.getIntroduced()).get());
 		}
 		
-		if (dto.getDiscontinued() != null && !Util.dateToTimestamp(dto.getDiscontinued()).isPresent()) {
+		if (dto.getDiscontinued() != null && Util.dateToTimestamp(dto.getDiscontinued()).isEmpty()) {
 			return Optional.empty();
 		}
 		if (dto.getDiscontinued() == null) {

@@ -95,7 +95,7 @@ public class EditComputerController {
 		logger.info("entering post");
 		
 		Optional<Integer> optId = Util.parseInt(computer.getId());
-		if (!optId.isPresent()) {
+		if (optId.isEmpty()) {
 			logger.warn("post - invalid computer ID");
 			return REDIRECT_DASHBOARD;
 		}

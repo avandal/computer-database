@@ -116,14 +116,14 @@ public class UpdateComputerPage extends Page {
 	private boolean execId(String input) {
 		Optional<Integer> id = Util.parseInt(input);
 		
-		if (!id.isPresent()) {
+		if (id.isEmpty()) {
 			System.out.println(boxMessage("Must be an integer"));
 			return false;
 		}
 		
 		Optional<ComputerDTO> toChange = service.getComputerDetails(id.get());
 		
-		if (!toChange.isPresent()) {
+		if (toChange.isEmpty()) {
 			System.out.println(boxMessage("There is no computer with this id"));
 			return false;
 		}
@@ -142,7 +142,7 @@ public class UpdateComputerPage extends Page {
 	private void execMenu(String input) {
 		Optional<Integer> choice = Util.parseInt(input);
 		
-		if (!choice.isPresent()) {
+		if (choice.isEmpty()) {
 			System.out.println(boxMessage("Must be an integer"));
 			return;
 		}
@@ -176,7 +176,7 @@ public class UpdateComputerPage extends Page {
 		
 		Optional<Timestamp> time = Util.parseTimestamp(input);
 		
-		if (!time.isPresent()) {
+		if (time.isEmpty()) {
 			System.out.println(boxMessage("Wrong format"));
 			return;
 		}

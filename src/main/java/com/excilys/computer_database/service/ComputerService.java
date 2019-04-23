@@ -72,7 +72,7 @@ public class ComputerService {
 		} else {
 			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
 			
-			if (!optIntroduced.isPresent()) {
+			if (optIntroduced.isEmpty()) {
 				logger.warn("createComputer - Introduced: Wrong format");
 				throw new FailComputerException(ConcernedField.INTRODUCED, FailComputerException.WRONG_FORMAT);
 			}
@@ -81,7 +81,7 @@ public class ComputerService {
 			if (!"".equals(discontinued)) {
 				Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
 				
-				if (!optDiscontinued.isPresent()) {
+				if (optDiscontinued.isEmpty()) {
 					logger.warn("createComputer - Discontinued: Wrong format");
 					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.WRONG_FORMAT);
 				}
@@ -95,7 +95,7 @@ public class ComputerService {
 		}
 		
 		Optional<Integer> optCompanyId = Util.parseInt(companyId);
-		if (!optCompanyId.isPresent()) {
+		if (optCompanyId.isEmpty()) {
 			logger.warn("createComputer - Invalid company id");
 			throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.INVALID_COMPANY_ID);
 		}
@@ -140,7 +140,7 @@ public class ComputerService {
 			System.out.println(introduced);
 			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
 			
-			if (!optIntroduced.isPresent()) {
+			if (optIntroduced.isEmpty()) {
 				logger.warn("updateComputer - Introduced: Wrong format");
 				throw new FailComputerException(ConcernedField.INTRODUCED, FailComputerException.WRONG_FORMAT);
 			}
@@ -149,7 +149,7 @@ public class ComputerService {
 			if (discontinued != null && !"".equals(discontinued)) {
 				Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
 				
-				if (!optDiscontinued.isPresent()) {
+				if (optDiscontinued.isEmpty()) {
 					logger.warn("updateComputer - Discontinued: Wrong format");
 					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.WRONG_FORMAT);
 				}
@@ -163,7 +163,7 @@ public class ComputerService {
 		}
 		
 		Optional<Integer> optCompanyId = Util.parseInt(companyId);
-		if (!optCompanyId.isPresent()) {
+		if (optCompanyId.isEmpty()) {
 			logger.warn("updateComputer - Invalid company id");
 			throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.INVALID_COMPANY_ID);
 		}
