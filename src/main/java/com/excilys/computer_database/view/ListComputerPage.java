@@ -23,10 +23,7 @@ public class ListComputerPage extends Page {
 	
 	private Logger logger = LoggerFactory.getLogger(ListComputerPage.class);
 	
-	private ListComputerPage() {
-		logger.debug("ListComputerPage - Constructor");
-//		service = AppConfig.context.getBean(ComputerService.class);
-	}
+	private ListComputerPage() {}
 
 	@Override
 	public String show() {

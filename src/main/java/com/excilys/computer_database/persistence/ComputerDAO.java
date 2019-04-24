@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,9 @@ public class ComputerDAO {
 	private static final String UPDATE_COMPUTER = "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?";
 	private static final String DELETE_COMPUTER = "delete from computer where id = ?";
 	
+	private static final String HQL_LIST = "select ct from Computer as ct left join ct.company as cn";
+	private static final String HQL_BY_NAME = "select ct from Computer as ct left join ct.company as cn where ct.name like :ct_name or cn.name like :cn_name";
+	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	@Autowired
@@ -48,37 +54,44 @@ public class ComputerDAO {
 	
 	@Autowired
 	private CompanyDAO companyDAO;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	private Session session;
 
 	private ComputerDAO() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
-
-	public List<Computer> computerList(String order) {
-		try {
-			return jdbcTemplate.query(SELECT_ALL_COMPUTERS + " " + order, new ComputerMapper());
-		} catch (EmptyResultDataAccessException e) {
-			logger.warn("There is no computer in database");
-			return new ArrayList<Computer>();
+	
+	private void openSession() {
+		if(session == null || !session.isOpen()) {
+			session = sessionFactory.openSession();
 		}
 	}
-
-	public Optional<Computer> getComputerDetails(int computerId) {
-		try {
-			return Optional.of(jdbcTemplate.queryForObject(SELECT_COMPUTER_DETAILS, new Object[] {computerId}, new ComputerMapper()));
-		} catch (EmptyResultDataAccessException e) {
-			logger.warn("This computer does not exist : " + computerId);
-			return Optional.empty();
-		}
+	
+	public List<Computer> computerList(String order) {
+		logger.info("computerList");
+		openSession();
+		Query<Computer> query = session.createQuery(HQL_LIST + " " + order, Computer.class);
 		
+		return query.list();
+	}
+	
+	public Optional<Computer> getComputerDetails(int computerId) {
+		logger.info("getComputerId");
+		openSession();
+		return Optional.ofNullable(session.get(Computer.class, computerId));
 	}
 	
 	public List<Computer> getByName(String name, String order) {
-		try {
-			return jdbcTemplate.query(SELECT_BY_NAME + " " + order, new Object[] {"%" + name + "%", "%" + name + "%"}, new ComputerMapper());
-		} catch (EmptyResultDataAccessException e) {
-			logger.warn("There is no computer with name like " + name);
-			return new ArrayList<Computer>();
-		}
+		logger.info("computerList");
+		openSession();
+		Query<Computer> query = session.createQuery(HQL_BY_NAME + " " + order, Computer.class);
+		query.setParameter("ct_name", "%" + name + "%");
+		query.setParameter("cn_name", "%" + name + "%");
+		
+		return query.list();
 	}
 
 	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {

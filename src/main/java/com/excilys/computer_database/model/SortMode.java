@@ -4,14 +4,14 @@ public enum SortMode {
 	NAME_ASC("name_asc", "order by ct.name asc"), 
 	NAME_DESC("name_desc", "order by ct.name desc"), 
 	
-	INTRO_ASC("intro_asc", "order by ct.introduced is null, ct.introduced asc"), 
-	INTRO_DESC("intro_desc", "order by ct.introduced desc"), 
+	INTRO_ASC("intro_asc", "order by ct.introduced asc nulls last"), 
+	INTRO_DESC("intro_desc", "order by ct.introduced desc nulls last"), 
 	
-	DISC_ASC("disc_asc", "order by ct.discontinued is null, ct.discontinued asc"),
-	DISC_DESC("disc_desc", "order by ct.discontinued desc"),
+	DISC_ASC("disc_asc", "order by ct.discontinued asc nulls last"),
+	DISC_DESC("disc_desc", "order by ct.discontinued desc nulls last"),
 	
-	COMP_ASC("comp_asc", "order by cn.name is null, cn.name asc"),
-	COMP_DESC("comp_desc", "order by cn.name desc"),
+	COMP_ASC("comp_asc", "order by cn.name asc nulls last"),
+	COMP_DESC("comp_desc", "order by cn.name desc nulls last"),
 	
 	DEFAULT("", "order by ct.id asc");
 	

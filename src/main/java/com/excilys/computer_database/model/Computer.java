@@ -2,12 +2,45 @@ package com.excilys.computer_database.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+@Entity
+@Table(name = "computer")
 public class Computer {
+	@Id @GeneratedValue
+	@Column(name = "id")
 	private int id;
+	
+	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "introduced")
 	private Timestamp introduced;
+	
+	@Column(name = "discontinued")
 	private Timestamp discontinued;
+	
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "company_id",
+				nullable=true,
+				table = "computer",
+				referencedColumnName = "id",
+				foreignKey = @ForeignKey(name="fk_computer_company_1"))
 	private Company company;
+	
+	public Computer() {}
 	
 	public Computer(int id, String name, Timestamp introduced, Timestamp discontinued, Company company) {
 		this.id = id;

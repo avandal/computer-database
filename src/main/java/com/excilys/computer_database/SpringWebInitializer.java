@@ -18,6 +18,7 @@ public class SpringWebInitializer implements WebApplicationInitializer {
 		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
 		ctx.register(AppConfig.class);
 		ctx.register(SpringMvcConfig.class);
+		ctx.register(HibernateConfig.class);
 		ctx.setServletContext(servletContext);
 		ctx.refresh();
 

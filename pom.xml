@@ -15,17 +15,19 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<Hikari>3.3.1</Hikari>
-		<jstl>1.2</jstl>
 		<junit>4.12</junit>
-		<logback>1.2.3</logback>
-		<mockito>2.25.0</mockito>
 		<mysql>8.0.15</mysql>
 		<slf4j>1.8.0-beta4</slf4j>
-		<spring>5.1.6.RELEASE</spring>
+		<logback>1.2.3</logback>
+		<mockito>2.25.0</mockito>
+		<jstl>1.2</jstl>
+		<Hikari>3.3.1</Hikari>
 		<spring-boot>2.1.3.RELEASE</spring-boot>
+		<spring>5.1.6.RELEASE</spring>
 		<validator>2.0.1.Final</validator>
 		<validator-hibernate>6.0.16.Final</validator-hibernate>
+		<persistence>2.2</persistence>
+		<hql>1.5.0.Final</hql>
 	</properties>
 
 	<dependencies>
@@ -103,5 +105,34 @@
 			<version>${validator-hibernate}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+			<version>${persistence}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.4.2.Final</version>
+		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.hibernate</groupId> -->
+<!-- 			<artifactId>hibernate-annotations</artifactId> -->
+<!-- 			<version>3.5.6-Final</version> -->
+<!-- 		</dependency> -->
+
+		<dependency>
+			<groupId>org.hibernate.hql</groupId>
+			<artifactId>hibernate-hql-parser</artifactId>
+			<version>${hql}</version>
+		</dependency>
 	</dependencies>
 </project>
