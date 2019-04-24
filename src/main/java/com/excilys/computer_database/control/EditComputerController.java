@@ -66,8 +66,7 @@ public class EditComputerController {
 		binder.setValidator(new ComputerDTOValidator());
 	}
 	
-	@GetMapping({"editComputer"})
-	public String get(@RequestParam(required = false) Map<String, String> args, Model model) {
+	private String doGet(Map<String, String> args, Model model) {
 		List<CompanyDTO> companies = companyService.getAll();
 		companies.add(0, new CompanyDTOBuilder().empty().build());
 		
@@ -78,8 +77,6 @@ public class EditComputerController {
 		if (id.isPresent()) {
 			Optional<ComputerDTO> optComputer = computerService.getComputerDetails(id.get());
 			if (optComputer.isPresent()) {
-				model.addAttribute("computer", new ComputerDTOBuilder().empty().build());
-				
 				model.addAttribute(COMPUTER_ID_PARAM, id.get());
 				
 				ComputerDTO computer = optComputer.get();
@@ -100,13 +97,21 @@ public class EditComputerController {
 		return REDIRECT_DASHBOARD;
 	}
 	
+	@GetMapping({"editComputer"})
+	public String get(@RequestParam(required = false) Map<String, String> args, Model model) {
+		logger.info("entering get");
+		model.addAttribute("computer", new ComputerDTOBuilder().empty().build());
+		
+		return doGet(args, model);
+	}
+	
 	@PostMapping({"editComputer"})
 	public String post(@Validated @ModelAttribute("computer") ComputerDTO computer, BindingResult result, Model model) {
 		logger.info("entering post");
 		
 		if (result.hasErrors()) {
 			logger.info("post - There is errors");
-			return get(Map.of(COMPUTER_ID_PARAM, computer.getId()), model);
+			return doGet(Map.of(COMPUTER_ID_PARAM, computer.getId()), model);
 		}
 		
 		Optional<Integer> optId = Util.parseInt(computer.getId());
@@ -135,7 +140,7 @@ public class EditComputerController {
 			}
 			e.printStackTrace();
 			
-			return get(Map.of(COMPUTER_ID_PARAM, computer.getId()), model);
+			return doGet(Map.of(COMPUTER_ID_PARAM, computer.getId()), model);
 		}
 	}
 }

@@ -228,10 +228,23 @@ $(document).ready(function() {
 	checkName();
 	checkIntroduced();
 	checkDiscontinued();
-
-//	$("#discontinued").attr("disabled", !checkIntroduced());
 	
-	$("#computerName").on("load change paste keyup cut", checkName);
-	$("#introduced").on("load change paste keyup cut", checkIntroduced);
-	$("#discontinued").on("load change paste keyup cut", checkDiscontinued);
+	$("#computerName").on("change paste keyup cut", function() {
+		$("#invalid_name").hide();
+		checkName();
+	});
+	
+	$("#introduced").on("change paste keyup cut", function() {
+		$("#invalid_intro").hide();
+		checkIntroduced();
+	});
+	
+	$("#discontinued").on("change paste keyup cut", function() {
+		$("#invalid_disc").hide();
+		checkDiscontinued();
+	});
+	
+	$("#companyId").on("change paste keyup cut", function() {
+		$("#invalid_comp").hide();
+	});
 });

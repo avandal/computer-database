@@ -36,6 +36,7 @@
                                 <form:label path="name" for="computerName"><spring:message code="computer.name" /> (${originalComputerName} <spring:message code="edit_computer.originally" />)</form:label>
                                 <form:input path="name" type="text" class="form-control" id="computerName" name="computerName" 
                                 	placeholder="${originalComputerName}" value="${originalComputerName}" />
+                                <form:errors id="invalid_name" path="name" cssClass="alert alert-danger" element="div" />
                                 <c:choose>
 									<c:when test = "${not empty errorName}">
 								<div id="errorName" class="alert alert-danger">
@@ -53,6 +54,7 @@
                                 	<spring:message code="edit_computer.originally" />)</form:label>
                                 <form:input path="introduced" type="text" class="form-control" id="introduced" name="introduced" 
                                 	placeholder="${originalIntroduced}" value="${originalIntroduced}" />
+                                <form:errors id="invalid_intro" path="introduced" cssClass="alert alert-danger" element="div" />
                                 <c:choose>
 									<c:when test = "${not empty errorIntroduced}">
 								<div id="errorIntroduced" class="alert alert-danger">
@@ -70,6 +72,7 @@
                                 	<spring:message code="edit_computer.originally" />)</form:label>
                                 <form:input path="discontinued" type="text" class="form-control" id="discontinued" name="discontinued" 
                                 	placeholder="${originalDiscontinued}" value="${originalDiscontinued}" />
+                                <form:errors id="invalid_disc" path="discontinued" cssClass="alert alert-danger" element="div" />
                                 <c:choose>
 									<c:when test = "${not empty errorDiscontinued}">
 								<div id="errorDiscontinued" class="alert alert-danger">
@@ -92,6 +95,7 @@
 										>${company.getName()}</option>
                                     </c:forEach>
                                 </form:select>
+                                <form:errors id="invalid_comp" path="companyId" cssClass="alert alert-danger" element="div" />
                                 <c:choose>
 									<c:when test = "${not empty errorCompany}">
 								<div id="errorCompany" class="alert alert-danger">

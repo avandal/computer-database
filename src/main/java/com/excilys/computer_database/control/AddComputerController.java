@@ -55,12 +55,7 @@ public class AddComputerController {
 		binder.setValidator(new ComputerDTOValidator());
 	}
 	
-	@GetMapping({"addComputer"})
-	public String get(Model model) {
-		logger.info("entering get");
-
-		model.addAttribute("computer", new ComputerDTOBuilder().empty().build());
-		
+	private String doGet(Model model) {
 		List<CompanyDTO> companies = companyService.getAll();
 		companies.add(0, new CompanyDTOBuilder().empty().build());
 		
@@ -69,10 +64,17 @@ public class AddComputerController {
 		return VIEW;
 	}
 	
+	@GetMapping({"addComputer"})
+	public String get(Model model) {
+		logger.info("entering get");
+		
+		model.addAttribute("computer", new ComputerDTOBuilder().empty().build());
+		return doGet(model);
+	}
+	
 	private boolean setStackTrace(Model model, BindingResult result) {
 		if (result.hasErrors()) {
 			StringBuilder stacktrace = new StringBuilder();
-			result.getAllErrors().forEach(System.out::println);
 			result.getAllErrors().forEach(stacktrace::append);
 			model.addAttribute("log", stacktrace);
 			return true;
@@ -87,7 +89,7 @@ public class AddComputerController {
 		
 		if (setStackTrace(model, result)) {
 			logger.info("post - There is errors");
-			return VIEW;
+			return doGet(model);
 		}
 		
 		try {
@@ -120,7 +122,7 @@ public class AddComputerController {
 			
 			model.addAttribute(STATUS_CREATE_PARAM, "failed");
 			
-			return get(model);
+			return doGet(model);
 		}
 	}
 }

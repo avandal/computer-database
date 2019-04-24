@@ -32,7 +32,7 @@
 									type="text" name="computerName" class="form-control"
 									id="computerName" placeholder="${computer_name}"
 									value="${computerName}" />
-								<form:errors path="name" cssClass="alert alert-danger" element="div" />
+								<form:errors id="invalid_name" path="name" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorName}">
 								<div id="errorName" class="alert alert-danger">
@@ -56,7 +56,7 @@
 								<form:input path="introduced" type="text" name="introduced" class="form-control"
 									id="introduced" placeholder="${computer_intro}"
 									value="${introduced}" />
-								<form:errors path="introduced" cssClass="alert alert-danger" element="div" />
+								<form:errors id="invalid_intro" path="introduced" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorIntroduced}">
 								<div id="errorIntroduced" class="alert alert-danger">
@@ -80,7 +80,7 @@
 								<form:input path="discontinued" type="text" name="discontinued" class="form-control"
 									id="discontinued" placeholder="${computer_disc}"
 									value="${discontinued}" />
-								<form:errors path="introduced" cssClass="alert alert-danger" element="div" />
+								<form:errors id="invalid_disc" path="introduced" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorDiscontinued}">
 								<div id="errorDiscontinued" class="alert alert-danger">
@@ -113,7 +113,7 @@
 <%-- 										</c:choose> --%>
 									</c:forEach>
 								</form:select>
-								<form:errors path="companyId" cssClass="alert alert-danger" element="div" />
+								<form:errors id="invalid_comp" path="companyId" cssClass="alert alert-danger" element="div" />
 								<c:choose>
 									<c:when test = "${not empty errorCompany}">
 								<div id="errorCompany" class="alert alert-danger">
