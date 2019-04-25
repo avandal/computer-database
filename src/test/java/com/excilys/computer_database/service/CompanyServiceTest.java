@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.excilys.computer_database.AppConfigTest;
+import com.excilys.computer_database.HibernateConfigTest;
 import com.excilys.computer_database.dto.CompanyDTO;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.model.SortMode;
@@ -26,7 +26,7 @@ public class CompanyServiceTest extends TestCase {
 	
 	@Before
 	public void setUp() {
-		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+		context = new AnnotationConfigApplicationContext(HibernateConfigTest.class);
 		
 		companyService = context.getBean(CompanyService.class);
 		computerService = context.getBean(ComputerService.class);

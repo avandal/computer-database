@@ -9,14 +9,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
 @ComponentScan(basePackages = {"com.excilys.computer_database.control", 
 							   "com.excilys.computer_database.view", 
 							   "com.excilys.computer_database.persistence",
-							   "com.excilys.computer_database.service",
-							   "com.excilys.computer_database.servlets"})
+							   "com.excilys.computer_database.service"})
 @PropertySource("classpath:/datasourceTest.properties")
 public class AppConfigTest {
 
@@ -34,12 +32,5 @@ public class AppConfigTest {
 				.build();
 
 		return datasource;
-	}
-	
-	@Bean
-	public JdbcTemplate jdbcTemplate() {
-		JdbcTemplate jdbc = new JdbcTemplate();
-		jdbc.setDataSource(datasource());
-		return jdbc;
 	}
 }

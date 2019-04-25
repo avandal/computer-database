@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.excilys.computer_database.AppConfigTest;
+import com.excilys.computer_database.HibernateConfigTest;
 import com.excilys.computer_database.dto.ComputerDTO;
 import com.excilys.computer_database.model.SortMode;
 import com.excilys.computer_database.service.exception.FailComputerException;
@@ -40,7 +40,7 @@ public class ComputerServiceTest extends TestCase {
 	
 	@Before
 	public void setUp() {
-		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+		context = new AnnotationConfigApplicationContext(HibernateConfigTest.class);
 		
 		service = context.getBean(ComputerService.class);
 		

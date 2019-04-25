@@ -34,11 +34,4 @@ public class AppConfig {
 		
 		return datasource;
 	}
-	
-	@Bean
-	public JdbcTemplate jdbcTemplate() {
-		JdbcTemplate jdbc = new JdbcTemplate();
-		jdbc.setDataSource(datasource());
-		return jdbc;
-	}
 }

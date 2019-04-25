@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,15 +17,20 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource("classpath:/datasource.properties")
+@PropertySource("classpath:/datasourceTest.properties")
 @ComponentScan(basePackages = {"com.excilys.computer_database.control", 
 							   "com.excilys.computer_database.view", 
 							   "com.excilys.computer_database.persistence",
 							   "com.excilys.computer_database.service"})
-public class HibernateConfig {
-
+public class HibernateConfigTest {
+	
 	@Autowired
 	private Environment env;
+	
+	@Bean
+	public AnnotationConfigApplicationContext context() {
+		return new AnnotationConfigApplicationContext(this.getClass());
+	}
 
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {

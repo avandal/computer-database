@@ -9,9 +9,13 @@ import java.util.Optional;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.computer_database.AppConfigTest;
+import com.excilys.computer_database.HibernateConfigTest;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.SortMode;
@@ -19,18 +23,25 @@ import com.excilys.computer_database.util.ScriptRunner;
 
 import junit.framework.TestCase;
 
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = HibernateConfigTest.class)
 public class CompanyDAOTest extends TestCase {
+	
+	@Autowired
 	private CompanyDAO companyDAO;
+	
+	@Autowired
 	private ComputerDAO computerDAO;
 
+	@Autowired
 	private AnnotationConfigApplicationContext context;
 	
 	@Before
 	public void setUp() {
-		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+//		context = new AnnotationConfigApplicationContext(HibernateConfigTest.class);
 		
-		companyDAO = context.getBean(CompanyDAO.class);
-		computerDAO = context.getBean(ComputerDAO.class);
+//		companyDAO = context.getBean(CompanyDAO.class);
+//		computerDAO = context.getBean(ComputerDAO.class);
 		
 		try {
 			new ScriptRunner().run();

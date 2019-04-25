@@ -9,9 +9,11 @@ import java.util.Optional;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
-import com.excilys.computer_database.AppConfigTest;
+import com.excilys.computer_database.HibernateConfigTest;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.SortMode;
@@ -32,7 +34,7 @@ public class ComputerDAOTest extends TestCase {
 	
 	@Before
 	public void setUp() {
-		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+		context = new AnnotationConfigApplicationContext(HibernateConfigTest.class);
 		
 		this.dao = context.getBean(ComputerDAO.class);
 		

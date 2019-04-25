@@ -1,6 +1,6 @@
 package com.excilys.computer_database.model;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +27,7 @@ public class Company {
 	
 	@Cascade(CascadeType.DELETE)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
-	private List<Computer> computers;
+	private Set<Computer> computers;
 	
 	public Company() {}
 	
