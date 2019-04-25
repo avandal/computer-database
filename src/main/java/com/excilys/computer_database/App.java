@@ -12,7 +12,7 @@ public class App {
 	public static final String CONFIG_TEST = "/config_test.sql";
 
 	public static void main(String[] args) {
-		GenericApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		GenericApplicationContext context = new AnnotationConfigApplicationContext(HibernateConfig.class);
 		ControllerCLI control = context.getBean(ControllerCLI.class);
 		control.run();
 		context.close();

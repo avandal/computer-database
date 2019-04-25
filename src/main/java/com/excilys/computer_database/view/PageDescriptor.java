@@ -7,7 +7,8 @@ public enum PageDescriptor {
 	CREATE_COMPUTER(4, "Create a new computer"),
 	UPDATE_COMPUTER(5, "Update an existing computer"),
 	DELETE_COMPUTER(6, "Delete an existing computer"),
-	QUIT(7, "Quit");
+	DELETE_COMPANY(7, "Delete an existing company"),
+	QUIT(8, "Quit");
 	
 	private final int id;
 	private final String value;

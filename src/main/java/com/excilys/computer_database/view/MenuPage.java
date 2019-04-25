@@ -1,5 +1,6 @@
 package com.excilys.computer_database.view;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -32,6 +33,9 @@ public class MenuPage extends Page {
 	private DeleteComputerPage deleteComputerPage;
 	
 	@Autowired
+	private DeleteCompanyPage deleteCompanyPage;
+	
+	@Autowired
 	private MenuPage menuPage;
 	
 	private MenuPage() {}
@@ -40,13 +44,14 @@ public class MenuPage extends Page {
 	public String show() {
 		logger.debug("MenuPage - Show");
 		System.out.println("Choose:");
-		System.out.println(PageDescriptor.LIST_COMPUTER);
-		System.out.println(PageDescriptor.LIST_COMPANY);
-		System.out.println(PageDescriptor.SHOW_COMPUTER);
-		System.out.println(PageDescriptor.CREATE_COMPUTER);
-		System.out.println(PageDescriptor.UPDATE_COMPUTER);
-		System.out.println(PageDescriptor.DELETE_COMPUTER);
-		System.out.println(PageDescriptor.QUIT);
+		Arrays.asList(PageDescriptor.values()).forEach(System.out::println);
+//		System.out.println(PageDescriptor.LIST_COMPUTER);
+//		System.out.println(PageDescriptor.LIST_COMPANY);
+//		System.out.println(PageDescriptor.SHOW_COMPUTER);
+//		System.out.println(PageDescriptor.CREATE_COMPUTER);
+//		System.out.println(PageDescriptor.UPDATE_COMPUTER);
+//		System.out.println(PageDescriptor.DELETE_COMPUTER);
+//		System.out.println(PageDescriptor.QUIT);
 		
 		String input = this.scan.nextLine();
 		
@@ -97,6 +102,10 @@ public class MenuPage extends Page {
 				break;
 			
 			case 7 : 
+				pageReturn = Optional.of(deleteCompanyPage);
+				break;
+			
+			case 8 : 
 				System.out.println(Util.boxMessage("Goodbye!"));
 				pageReturn = Optional.empty();
 				break;

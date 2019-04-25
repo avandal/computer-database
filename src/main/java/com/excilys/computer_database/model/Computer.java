@@ -32,13 +32,8 @@ public class Computer {
 	@Column(name = "discontinued")
 	private Timestamp discontinued;
 	
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "company_id",
-				nullable=true,
-				table = "computer",
-				referencedColumnName = "id",
-				foreignKey = @ForeignKey(name="fk_computer_company_1"))
+	@JoinColumn(name = "company_id")
 	private Company company;
 	
 	public Computer() {}
