@@ -1,7 +1,6 @@
 package com.excilys.computer_database.persistence;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -12,13 +11,11 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
 
 @Repository
 public class ComputerDAO {
@@ -27,30 +24,10 @@ public class ComputerDAO {
 	public static final String ID_CN_ALIAS = "id_company";
 	public static final String NAME_CN_ALIAS = "name_company";
 	
-	private static final String ID_COMPUTER = "ct.id as " + ID_CT_ALIAS;
-	private static final String NAME_COMPUTER = "ct.name as " + NAME_CT_ALIAS;
-	private static final String ID_COMPANY = "cn.id as " + ID_CN_ALIAS;
-	private static final String NAME_COMPANY = "cn.name as " + NAME_CN_ALIAS;
-	
-	private static final String SELECT_ALL_COMPUTERS = "select " + ID_COMPUTER + ", " + NAME_COMPUTER + ", ct.introduced, ct.discontinued, "
-			+ ID_COMPANY + ", " + NAME_COMPANY + " from computer ct left join company cn on ct.company_id = cn.id";
-
-	private static final String SELECT_COMPUTER_DETAILS = "select " + ID_COMPUTER + ", " + NAME_COMPUTER + ", ct.introduced, ct.discontinued, "
-			+ ID_COMPANY + ", " + NAME_COMPANY + " from computer ct left join company cn on ct.company_id = cn.id where ct.id = ?";
-	private static final String SELECT_BY_NAME = "select " + ID_COMPUTER + ", " + NAME_COMPUTER + ", ct.introduced, ct.discontinued, "
-			+ ID_COMPANY + ", " + NAME_COMPANY + " from computer ct left join company cn on ct.company_id = cn.id where ct.name like ? or cn.name like ?";
-
-	private static final String INSERT_COMPUTER = "insert into computer (name, introduced, discontinued, company_id) values (?, ?, ?, ?)";
-	private static final String UPDATE_COMPUTER = "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?";
-	private static final String DELETE_COMPUTER = "delete from computer where id = ?";
-	
 	private static final String HQL_LIST = "select ct from Computer as ct left join ct.company as cn";
 	private static final String HQL_BY_NAME = "select ct from Computer as ct left join ct.company as cn where ct.name like :ct_name or cn.name like :cn_name";
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
-	
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired
 	private CompanyDAO companyDAO;
@@ -85,42 +62,61 @@ public class ComputerDAO {
 	}
 	
 	public List<Computer> getByName(String name, String order) {
-		logger.info("computerList");
+		logger.info("getByName");
 		openSession();
 		Query<Computer> query = session.createQuery(HQL_BY_NAME + " " + order, Computer.class);
 		query.setParameter("ct_name", "%" + name + "%");
 		query.setParameter("cn_name", "%" + name + "%");
-		
 		return query.list();
 	}
-
-	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		if (companyId != null) {
-			Optional<Company> company = companyDAO.getCompanyById(companyId);
-			
-			if (company.isEmpty()) {
-				logger.error("'createComputer' method - This company id doesn't exist.");
-				return 0;
-			}
-		}
+	
+	private int createOrUpdate(Computer computer) {
+		session.beginTransaction();
 		
-		return jdbcTemplate.update(INSERT_COMPUTER, new Object[] {name, introduced, discontinued, companyId});
+		session.saveOrUpdate(computer);
+		session.getTransaction().commit();
+		
+		return 1;
 	}
-
-	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		if (companyId != null) {
-			Optional<Company> company = companyDAO.getCompanyById(companyId);
-			
-			if (company.isEmpty()) {
-				logger.error("'updateComputer' method - This company id doesn't exist.");
-				return 0;
-			}
-		}
+	
+	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+		openSession();
+		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
 		
-		return jdbcTemplate.update(UPDATE_COMPUTER, new Object[] {name, introduced, discontinued, companyId, computerId});
+		Computer computer = new ComputerBuilder()
+				.name(name)
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company.isPresent() ? company.get() : null)
+				.build();
+		
+		return createOrUpdate(computer);
+	}
+	
+	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+		openSession();
+		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
+		Optional<Computer> optComputer = getComputerDetails(computerId);
+		
+		if (optComputer.isEmpty()) {
+			logger.error("The given computer does not exist");
+			return 0;
+		}
+		Computer computer = optComputer.get();
+		computer.setName(name);
+		computer.setIntroduced(introduced);
+		computer.setDiscontinued(discontinued);
+		computer.setCompany(company.isPresent() ? company.get() : null);
+		
+		return createOrUpdate(computer);
 	}
 
 	public int deleteComputer(int computerId) {
-		return jdbcTemplate.update(DELETE_COMPUTER, new Object[] {computerId});
+		openSession();
+		session.beginTransaction();
+		Computer toDelete = session.get(Computer.class, computerId);
+		session.delete(toDelete);
+		session.getTransaction().commit();
+		return 0;
 	}
 }
