@@ -22,7 +22,6 @@
 	
 		<div class="container">
 			<h1 id="homeTitle">
-			MDR 
 				<c:choose>
 					<c:when test="${ nbComputers > 0}">
 	                	${ nbComputers } <spring:message code="dashboard.nb_computer" /> - ${webPage.firstId()}/${webPage.lastId()}

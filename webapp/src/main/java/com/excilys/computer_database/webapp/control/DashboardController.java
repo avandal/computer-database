@@ -71,7 +71,7 @@ public class DashboardController {
 		return VIEW;
 	}
 	
-	@PostMapping({"/", "/dashboard"})
+	@PostMapping({"/dashboard"})
 	public String post(@RequestParam(value = "cb", required = false) String[] toDelete, Model model) {
 		logger.info("entering post");
 		

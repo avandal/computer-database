@@ -13,6 +13,7 @@ local.properties
 .loadpath
 .recommenders
 datasource*.properties
+table_user.sql
 
 # External tool builders
 .externalToolBuilders/
