@@ -36,19 +36,6 @@ public class HibernateConfig {
 		return fact;
 	}
 	
-//	@Bean
-//	public DataSource datasource() {
-//		DataSource datasource = DataSourceBuilder
-//				.create()
-//				.url(env.getProperty("jdbcUrl"))
-//				.driverClassName(env.getProperty("driverClassName"))
-//				.username(env.getProperty("db.username"))
-//				.password(env.getProperty("db.password"))
-//				.build();
-//		
-//		return datasource;
-//	}
-	
 	@Bean
     public HikariDataSource datasource() {
 		HikariDataSource dataSource = new HikariDataSource();

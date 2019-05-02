@@ -23,7 +23,7 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1><spring:message code="add_computer.title" /></h1>
-					<form:form action="addComputer" modelAttribute="computer" method="POST">
+					<form:form action="add" modelAttribute="computer" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<spring:message code="computer.name" var="computer_name" />
@@ -143,9 +143,9 @@
 			</div>
 		</div>
 	</section>
-	<script src="resources/js/jquery.min.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/js/validator.js"></script>
-	<script src="resources/js/lang.js"></script>
+	<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
+	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<script src="<c:url value="/resources/js/validator.js" />"></script>
+	<script src="<c:url value="/resources/js/lang.js" />"></script>
 </body>
 </html>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
@@ -22,8 +23,11 @@ import com.excilys.computer_database.webapp.control.web_model.WebPage;
 import com.excilys.computer_database.webapp.control.web_model.WebPageBuilder;
 
 @Controller
+@RequestMapping({"/", "/dashboard"})
 public class DashboardController {
-	static final String VIEW = "dashboard";
+	static final String URL = "dashboard";
+	static final String VIEW = "/dashboard";
+	static final String REDIRECT = "redirect:" + VIEW;
 	
 	public static final String PAGE_SIZE_PARAM = "pageSize";
 	public static final String PAGE_INDEX_PARAM = "pageIndex";
@@ -33,14 +37,12 @@ public class DashboardController {
 	public static final String SEARCH_PARAM = "search";
 	public static final String ORDER_PARAM = "order";
 	
-	private static final String URL = "dashboard";
-	
 	private Logger logger = LoggerFactory.getLogger(DashboardController.class);
 	
 	@Autowired
 	private ComputerService computerService;
 	
-	@GetMapping({"/", "/dashboard"})
+	@GetMapping
 	public String get(@RequestParam(required = false) Map<String, String> args, Model model) {
 		logger.info("entering get");
 		
@@ -68,10 +70,10 @@ public class DashboardController {
 		model.addAttribute(PAGE_SIZE_PARAM, webPage.getSize());
 		model.addAttribute(WEB_PAGE_PARAM, webPage);
 		
-		return VIEW;
+		return URL;
 	}
 	
-	@PostMapping({"/dashboard"})
+	@PostMapping({"/delete"})
 	public String post(@RequestParam(value = "cb", required = false) String[] toDelete, Model model) {
 		logger.info("entering post");
 		
@@ -84,6 +86,6 @@ public class DashboardController {
 				}
 			}
 		}
-		return get(Map.of(), model);
+		return REDIRECT;
 	}
 }

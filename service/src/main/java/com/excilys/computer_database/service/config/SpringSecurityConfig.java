@@ -22,9 +22,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		auth.jdbcAuthentication().dataSource(dataSource)
 		.usersByUsernameQuery(
-			"select username,password, enabled from user where username = ?")
+			"select username, password, enabled from user where username = ?")
 		.authoritiesByUsernameQuery(
-			"select user_role.username username, role.name auhority from user_role join role on role.id = user_role.idRole where user_role.username = ?")
+			"select u.username, r.role from user u join role r on u.id = r.user_id where u.username = ?")
 		.passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
@@ -32,19 +32,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 		.authorizeRequests()
-			.antMatchers("/dashboard").hasAuthority("ADMIN")
-			.antMatchers("/editComputer").hasAuthority("ADMIN")
-//			.antMatchers("/deleteComputer").hasAuthority("ADMIN")
-			.antMatchers("/").authenticated()
-//			.antMatchers("/FindComputerByName").authenticated()
-			.antMatchers("/LoginProcess").permitAll()
+			.antMatchers("/", "/dashabord").permitAll()
+			.antMatchers("/computer/edit", "/computer/delete").hasAuthority("admin")
+			.antMatchers("/computer/new").hasAnyAuthority("admin", "guest")
+			.antMatchers("/loginProcess").permitAll()
 		.and()
 			.formLogin()
 			.loginPage("/login")
 			.loginProcessingUrl("/loginProcess")
 			.usernameParameter("username")
 			.passwordParameter("password")
-			.defaultSuccessUrl("/")
+			.defaultSuccessUrl("/dashboard")
 			.failureForwardUrl("/login?error")
 		.and()
 			.logout()

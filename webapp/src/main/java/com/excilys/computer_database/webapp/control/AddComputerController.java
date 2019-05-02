@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.excilys.computer_database.binding.dto.CompanyDTO;
 import com.excilys.computer_database.binding.dto.CompanyDTOBuilder;
@@ -25,8 +26,10 @@ import com.excilys.computer_database.service.service.exception.FailComputerExcep
 import com.excilys.computer_database.webapp.validator.ComputerDTOValidator;
 
 @Controller
+@RequestMapping("/computer")
 public class AddComputerController {
-	static final String VIEW = "addComputer";
+	static final String URL = "addComputer";
+	static final String VIEW = "/new";
 	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	
 	private static final String LIST_COMP_PARAM = "companyList";
@@ -61,10 +64,10 @@ public class AddComputerController {
 		
 		model.addAttribute(LIST_COMP_PARAM, companies);
 		
-		return VIEW;
+		return URL;
 	}
 	
-	@GetMapping({"addComputer"})
+	@GetMapping("/new")
 	public String get(Model model) {
 		logger.info("entering get");
 		
@@ -83,7 +86,7 @@ public class AddComputerController {
 		return false;
 	}
 	
-	@PostMapping({"addComputer"})
+	@PostMapping({"/add"})
 	public String post(@ModelAttribute("computer") @Validated ComputerDTO computer, BindingResult result, Model model) {
 		logger.info("entering post");
 		

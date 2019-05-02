@@ -36,6 +36,9 @@ public class MenuPage extends Page {
 	private DeleteCompanyPage deleteCompanyPage;
 	
 	@Autowired
+	private CreateUserPage createUserPage;
+	
+	@Autowired
 	private MenuPage menuPage;
 	
 	private MenuPage() {}
@@ -45,13 +48,6 @@ public class MenuPage extends Page {
 		logger.debug("MenuPage - Show");
 		System.out.println("Choose:");
 		Arrays.asList(PageDescriptor.values()).forEach(System.out::println);
-//		System.out.println(PageDescriptor.LIST_COMPUTER);
-//		System.out.println(PageDescriptor.LIST_COMPANY);
-//		System.out.println(PageDescriptor.SHOW_COMPUTER);
-//		System.out.println(PageDescriptor.CREATE_COMPUTER);
-//		System.out.println(PageDescriptor.UPDATE_COMPUTER);
-//		System.out.println(PageDescriptor.DELETE_COMPUTER);
-//		System.out.println(PageDescriptor.QUIT);
 		
 		String input = this.scan.nextLine();
 		
@@ -104,8 +100,12 @@ public class MenuPage extends Page {
 			case 7 : 
 				pageReturn = Optional.of(deleteCompanyPage);
 				break;
+				
+			case 8 :
+				pageReturn = Optional.of(createUserPage);
+				break;
 			
-			case 8 : 
+			case 9 : 
 				System.out.println(Util.boxMessage("Goodbye!"));
 				pageReturn = Optional.empty();
 				break;

@@ -33,7 +33,7 @@
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="<c:url value="/dashboard" />" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="<spring:message code="dashboard.search.placeholder" />" /> <input
@@ -43,7 +43,7 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href=<c:url value="addComputer" />><spring:message code="dashboard.add_computer" /></a> 
+						href=<c:url value="computer/new" />><spring:message code="dashboard.add_computer" /></a> 
 						<a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.edit_computer" /></a>
 						<a class="btn btn-default" id="view" href="#"
@@ -52,7 +52,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="delete" method="POST">
 			<input type="hidden" name="selection" value="">
 
 			<div class="container" style="margin-top: 10px;">
@@ -115,7 +115,7 @@
 							<tr>
 								<td class="editMode"><input type="checkbox" name="cb"
 									class="cb" value="${computer.getId()}"></td>
-								<td><a href="editComputer?computerId=${computer.getId()}" onclick="">${ computer.getName() }</a>
+								<td><a href="<c:url value="computer/edit" />?computerId=${computer.getId()}" onclick="">${ computer.getName() }</a>
 								</td>
 								<td>${ computer.getIntroduced() }</td>
 								<td>${ computer.getDiscontinued() }</td>
@@ -166,9 +166,9 @@
 			</div>
 		</div>
 	</footer>
-	<script src="resources/js/jquery.min.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/js/dashboard.js"></script>
-	<script src="resources/js/lang.js"></script>
+	<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
+	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<script src="<c:url value="/resources/js/dashboard.js" />"></script>
+	<script src="<c:url value="/resources/js/lang.js" />"></script>
 </body>
 </html>

@@ -29,7 +29,7 @@
                     </div>
                     <h1><spring:message code="edit_computer.title" /></h1>
 
-                    <form:form action="editComputer" modelAttribute="computer" method="POST">
+                    <form:form action="validate" modelAttribute="computer" method="POST">
                         <fieldset>
                         	<form:input path="id" type="hidden" name="computerId" value="${computerId}" />
                             <div class="form-group">
@@ -119,9 +119,9 @@
             </div>
         </div>
     </section>
-    <script src="resources/js/jquery.min.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/js/validator.js"></script>
-	<script src="resources/js/lang.js"></script>
+	<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
+	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<script src="<c:url value="/resources/js/validator.js" />"></script>
+	<script src="<c:url value="/resources/js/lang.js" />"></script>
 </body>
 </html>

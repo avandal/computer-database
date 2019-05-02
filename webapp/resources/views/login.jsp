@@ -24,13 +24,13 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1><spring:message code="login.title" /></h1>
-					<form action="login" method="POST">
+					<form action="loginProcess" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<spring:message code="login.username" var="login_username" />
-								<label for="loginUsername">${login_username}</label>
+								<label for="username">${login_username}</label>
 								<input
-									type="text" name="loginUsername" class="form-control"
+									type="text" name="username" class="form-control"
 									id="loginUsername" placeholder="${login_username}"
 									value="${loginUsername}" />
 								<c:choose>
@@ -47,9 +47,9 @@
 							</div>
 							<div class="form-group">
 								<spring:message code="login.password" var="login_password" />
-								<label for="loginUsername">${login_password}</label>
+								<label for="password">${login_password}</label>
 								<input
-									type="text" name="loginPassword" class="form-control"
+									type="password" name="password" class="form-control"
 									id="loginPassword" placeholder="${login_password}"
 								/>
 								<c:choose>

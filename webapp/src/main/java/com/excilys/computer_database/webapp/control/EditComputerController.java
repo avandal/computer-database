@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computer_database.binding.dto.CompanyDTO;
@@ -29,8 +30,10 @@ import com.excilys.computer_database.service.service.exception.FailComputerExcep
 import com.excilys.computer_database.webapp.validator.ComputerDTOValidator;
 
 @Controller
+@RequestMapping("/computer")
 public class EditComputerController {
-	static final String VIEW = "editComputer";
+	static final String URL = "editComputer";
+	static final String VIEW = "/edit";
 	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	
 	private static final String LIST_COMP_PARAM = "companyList";
@@ -87,7 +90,7 @@ public class EditComputerController {
 				model.addAttribute(ORIGINAL_COMP_ID_PARAM, computer.getCompanyId());
 				model.addAttribute(ORIGINAL_COMP_NAME_PARAM, "".equals(computer.getCompanyName()) ? "No one" : computer.getCompanyName());
 				
-				return VIEW;
+				return URL;
 			}
 			logger.error("get - This computer (" + optComputer.get() + ") does not exist, back to dashboard");
 		} else {
@@ -97,7 +100,7 @@ public class EditComputerController {
 		return REDIRECT_DASHBOARD;
 	}
 	
-	@GetMapping({"editComputer"})
+	@GetMapping({"edit"})
 	public String get(@RequestParam(required = false) Map<String, String> args, Model model) {
 		logger.info("entering get");
 		model.addAttribute("computer", new ComputerDTOBuilder().empty().build());
@@ -105,7 +108,7 @@ public class EditComputerController {
 		return doGet(args, model);
 	}
 	
-	@PostMapping({"editComputer"})
+	@PostMapping({"validate"})
 	public String post(@Validated @ModelAttribute("computer") ComputerDTO computer, BindingResult result, Model model) {
 		logger.info("entering post");
 		
