@@ -14,6 +14,7 @@ import com.excilys.computer_database.core.model.Role;
 import com.excilys.computer_database.core.model.RoleUser;
 import com.excilys.computer_database.core.model.User;
 import com.excilys.computer_database.persistence.UserDAO;
+import com.excilys.computer_database.service.service.exception.ConcernedField;
 import com.excilys.computer_database.service.service.exception.FailUserException;
 
 @Service
@@ -39,18 +40,18 @@ public class UserService {
 		
 		if (username == null || username.isEmpty()) {
 			logger.error("Empty username");
-			throw new FailUserException();
+			throw new FailUserException(ConcernedField.USERNAME, FailUserException.EMPTY_USERNAME);
 		}
 		
 		if (password == null || password.isEmpty()) {
 			logger.error("Empty password");
-			throw new FailUserException();
+			throw new FailUserException(ConcernedField.PASSWORD, FailUserException.EMPTY_PASSWORD);
 		}
 		
 		Optional<RoleUser> optUserRole = dao.getUserRole(username);
 		if (optUserRole.isPresent()) {
 			logger.error("This username already exists");
-			throw new FailUserException();
+			throw new FailUserException(ConcernedField.USERNAME, FailUserException.USERNAME_ALREADY_EXISTS);
 		}
 		
 		return dao.createUser(

@@ -24,7 +24,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.usersByUsernameQuery(
 			"select username, password, enabled from user where username = ?")
 		.authoritiesByUsernameQuery(
-			"select u.username, r.role from user u join role r on u.id = r.user_id where u.username = ?")
+			"select u.username, r.role from user u join role r on u.username = r.username where u.username = ?")
 		.passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
@@ -32,10 +32,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 		.authorizeRequests()
-			.antMatchers("/", "/dashabord").permitAll()
-			.antMatchers("/computer/edit", "/computer/delete").hasAuthority("admin")
-			.antMatchers("/computer/new").hasAnyAuthority("admin", "guest")
-			.antMatchers("/loginProcess").permitAll()
+			.antMatchers("/computer/new", "/computer/edit", "/computer/delete").hasAuthority("admin")
+			.antMatchers("/", "/dashboard").hasAnyAuthority("admin", "guest")
+			.antMatchers("/login", "/login/signup", "login/create", "/loginProcess").permitAll()
 		.and()
 			.formLogin()
 			.loginPage("/login")
@@ -43,10 +42,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 			.usernameParameter("username")
 			.passwordParameter("password")
 			.defaultSuccessUrl("/dashboard")
-			.failureForwardUrl("/login?error")
+			.failureUrl("/login?error=true")
 		.and()
 			.logout()
 			.logoutSuccessUrl("/login?logout")
-			.logoutUrl("/logoutProcess");
+			.logoutUrl("/logoutProcess")
+		.and()
+			.exceptionHandling().accessDeniedPage("/403");;
 	}
 }

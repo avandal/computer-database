@@ -1,8 +1,6 @@
 package com.excilys.computer_database.service.service.exception;
 
-import com.excilys.computer_database.binding.util.Util;
-
-public class FailComputerException extends Exception {
+public class FailComputerException extends FailException {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String ID_ERROR = "The given id isn't correct.";
@@ -22,25 +20,7 @@ public class FailComputerException extends Exception {
 	public static final String INVALID_COMPANY_ID = "The given company id is invalid";
 	public static final String NONEXISTENT_COMPANY = "The given company does not exist";
 	
-	private ConcernedField concerned;
-	private String reason;
-	
 	public FailComputerException(ConcernedField concerned, String reason) {
-		this.concerned = concerned;
-		this.reason = reason;
-	}
-	
-	public String getReason() {
-		return reason;
-	}
-	
-	public ConcernedField getConcerned() {
-		return concerned;
-	}
-	
-	@Override
-	public void printStackTrace() {
-		System.out.println(Util.boxMessage(concerned + ": " + reason));
-		super.printStackTrace();
+		super(concerned, reason);
 	}
 }

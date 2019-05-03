@@ -37,13 +37,12 @@ input[type='checkbox'] {
 	vertical-align: middle;
 }
 
-#lang {
-	float: right;
-	margin-right: 5%;
+#logout, .lang_flag {
+	margin-top: 10px;
+	margin-left: 10px;
 }
 
 .lang_flag {
 	width: 32px;
 	height: auto;
-	margin-left: 10px;
 }

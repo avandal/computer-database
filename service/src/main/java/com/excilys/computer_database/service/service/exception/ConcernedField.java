@@ -1,7 +1,10 @@
 package com.excilys.computer_database.service.service.exception;
 
 public enum ConcernedField {
-	ID("id"), NAME("name"), INTRODUCED("introduced"), DISCONTINUED("discontinued"), COMPANY("company");
+	// FailComputerException
+	ID("id"), NAME("name"), INTRODUCED("introduced"), DISCONTINUED("discontinued"), COMPANY("company"),
+	// FailUserException
+	USERNAME("username"), PASSWORD("password");
 	
 	private String value;
 	

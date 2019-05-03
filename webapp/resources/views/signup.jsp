@@ -9,8 +9,8 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><spring:message code="login.title" /></h1>
-					<form action="loginProcess" method="POST">
+					<h1><spring:message code="login.signup.title" /></h1>
+					<form action="create" method="POST">
 						<fieldset>
 							<div class="form-group">
 								<spring:message code="login.username" var="login_username" />
@@ -51,8 +51,8 @@
 								</c:choose>
 							</div>
 							<div class="actions pull-right">
-								<input type="submit" value="<spring:message code="login.connect" />" class="btn btn-primary" id="connect" /><a class="btn btn-success" id="signup" style="margin-left: 5px"
-						href=<c:url value="/login/signup" />><spring:message code="login.signup_btn" /></a>
+								<input type="submit" value="<spring:message code="login.signup_btn" />" class="btn btn-primary" id="signup" /><a class="btn btn-default" id="cancel" style="margin-left: 5px"
+						href=<c:url value="/login" />><spring:message code="cancel" /></a>
 							</div>
 						</fieldset>
 					</form>

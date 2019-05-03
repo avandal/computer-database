@@ -1,22 +1,9 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="/resources/views/imports/taglibs.jsp" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page import="com.excilys.computer_database.binding.dto.ComputerDTO"%>
 <!DOCTYPE html>
 <html>
-<head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href=<c:url value = "/resources/css/bootstrap.min.css" />
-	rel="stylesheet" media="screen">
-<link href=<c:url value = "/resources/css/font-awesome.css" />
-	rel="stylesheet" media="screen">
-<link href=<c:url value = "/resources/css/main.css" /> rel="stylesheet"
-	media="screen">
-</head>
+<%@include file="/resources/views/imports/head.jsp" %>
 <body>
     <%@include file="/resources/views/imports/header.jsp" %>
     
@@ -119,9 +106,7 @@
             </div>
         </div>
     </section>
-	<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
-	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<%@include file="/resources/views/imports/js.jsp" %>
 	<script src="<c:url value="/resources/js/validator.js" />"></script>
-	<script src="<c:url value="/resources/js/lang.js" />"></script>
 </body>
 </html>

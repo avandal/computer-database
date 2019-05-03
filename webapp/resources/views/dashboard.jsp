@@ -1,20 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="/resources/views/imports/taglibs.jsp" %>
 <%@ page import="com.excilys.computer_database.binding.dto.ComputerDTO"%>
 <!DOCTYPE html>
 <html>
-<head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
-<!-- Bootstrap -->
-<link href=<c:url value="/resources/css/bootstrap.min.css" />
-	rel="stylesheet" media="screen">
-<link href=<c:url value="/resources/css/font-awesome.css" />
-	rel="stylesheet" media="screen">
-<link href=<c:url value="/resources/css/main.css" /> rel="stylesheet"
-	media="screen">
-</head>
+<%@include file="/resources/views/imports/head.jsp" %>
 <body>
 	<%@include file="/resources/views/imports/header.jsp" %>
 
@@ -41,6 +29,7 @@
 							class="btn btn-primary" />
 					</form>
 				</div>
+				<sec:authorize access="hasAuthority('admin')">
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
 						href=<c:url value="computer/new" />><spring:message code="dashboard.add_computer" /></a> 
@@ -49,6 +38,7 @@
 						<a class="btn btn-default" id="view" href="#"
 						onclick="$.fn.toggleEditMode();" style="display: none"><spring:message code="dashboard.view"/></a>
 				</div>
+				</sec:authorize>
 			</div>
 		</div>
 
@@ -115,7 +105,13 @@
 							<tr>
 								<td class="editMode"><input type="checkbox" name="cb"
 									class="cb" value="${computer.getId()}"></td>
-								<td><a href="<c:url value="computer/edit" />?computerId=${computer.getId()}" onclick="">${ computer.getName() }</a>
+								<td>
+								<sec:authorize access="hasAuthority('admin')">
+								<a href="<c:url value="computer/edit" />?computerId=${computer.getId()}" onclick="">${ computer.getName() }</a>
+								</sec:authorize>
+								<sec:authorize access="hasAnyAuthority('guest')">
+									${ computer.getName() }
+								</sec:authorize>
 								</td>
 								<td>${ computer.getIntroduced() }</td>
 								<td>${ computer.getDiscontinued() }</td>
@@ -166,9 +162,7 @@
 			</div>
 		</div>
 	</footer>
-	<script src="<c:url value="/resources/js/jquery.min.js" />"></script>
-	<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+	<%@include file="/resources/views/imports/js.jsp" %>
 	<script src="<c:url value="/resources/js/dashboard.js" />"></script>
-	<script src="<c:url value="/resources/js/lang.js" />"></script>
 </body>
 </html>
