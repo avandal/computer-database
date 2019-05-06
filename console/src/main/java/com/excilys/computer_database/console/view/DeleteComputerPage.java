@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.service.service.ComputerService;
+import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
 public class DeleteComputerPage extends Page {
@@ -57,12 +58,10 @@ public class DeleteComputerPage extends Page {
 			return Optional.of(deleteComputerPage);
 		}
 
-		int status = service.deleteComputer(idInput.get());
-		
-		if (status == 1) {
-			System.out.println(boxMessage("Computer successfully deleted"));
-		} else {
-			System.out.println(boxMessage("[Problem] Fail deleting computer"));
+		try {
+			service.deleteComputer(input);
+		} catch (FailComputerException e) {
+			e.printStackTrace();
 		}
 		
 		return Optional.of(menuPage);

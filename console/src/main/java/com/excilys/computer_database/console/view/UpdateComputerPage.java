@@ -9,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
+import com.excilys.computer_database.binding.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.binding.mapper.ComputerMapper;
 import com.excilys.computer_database.binding.util.Util;
-import com.excilys.computer_database.core.model.Computer;
 import com.excilys.computer_database.service.service.ComputerService;
+import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
 public class UpdateComputerPage extends Page {
@@ -56,12 +57,11 @@ public class UpdateComputerPage extends Page {
 	
 	private final static String MSG_ID = "Please give a computer id ('abort' to abort)";
 										
-	private Optional<Computer> toChange;
+	private ComputerDTO toChange;
 	
-	private int idComp;
 	private String nameComp;
-	private Timestamp introducedComp;
-	private Timestamp discontinuedComp;
+	private String introducedComp;
+	private String discontinuedComp;
 	
 	private boolean start = false;
 	private Item index = Item.MENU_ITEM;
@@ -70,9 +70,9 @@ public class UpdateComputerPage extends Page {
 	
 	private String currentChanges() {
 		String ret = "Now:\n";
-		ret += "name: " + toChange.get().getName();
-		ret += ", introduced: " + toChange.get().getIntroduced();
-		ret += ", discontinued: " + toChange.get().getDiscontinued() + "\n";
+		ret += "name: " + toChange.getName();
+		ret += ", introduced: " + toChange.getIntroduced();
+		ret += ", discontinued: " + toChange.getDiscontinued() + "\n";
 		ret += "Your changes:\n";
 		ret += "name: " + nameComp;
 		ret += ", introduced: " + introducedComp;
@@ -121,20 +121,24 @@ public class UpdateComputerPage extends Page {
 			return false;
 		}
 		
-		Optional<ComputerDTO> toChange = service.getComputerDetails(id.get());
+		Optional<ComputerDTO> toChange = service.getById(id.get());
 		
 		if (toChange.isEmpty()) {
 			System.out.println(boxMessage("There is no computer with this id"));
 			return false;
 		}
 		
-		this.toChange = ComputerMapper.dtoToComputer(toChange.get());
+		this.toChange = new ComputerDTOBuilder()
+				.empty()
+				.id(input.trim())
+				.name(toChange.get().getName())
+				.introduced(toChange.get().getIntroduced())
+				.discontinued(toChange.get().getDiscontinued())
+				.build();
 		
-		this.idComp = id.get();
-		
-		this.nameComp = this.toChange.get().getName();
-		this.introducedComp = this.toChange.get().getIntroduced();
-		this.discontinuedComp = this.toChange.get().getDiscontinued();
+		this.nameComp = this.toChange.getName();
+		this.introducedComp = this.toChange.getIntroduced();
+		this.discontinuedComp = this.toChange.getDiscontinued();
 		
 		return true;
 	}
@@ -160,7 +164,7 @@ public class UpdateComputerPage extends Page {
 		this.index = Item.MENU_ITEM;
 	}
 	
-	private void setTimestamp(TimestampChoice choice, Timestamp time) {
+	private void setTimestamp(TimestampChoice choice, String time) {
 		switch (choice) {
 		case INTRODUCED : this.introducedComp = time; break;
 		case DISCONTINUED : this.discontinuedComp = time; break;
@@ -174,31 +178,33 @@ public class UpdateComputerPage extends Page {
 			return;
 		}
 		
-		Optional<Timestamp> time = Util.parseTimestamp(input);
+		Optional<Timestamp> time = Util.dateToTimestamp(input);
 		
 		if (time.isEmpty()) {
 			System.out.println(boxMessage("Wrong format"));
 			return;
 		}
 		
-		setTimestamp(timestamp, time.get());
+		setTimestamp(timestamp, input);
 		this.index = Item.MENU_ITEM;
 	}
 	
 	private void execUpdate() {
-		int status = service.updateComputer(idComp, nameComp, introducedComp, discontinuedComp, null);
-		
-		if (status == 1) {
-			System.out.println(boxMessage("Computer successfully updated"));
-		} else {
-			System.out.println(boxMessage("[Problem] Fail updating computer"));
+		try {
+			toChange.setName(nameComp);
+			toChange.setIntroduced(introducedComp);
+			toChange.setDiscontinued(discontinuedComp);
+			
+			service.update(toChange);
+		} catch (FailComputerException e) {
+			e.printStackTrace();
 		}
 		
 		this.index = Item.UPDATE_ITEM;
 	}
 	
 	private Optional<Page> initialChecks(String input) {
-		if (input == null || input.equals("")) {
+		if (input == null || input.trim().equals("")) {
 			System.out.println(boxMessage("Invalid input"));
 			return Optional.of(this);
 		}
@@ -221,6 +227,11 @@ public class UpdateComputerPage extends Page {
 		}
 		
 		return true;
+	}
+	
+	private void reset() {
+		start = true;
+		index = Item.MENU_ITEM;
 	}
 	
 	@Override
@@ -253,9 +264,11 @@ public class UpdateComputerPage extends Page {
 			
 		case UPDATE_ITEM :
 			execUpdate();
+			reset();
 			return Optional.of(menuPage);
 			
 		case QUIT_ITEM :
+			reset();
 			return Optional.of(menuPage);
 			
 		default : break;

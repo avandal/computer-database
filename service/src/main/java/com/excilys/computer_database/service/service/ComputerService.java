@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.mapper.ComputerMapper;
 import com.excilys.computer_database.binding.util.Util;
+import com.excilys.computer_database.core.model.Company;
 import com.excilys.computer_database.core.model.Computer;
+import com.excilys.computer_database.core.model.ComputerBuilder;
 import com.excilys.computer_database.core.model.SortMode;
+import com.excilys.computer_database.persistence.CompanyDAO;
 import com.excilys.computer_database.persistence.ComputerDAO;
 import com.excilys.computer_database.service.service.exception.ConcernedField;
 import com.excilys.computer_database.service.service.exception.FailComputerException;
@@ -23,10 +26,10 @@ import com.excilys.computer_database.service.service.exception.FailComputerExcep
 public class ComputerService {
 	
 	@Autowired
-	private ComputerDAO dao;
+	private ComputerDAO computerDAO;
 	
 	@Autowired
-	private CompanyService companyService;
+	private CompanyDAO companyDAO;
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerService.class);
 	
@@ -34,15 +37,15 @@ public class ComputerService {
 	
 	public List<ComputerDTO> getAll(SortMode orderMode) {
 		logger.debug("ComputerService - getAll : callings dao.computerList");
-		return dao.computerList(orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
+		return computerDAO.getAll(orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
-	public List<ComputerDTO> searchByName(String name, SortMode orderMode) {
-		return dao.getByName(name, orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
+	public List<ComputerDTO> getByName(String name, SortMode orderMode) {
+		return computerDAO.getByName(name, orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
-	public Optional<ComputerDTO> getComputerDetails(int id) {
-		Optional<Computer> computer = dao.getComputerDetails(id);
+	public Optional<ComputerDTO> getById(int id) {
+		Optional<Computer> computer = computerDAO.getById(id);
 		if (computer.isPresent()) {
 			return Optional.of(ComputerMapper.computerToDTO(computer.get()));
 		}
@@ -50,30 +53,46 @@ public class ComputerService {
 		return Optional.empty();
 	}
 	
-	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		return dao.createComputer(name, introduced, discontinued, companyId);
+	private void checkId(ComputerDTO computer) throws FailComputerException {
+		String id = computer.getId();
+		
+		Optional<Integer> optId = Util.parseInt(id);
+		if (optId.isEmpty()) {
+			logger.warn("checkId - Invalid id");
+			throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);
+		}
+		
+		Optional<Computer> toChange = computerDAO.getById(optId.get());
+		if (toChange.isEmpty()) {
+			logger.warn("checkId - This computer does not exist");
+			throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);
+		}
 	}
 	
-	public int createComputer(String name, String introduced, String discontinued, String companyId) throws FailComputerException {
-		if (name == null || "".equals(name)) {
-			logger.warn("createComputer - Empty name");
+	private void checkName(ComputerDTO computer) throws FailComputerException {
+		if (computer.getName() == null || "".equals(computer.getName().trim())) {
+			logger.warn("checkName - Empty name");
 			throw new FailComputerException(ConcernedField.NAME, FailComputerException.NULL_NAME);
 		}
+	}
+	
+	private void checkDates(ComputerDTO computer) throws FailComputerException {
+		String introduced = computer.getIntroduced();
+		String discontinued = computer.getDiscontinued();
 		
 		Timestamp retIntroduced = null;
 		Timestamp retDiscontinued = null;
 		
 		if (introduced == null || "".equals(introduced)) {
 			if (discontinued != null && !"".equals(discontinued)) {
-				System.out.println(discontinued);
-				logger.warn("createComputer - Discontinued without introduced");
+				logger.warn("checkDates - Discontinued without introduced");
 				throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_WITHOUT_INTRO);
 			}
 		} else {
 			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
 			
 			if (optIntroduced.isEmpty()) {
-				logger.warn("createComputer - Introduced: Wrong format");
+				logger.warn("checkDates - Introduced: Wrong format");
 				throw new FailComputerException(ConcernedField.INTRODUCED, FailComputerException.WRONG_FORMAT);
 			}
 			retIntroduced = optIntroduced.get();
@@ -82,127 +101,118 @@ public class ComputerService {
 				Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
 				
 				if (optDiscontinued.isEmpty()) {
-					logger.warn("createComputer - Discontinued: Wrong format");
+					logger.warn("checkDates - Discontinued: Wrong format");
 					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.WRONG_FORMAT);
 				}
 				retDiscontinued = optDiscontinued.get();
 				
 				if (retIntroduced.after(retDiscontinued)) {
-					logger.warn("createComputer - Discontinued less then introduced");
+					logger.warn("checkDates - Discontinued less then introduced");
 					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_LESS_THAN_INTRO);
 				}
 			}
 		}
-		
-		Optional<Integer> optCompanyId = Util.parseInt(companyId);
-		if (optCompanyId.isEmpty()) {
-			logger.warn("createComputer - Invalid company id");
-			throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.INVALID_COMPANY_ID);
-		}
-		
-		int intCompanyId = optCompanyId.get();
-		
-		if (intCompanyId <= 0) {
-			return createComputer(name, retIntroduced, retDiscontinued, null);
-		}
-		
-		if (companyService.getById(intCompanyId).isPresent()) {
-			return createComputer(name, retIntroduced, retDiscontinued, intCompanyId);
-		}
-		
-		logger.warn("createComputer - nonexistent company");
-		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
-	public int createComputer(ComputerDTO computer) throws FailComputerException {
-		return createComputer(computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId());
-	}
-	
-	public int updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		return dao.updateComputer(id, name, introduced, discontinued, companyId);
-	}
-	
-	public int updateComputer(String id, String name, String introduced, String discontinued, String companyId) throws FailComputerException {
-		if ("".equals(name)) {
-			logger.warn("updateComputer - Empty name");
-			throw new FailComputerException(ConcernedField.NAME, FailComputerException.NULL_NAME);
-		}
+	private void checkCompany(ComputerDTO computer) throws FailComputerException {
+		String companyId = computer.getCompanyId();
 		
-		Timestamp retIntroduced = null;
-		Timestamp retDiscontinued = null;
-		
-		if (introduced == null || "".equals(introduced)) {
-			if (discontinued != null && !"".equals(discontinued)) {
-				logger.warn("updateComputer - Discontinued without introduced");
-				throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_WITHOUT_INTRO);
+		if (companyId != null) {
+			Optional<Integer> optCompanyId = Util.parseInt(companyId);
+			if (optCompanyId.isEmpty()) {
+				logger.warn("checkCompany - Invalid company id");
+				throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.INVALID_COMPANY_ID);
+			}
+			
+			int intCompanyId = optCompanyId.get();
+			
+			if (intCompanyId > 0 && companyDAO.getCompanyById(intCompanyId).isEmpty()) {
+				logger.warn("checkCompany - nonexistent company");
+				throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 			}
 		} else {
-			System.out.println(introduced);
-			Optional<Timestamp> optIntroduced = Util.dateToTimestamp(introduced);
-			
-			if (optIntroduced.isEmpty()) {
-				logger.warn("updateComputer - Introduced: Wrong format");
-				throw new FailComputerException(ConcernedField.INTRODUCED, FailComputerException.WRONG_FORMAT);
-			}
-			retIntroduced = optIntroduced.get();
-			
-			if (discontinued != null && !"".equals(discontinued)) {
-				Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
-				
-				if (optDiscontinued.isEmpty()) {
-					logger.warn("updateComputer - Discontinued: Wrong format");
-					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.WRONG_FORMAT);
-				}
-				retDiscontinued = optDiscontinued.get();
-				
-				if (retIntroduced.after(retDiscontinued)) {
-					logger.warn("updateComputer - Discontinued less then introduced");
-					throw new FailComputerException(ConcernedField.DISCONTINUED, FailComputerException.DISC_LESS_THAN_INTRO);
-				}
-			}
+			computer.setCompanyId("0");
 		}
-		
-		Optional<Integer> optCompanyId = Util.parseInt(companyId);
-		if (optCompanyId.isEmpty()) {
-			logger.warn("updateComputer - Invalid company id");
-			throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.INVALID_COMPANY_ID);
-		}
-		
-		int intCompanyId = optCompanyId.get();
-		
-		if (intCompanyId <= 0) {
-			if (Util.parseInt(id).isPresent()) {
-				return updateComputer(Util.parseInt(id).get(), name, retIntroduced, retDiscontinued, null);
-			} else {
-				throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);
-			}
-		}
-		
-		if (companyService.getById(intCompanyId).isPresent()) {
-			if (Util.parseInt(id).isPresent()) {
-				return updateComputer(Util.parseInt(id).get(), name, retIntroduced, retDiscontinued, intCompanyId);
-			} else {
-				throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);
-			}
-		}
-		
-		logger.warn("updateComputer - Nonexistent company");
-		throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 	}
 	
-	public int updateComputer(ComputerDTO computer) throws FailComputerException {
-		return updateComputer(computer.getId(), computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId());
+	private void create(String name, Timestamp introduced, Timestamp discontinued, Company company) {
+		computerDAO.create(new ComputerBuilder()
+				.empty()
+				.name(name)
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company)
+				.build()
+		);
 	}
 	
-	public int deleteComputer(int id) {
-		return dao.deleteComputer(id);
+	public void create(ComputerDTO computer) throws FailComputerException {
+		String name = computer.getName();
+		String introduced = computer.getIntroduced();
+		String discontinued = computer.getIntroduced();
+		String companyId = computer.getCompanyId();
+		
+		checkName(computer);
+		checkDates(computer);
+		checkCompany(computer);
+		
+		Timestamp tsIntroduced = Util.extract(Util.dateToTimestamp(introduced));
+		Timestamp tsDiscontinued = Util.extract(Util.dateToTimestamp(discontinued));
+		
+		Optional<Company> company = companyDAO.getCompanyById(Integer.parseInt(companyId));
+		
+		if (Integer.parseInt(companyId) <= 0) {
+			create(name, tsIntroduced, tsDiscontinued, null);
+			return;
+		}
+		
+		create(name, tsIntroduced, tsDiscontinued, company.get());
+	}
+	
+	private void update(int id, String name, Timestamp introduced, Timestamp discontinued, Company company) {
+		computerDAO.update(new ComputerBuilder()
+				.empty()
+				.id(id)
+				.name(name)
+				.introduced(introduced)
+				.discontinued(discontinued)
+				.company(company)
+				.build()
+		);
+	}
+	
+	public void update(ComputerDTO computer) throws FailComputerException {
+		computer.setCompanyId(Util.accordingTo(s -> s != null, computer.getCompanyId(), "0"));
+		
+		String id = computer.getId();
+		String name = computer.getName();
+		String introduced = computer.getIntroduced();
+		String discontinued = computer.getIntroduced();
+		String companyId = computer.getCompanyId();
+		
+		checkId(computer);
+		checkName(computer);
+		checkDates(computer);
+		checkCompany(computer);
+		
+		int intId = Util.parseInt(id).get();
+		Timestamp tsIntroduced = Util.extract(Util.dateToTimestamp(introduced));
+		Timestamp tsDiscontinued = Util.extract(Util.dateToTimestamp(discontinued));
+		Optional<Company> company = companyDAO.getCompanyById(Integer.parseInt(companyId));
+		
+		if (Integer.parseInt(companyId) <= 0) {
+			update(intId, name, tsIntroduced, tsDiscontinued, null);
+			return;
+		}
+		
+		update(intId, name, tsIntroduced, tsDiscontinued, company.get());
 	}
 	
 	public int deleteComputer(String id) throws FailComputerException {
 		Optional<Integer> optId = Util.parseInt(id);
 		
 		if (optId.isPresent()) {
-			return deleteComputer(optId.get());
+			return computerDAO.deleteComputer(optId.get());
 		}
 		
 		throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);

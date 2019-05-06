@@ -33,7 +33,6 @@ public class AddComputerController {
 	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	
 	private static final String LIST_COMP_PARAM = "companyList";
-	private static final String STATUS_CREATE_PARAM = "status";
 	
 	private static final String NAME_PARAM = "computerName";
 	private static final String INTR_PARAM = "introduced";
@@ -96,15 +95,8 @@ public class AddComputerController {
 		}
 		
 		try {
-			int status = computerService.createComputer(computer);
-			
-			if (status == 0) {
-				logger.error(String.format("Fail creating the computer : %s", computer));
-				model.addAttribute(STATUS_CREATE_PARAM, "failed");
-			} else {
-				logger.info(String.format("Successfully created the computer : %s", computer));
-				model.addAttribute(STATUS_CREATE_PARAM, "success");
-			}
+			computerService.create(computer);
+			logger.info("Computer successfully created, back to dashboard");
 			
 			return REDIRECT_DASHBOARD;
 		} catch (FailComputerException e) {
@@ -122,8 +114,6 @@ public class AddComputerController {
 			case COMPANY : model.addAttribute(ERROR_COMP, e.getReason());break;
 			default : break;
 			}
-			
-			model.addAttribute(STATUS_CREATE_PARAM, "failed");
 			
 			return doGet(model);
 		}

@@ -78,7 +78,7 @@ public class EditComputerController {
 		String computerId = args.get(COMPUTER_ID_PARAM);
 		Optional<Integer> id = Util.parseInt(computerId);
 		if (id.isPresent()) {
-			Optional<ComputerDTO> optComputer = computerService.getComputerDetails(id.get());
+			Optional<ComputerDTO> optComputer = computerService.getById(id.get());
 			if (optComputer.isPresent()) {
 				model.addAttribute(COMPUTER_ID_PARAM, id.get());
 				
@@ -124,7 +124,7 @@ public class EditComputerController {
 		}
 		
 		try {
-			computerService.updateComputer(computer);
+			computerService.update(computer);
 			logger.info("Computer successfully updated, back to dashboard");
 			
 			return REDIRECT_DASHBOARD;

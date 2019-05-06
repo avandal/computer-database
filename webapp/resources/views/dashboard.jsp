@@ -51,7 +51,7 @@
 						<tr>
 							<!-- Variable declarations for passing labels as parameters -->
 							<!-- Table header for Computer Name -->
-	
+							<sec:authorize access="hasAuthority('admin')">
 							<th class="editMode" style="width: 60px; height: 22px;"><input
 								type="checkbox" id="selectall" /> <span
 								style="vertical-align: top;"> - <a href="#"
@@ -59,6 +59,7 @@
 										class="fa fa-trash-o fa-lg"></i>
 								</a>
 							</span></th>
+							</sec:authorize>
 							<th>
 								<ul class="list-inline sort-mode">
 									<li>
@@ -103,9 +104,11 @@
 					<tbody id="results">
 						<c:forEach items="${ webPage.indexPage() }" var="computer">
 							<tr>
+								<sec:authorize access="hasAuthority('admin')">
 								<td class="editMode"><input type="checkbox" name="cb"
 									class="cb" value="${computer.getId()}"></td>
 								<td>
+								</sec:authorize>
 								<sec:authorize access="hasAuthority('admin')">
 								<a href="<c:url value="computer/edit" />?computerId=${computer.getId()}" onclick="">${ computer.getName() }</a>
 								</sec:authorize>

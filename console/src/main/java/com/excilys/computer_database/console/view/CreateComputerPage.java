@@ -8,8 +8,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.excilys.computer_database.binding.dto.ComputerDTO;
+import com.excilys.computer_database.binding.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.service.service.ComputerService;
+import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
 public class CreateComputerPage extends Page {
@@ -22,9 +25,9 @@ public class CreateComputerPage extends Page {
 												+ "'null' to set null)";
 
 	private String nameComp;
-	private Timestamp introducedComp;
-	private Timestamp discontinuedComp;
-	private Integer companyIdComp;
+	private String introducedComp;
+	private String discontinuedComp;
+	private String companyIdComp;
 
 	private int index = 1;
 	
@@ -65,7 +68,7 @@ public class CreateComputerPage extends Page {
 		return true;
 	}
 
-	private void setTimestamp(TimestampChoice choice, Timestamp time) {
+	private void setTimestamp(TimestampChoice choice, String time) {
 		switch (choice) {
 		case INTRODUCED: this.introducedComp = time; break;
 		case DISCONTINUED: this.discontinuedComp = time; break;
@@ -79,14 +82,14 @@ public class CreateComputerPage extends Page {
 			return true;
 		}
 
-		Optional<Timestamp> time = Util.parseTimestamp(input);
+		Optional<Timestamp> time = Util.dateToTimestamp(input);
 
 		if (time.isEmpty()) {
 			System.out.println(boxMessage("Wrong format"));
 			return false;
 		}
 
-		setTimestamp(timestamp, time.get());
+		setTimestamp(timestamp, input);
 		return true;
 	}
 
@@ -103,13 +106,13 @@ public class CreateComputerPage extends Page {
 			return false;
 		}
 
-		this.companyIdComp = id.get();
+		this.companyIdComp = input;
 		return true;
 	}
 
 	@Override
 	public Optional<Page> exec(String input) {
-		if (input == null || input.equals("")) {
+		if (input == null || input.trim().equals("")) {
 			System.out.println(boxMessage("Invalid input"));
 			return Optional.of(this);
 		}
@@ -135,14 +138,21 @@ public class CreateComputerPage extends Page {
 		}
 
 		if (finished) {
-			int status = service.createComputer(nameComp, introducedComp, discontinuedComp, companyIdComp);
-			if (status == -2) {
-				System.out.println(boxMessage("[Error] this companyId doesn't exist, " + BACK_MENU));
-			} else if (status <= 0) {
-				System.out.println(boxMessage("[Error] Nothing has been created, " + BACK_MENU));
-			} else {
-				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));
+			ComputerDTO computer = new ComputerDTOBuilder()
+					.empty()
+					.name(nameComp)
+					.introduced(introducedComp)
+					.discontinued(discontinuedComp)
+					.companyId(companyIdComp)
+					.build();
+			
+			try {
+				service.create(computer);
+			} catch (FailComputerException e) {
+				e.printStackTrace();
 			}
+			
+			index = 1;
 
 			return Optional.of(menuPage);
 		}

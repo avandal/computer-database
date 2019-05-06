@@ -1,6 +1,5 @@
 package com.excilys.computer_database.persistence;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -13,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computer_database.core.model.Company;
 import com.excilys.computer_database.core.model.Computer;
-import com.excilys.computer_database.core.model.ComputerBuilder;
 
 @Repository
 public class ComputerDAO {
@@ -28,9 +25,6 @@ public class ComputerDAO {
 	private static final String HQL_BY_NAME = "select ct from Computer as ct left join ct.company as cn where ct.name like :ct_name or cn.name like :cn_name";
 	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
-	
-	@Autowired
-	private CompanyDAO companyDAO;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -47,7 +41,7 @@ public class ComputerDAO {
 		}
 	}
 	
-	public List<Computer> computerList(String order) {
+	public List<Computer> getAll(String order) {
 		logger.info("computerList");
 		openSession();
 		Query<Computer> query = session.createQuery(HQL_LIST + " " + order, Computer.class);
@@ -55,7 +49,7 @@ public class ComputerDAO {
 		return query.list();
 	}
 	
-	public Optional<Computer> getComputerDetails(int computerId) {
+	public Optional<Computer> getById(int computerId) {
 		logger.info("getComputerId");
 		openSession();
 		return Optional.ofNullable(session.get(Computer.class, computerId));
@@ -70,46 +64,59 @@ public class ComputerDAO {
 		return query.list();
 	}
 	
-	private int createOrUpdate(Computer computer) {
+	public void create(Computer computer) {
+		openSession();
+		session.beginTransaction();
+		session.save(computer);
+		session.getTransaction().commit();
+	}
+	
+	public void update(Computer computer) {
+		openSession();
 		session.beginTransaction();
 		
-		session.saveOrUpdate(computer);
+		Computer tochange = getById(computer.getId()).get();
+		
+		tochange.setName(computer.getName());
+		tochange.setIntroduced(computer.getIntroduced());
+		tochange.setDiscontinued(computer.getDiscontinued());
+		tochange.setCompany(computer.getCompany());
+		
+		session.update(tochange);
 		session.getTransaction().commit();
-		
-		return 1;
 	}
 	
-	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		openSession();
-		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
-		
-		Computer computer = new ComputerBuilder()
-				.name(name)
-				.introduced(introduced)
-				.discontinued(discontinued)
-				.company(company.isPresent() ? company.get() : null)
-				.build();
-		
-		return createOrUpdate(computer);
-	}
+//	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+//		openSession();
+//		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
+//		
+//		Computer computer = new ComputerBuilder()
+//				.name(name)
+//				.introduced(introduced)
+//				.discontinued(discontinued)
+//				.company(company.isPresent() ? company.get() : null)
+//				.build();
+//		
+//		return createOrUpdate(computer);
+//	}
 	
-	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		openSession();
-		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
-		Optional<Computer> optComputer = getComputerDetails(computerId);
-		
-		if (optComputer.isEmpty()) {
-			logger.error("The given computer does not exist");
-			return 0;
-		}
-		Computer computer = optComputer.get();
-		computer.setName(name);
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		computer.setCompany(company.isPresent() ? company.get() : null);
-		
-		return createOrUpdate(computer);
-	}
+//	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+//		openSession();
+//		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
+//		Optional<Computer> optComputer = getComputerDetails(computerId);
+//		
+//		if (optComputer.isEmpty()) {
+//			logger.error("The given computer does not exist");
+//			return 0;
+//		}
+//		Computer computer = optComputer.get();
+//		computer.setName(name);
+//		computer.setIntroduced(introduced);
+//		computer.setDiscontinued(discontinued);
+//		computer.setCompany(company.isPresent() ? company.get() : null);
+//		
+//		return createOrUpdate(computer);
+//	}
 
 	public int deleteComputer(int computerId) {
 		openSession();

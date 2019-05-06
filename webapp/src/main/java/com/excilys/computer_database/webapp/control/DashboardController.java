@@ -50,7 +50,7 @@ public class DashboardController {
 		String order = args.get(ORDER_PARAM);
 		SortMode mode = SortMode.getByValue(order);
 		
-		List<ComputerDTO> list = search == null || "".equals(search) ? computerService.getAll(mode) : computerService.searchByName(search, mode);
+		List<ComputerDTO> list = search == null || "".equals(search) ? computerService.getAll(mode) : computerService.getByName(search, mode);
 		
 		Optional<Integer> size = Util.parseInt(args.get(PAGE_SIZE_PARAM));
 		Optional<Integer> index = Util.parseInt(args.get(PAGE_INDEX_PARAM));

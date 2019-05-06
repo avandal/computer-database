@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,21 @@ public abstract class Util {
 		}
 		
 		return Optional.empty();
+	}
+	
+	public static <T> T accordingTo(Predicate<T> condition, T initialValue, T defaultValue) {
+		if (!condition.test(initialValue)) {
+			return defaultValue;
+		}
+		
+		return initialValue;
+	}
+	
+	public static <T> T extract(Optional<T> opt) {
+		if (opt.isPresent()) {
+			return opt.get();
+		}
+		return null;
 	}
 	
 	public static String timestampToDate(Timestamp time) {
