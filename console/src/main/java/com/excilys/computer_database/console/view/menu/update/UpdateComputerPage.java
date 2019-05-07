@@ -1,8 +1,7 @@
-package com.excilys.computer_database.console.view;
+package com.excilys.computer_database.console.view.menu.update;
 
 import static com.excilys.computer_database.binding.util.Util.boxMessage;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,11 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.dto.ComputerDTOBuilder;
-import com.excilys.computer_database.binding.mapper.ComputerMapper;
 import com.excilys.computer_database.binding.util.Util;
+import com.excilys.computer_database.console.view.MenuPage;
+import com.excilys.computer_database.console.view.Page;
+import com.excilys.computer_database.console.view.menu.update.checker.DateChecker;
+import com.excilys.computer_database.console.view.menu.update.checker.NameChecker;
 import com.excilys.computer_database.service.service.ComputerService;
 import com.excilys.computer_database.service.service.exception.FailComputerException;
 
@@ -50,7 +52,16 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	@Autowired
+	private NameChecker nameChecker;
+	
+	@Autowired
+	private DateChecker dateChecker;
+	
+	@Autowired
 	private ComputerService service;
+	
+	@Autowired
+	private UpdateComputerPage updateComputerPage;
 	
 	@Autowired
 	private MenuPage menuPage;
@@ -79,6 +90,13 @@ public class UpdateComputerPage extends Page {
 		ret += ", discontinued: "+ discontinuedComp;
 		
 		return boxMessage(ret);
+	}
+	
+	@Override
+	protected Optional<Page> backToMenu() {
+		start = false;
+		index = Item.MENU_ITEM;
+		return Optional.of(menuPage);
 	}
 	
 	@Override
@@ -160,8 +178,15 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private void execName(String input) {
-		this.nameComp = input;
-		this.index = Item.MENU_ITEM;
+		Optional<String> validated = nameChecker.validate(input);
+		
+		if (validated.isPresent()) {
+			nameComp = validated.get();
+		}
+		
+		if (nameChecker.back()) {
+			this.index = Item.MENU_ITEM;
+		}
 	}
 	
 	private void setTimestamp(TimestampChoice choice, String time) {
@@ -173,20 +198,12 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private void execTimestamp(TimestampChoice timestamp, String input) {
-		if (input.equals("null")) {
-			setTimestamp(timestamp, null);
-			return;
+		Optional<String> validated = dateChecker.validate(input);
+		
+		if (dateChecker.back()) {
+			setTimestamp(timestamp, Util.extract(validated));
+			this.index = Item.MENU_ITEM;
 		}
-		
-		Optional<Timestamp> time = Util.dateToTimestamp(input);
-		
-		if (time.isEmpty()) {
-			System.out.println(boxMessage("Wrong format"));
-			return;
-		}
-		
-		setTimestamp(timestamp, input);
-		this.index = Item.MENU_ITEM;
 	}
 	
 	private void execUpdate() {
@@ -206,13 +223,13 @@ public class UpdateComputerPage extends Page {
 	private Optional<Page> initialChecks(String input) {
 		if (input == null || input.trim().equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(this);
+			return Optional.of(updateComputerPage);
 		}
 		
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted]"));
 			this.index = Item.MENU_ITEM;
-			return Optional.of(menuPage);
+			return backToMenu();
 		}
 		
 		return Optional.empty();
@@ -229,11 +246,6 @@ public class UpdateComputerPage extends Page {
 		return true;
 	}
 	
-	private void reset() {
-		start = true;
-		index = Item.MENU_ITEM;
-	}
-	
 	@Override
 	public Optional<Page> exec(String input) {
 		Optional<Page> initialCheckPage = initialChecks(input);
@@ -242,7 +254,7 @@ public class UpdateComputerPage extends Page {
 		}
 		
 		if (!checkStart(input)) {
-			return Optional.of(this);
+			return Optional.of(updateComputerPage);
 		}
 		
 		switch (this.index) {
@@ -264,17 +276,15 @@ public class UpdateComputerPage extends Page {
 			
 		case UPDATE_ITEM :
 			execUpdate();
-			reset();
-			return Optional.of(menuPage);
+			return backToMenu();
 			
 		case QUIT_ITEM :
-			reset();
-			return Optional.of(menuPage);
+			return backToMenu();
 			
 		default : break;
 		}
 		
-		return Optional.of(this);
+		return Optional.of(updateComputerPage);
 	}
 	
 	public String toString() {

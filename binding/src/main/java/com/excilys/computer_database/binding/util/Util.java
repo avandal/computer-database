@@ -113,14 +113,25 @@ public abstract class Util {
 	public static String boxMessage(String message) {
 		if (message == null) return null;
 		
+		int k = 0;
+		
 		String[] lines = message.split("\n");
 		int length = sizeMax(lines);
 		
-		String ret = "\n";
+		String ret = "";
 		ret += " _"+repeatNTimes(length, "_")+"_\n";
-		ret += "/ "+repeatNTimes(length, " ")+" \\\n";
 		
-		for (String line : lines) {
+		if (lines[0].equals(" "+repeatNTimes(length - 2, "_"))) {
+			k++;
+			ret += "/ " + lines[0] + "  \\\n";
+		} else {
+			ret += "/ "+repeatNTimes(length, " ")+" \\\n";
+		}
+		
+		
+		for (int i = k; i < lines.length; i++) {
+			String line = lines[i];
+			
 			int gap = length - line.length();
 			ret += "| " + line + repeatNTimes(gap, " ") + " |\n";
 		}
@@ -128,5 +139,13 @@ public abstract class Util {
 		ret += "\\_"+repeatNTimes(length, "_")+"_/\n";
 		
 		return ret;
+	}
+	
+	public static String boxMessage(String message, int n) {
+		message = boxMessage(message);
+		while (--n > 0) {
+			message = boxMessage(message);
+		}
+		return "\n" + message;
 	}
 }

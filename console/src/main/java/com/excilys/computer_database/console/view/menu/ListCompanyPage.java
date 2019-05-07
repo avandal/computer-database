@@ -1,4 +1,4 @@
-package com.excilys.computer_database.console.view;
+package com.excilys.computer_database.console.view.menu;
 
 import static com.excilys.computer_database.binding.util.Util.boxMessage;
 
@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.excilys.computer_database.console.view.MenuPage;
+import com.excilys.computer_database.console.view.Page;
 import com.excilys.computer_database.service.service.CompanyService;
 
 @Component
@@ -19,6 +21,11 @@ public class ListCompanyPage extends Page {
 	private MenuPage menuPage;
 	
 	private ListCompanyPage() {}
+	
+	@Override
+	protected Optional<Page> backToMenu() {
+		return Optional.of(menuPage);
+	}
 
 	@Override
 	public String show() {
@@ -28,11 +35,15 @@ public class ListCompanyPage extends Page {
 
 	@Override
 	public Optional<Page> exec(String input) {
-		service.getAll().forEach(System.out::println);
+		StringBuilder sbList = new StringBuilder();
+		service.getAll().forEach(s -> sbList.append(s+"\n"));
+		String list = sbList.toString();
+		
+		System.out.println(boxMessage(list.toString(), 3));
 		System.out.println();
 		System.out.println(boxMessage(M_BACK_MENU));
 		System.out.println();
-		return Optional.of(menuPage);
+		return backToMenu();
 	}
 	
 	public String toString() {

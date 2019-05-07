@@ -85,38 +85,6 @@ public class ComputerDAO {
 		session.update(tochange);
 		session.getTransaction().commit();
 	}
-	
-//	public int createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-//		openSession();
-//		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
-//		
-//		Computer computer = new ComputerBuilder()
-//				.name(name)
-//				.introduced(introduced)
-//				.discontinued(discontinued)
-//				.company(company.isPresent() ? company.get() : null)
-//				.build();
-//		
-//		return createOrUpdate(computer);
-//	}
-	
-//	public int updateComputer(int computerId, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-//		openSession();
-//		Optional<Company> company = companyDAO.getCompanyById(companyId != null ? companyId : 0);
-//		Optional<Computer> optComputer = getComputerDetails(computerId);
-//		
-//		if (optComputer.isEmpty()) {
-//			logger.error("The given computer does not exist");
-//			return 0;
-//		}
-//		Computer computer = optComputer.get();
-//		computer.setName(name);
-//		computer.setIntroduced(introduced);
-//		computer.setDiscontinued(discontinued);
-//		computer.setCompany(company.isPresent() ? company.get() : null);
-//		
-//		return createOrUpdate(computer);
-//	}
 
 	public int deleteComputer(int computerId) {
 		openSession();

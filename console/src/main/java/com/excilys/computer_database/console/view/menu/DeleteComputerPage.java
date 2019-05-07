@@ -1,4 +1,4 @@
-package com.excilys.computer_database.console.view;
+package com.excilys.computer_database.console.view.menu;
 
 import static com.excilys.computer_database.binding.util.Util.boxMessage;
 
@@ -8,23 +8,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.util.Util;
-import com.excilys.computer_database.service.service.CompanyService;
+import com.excilys.computer_database.console.view.MenuPage;
+import com.excilys.computer_database.console.view.Page;
+import com.excilys.computer_database.service.service.ComputerService;
+import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
-public class DeleteCompanyPage extends Page {
+public class DeleteComputerPage extends Page {
 	
 	@Autowired
-	private CompanyService service;
+	private ComputerService service;
 	
 	@Autowired
 	private MenuPage menuPage;
 	
 	@Autowired
-	private DeleteCompanyPage deleteCompanyPage;
+	private DeleteComputerPage deleteComputerPage;
+
+	private DeleteComputerPage() {}
+	
+	@Override
+	protected Optional<Page> backToMenu() {
+		return Optional.of(menuPage);
+	}
 
 	@Override
 	public String show() {
-		System.out.println(boxMessage("Please give a company id ('abort' to abort')"));
+		System.out.println(boxMessage("Please give a computer id ('abort' to abort')"));
 
 		String input = this.scan.nextLine();
 
@@ -35,40 +45,36 @@ public class DeleteCompanyPage extends Page {
 	public Optional<Page> exec(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(deleteCompanyPage);
+			return Optional.of(deleteComputerPage);
 		}
-		
+
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(menuPage);
+			return backToMenu();
 		}
-		
+
 		Optional<Integer> idInput = Util.parseInt(input);
-		
+
 		if (idInput.isEmpty()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return Optional.of(deleteCompanyPage);
+			return Optional.of(deleteComputerPage);
 		}
 
 		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return Optional.of(deleteCompanyPage);
+			return Optional.of(deleteComputerPage);
 		}
 
-		int status = service.delete(input);
-		
-		if (status == 1) {
-			System.out.println(boxMessage("Computer successfully deleted"));
-		} else {
-			System.out.println(boxMessage("[Problem] Fail deleting computer"));
+		try {
+			service.deleteComputer(input);
+		} catch (FailComputerException e) {
+			e.printStackTrace();
 		}
 		
-		return Optional.of(menuPage);
+		return backToMenu();
 	}
 
-	@Override
 	public String toString() {
-		return "Delete company";
+		return "Delete computer";
 	}
-
 }

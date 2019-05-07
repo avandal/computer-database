@@ -31,7 +31,7 @@ public class ComputerService {
 	@Autowired
 	private CompanyDAO companyDAO;
 	
-	private static Logger logger = LoggerFactory.getLogger(ComputerService.class);
+	private Logger logger = LoggerFactory.getLogger(ComputerService.class);
 	
 	private ComputerService() {}
 	

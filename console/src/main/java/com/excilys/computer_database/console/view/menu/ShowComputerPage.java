@@ -1,4 +1,4 @@
-package com.excilys.computer_database.console.view;
+package com.excilys.computer_database.console.view.menu;
 
 import static com.excilys.computer_database.binding.util.Util.boxMessage;
 
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.util.Util;
+import com.excilys.computer_database.console.view.MenuPage;
+import com.excilys.computer_database.console.view.Page;
 import com.excilys.computer_database.service.service.ComputerService;
 
 @Component
@@ -24,6 +26,11 @@ public class ShowComputerPage extends Page {
 	private MenuPage menuPage;
 
 	private ShowComputerPage() {}
+	
+	@Override
+	protected Optional<Page> backToMenu() {
+		return Optional.of(menuPage);
+	}
 
 	@Override
 	public String show() {
@@ -42,7 +49,7 @@ public class ShowComputerPage extends Page {
 		
 		if (input.equals("abort")) {
 			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
-			return Optional.of(menuPage);
+			return backToMenu();
 		}
 		
 		return Optional.empty();
@@ -87,7 +94,7 @@ public class ShowComputerPage extends Page {
 		
 		System.out.println(boxMessage(M_BACK_MENU));
 		
-		return Optional.of(menuPage);
+		return backToMenu();
 	}
 	
 	public String toString() {

@@ -9,6 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.util.Util;
+import com.excilys.computer_database.console.view.menu.CreateComputerPage;
+import com.excilys.computer_database.console.view.menu.CreateUserPage;
+import com.excilys.computer_database.console.view.menu.DeleteCompanyPage;
+import com.excilys.computer_database.console.view.menu.DeleteComputerPage;
+import com.excilys.computer_database.console.view.menu.ListCompanyPage;
+import com.excilys.computer_database.console.view.menu.ListComputerPage;
+import com.excilys.computer_database.console.view.menu.ShowComputerPage;
+import com.excilys.computer_database.console.view.menu.update.UpdateComputerPage;
 
 @Component
 public class MenuPage extends Page {
@@ -42,22 +50,26 @@ public class MenuPage extends Page {
 	private MenuPage menuPage;
 	
 	private MenuPage() {}
+	
+	@Override
+	protected Optional<Page> backToMenu() {
+		return Optional.of(menuPage);
+	}
 
 	@Override
 	public String show() {
-		logger.debug("MenuPage - Show");
 		System.out.println("Choose:");
-		Arrays.asList(PageDescriptor.values()).forEach(System.out::println);
+		Arrays.asList(MenuDescriptor.values()).forEach(System.out::println);
 		
 		String input = this.scan.nextLine();
 		
 		return input;
 	}
 	
-	private Page wrongTyped() {
+	private Optional<Page> wrongTyped() {
 		System.out.println(Util.boxMessage("Error typing, " + BACK_MENU));
 		System.out.println();
-		return menuPage;
+		return backToMenu();
 	}
 
 	@Override
@@ -68,50 +80,50 @@ public class MenuPage extends Page {
 		Optional<Page> pageReturn = Optional.empty();
 		
 		if (choice.isEmpty()) {
-			pageReturn = Optional.of(wrongTyped());
+			pageReturn = backToMenu();
 		} else {
+			Optional<MenuDescriptor> matching = MenuDescriptor.getById(choice.get());
 			
-			switch (choice.get()) {
-			case 1 :
-				logger.debug("MenuPage - Exec : listComputer chosen");
+			if (matching.isEmpty() ) {
+				return wrongTyped();
+			}
+			
+			switch (matching.get()) {
+			case LIST_COMPUTER :
 				pageReturn = Optional.of(listComputerPage);
 				break;
 			
-			case 2 : 
+			case LIST_COMPANY : 
 				pageReturn = Optional.of(listCompanyPage);
 				break;
 			
-			case 3 :
+			case SHOW_COMPUTER :
 				pageReturn = Optional.of(showComputerPage);
 				break;
 			
-			case 4 : 
+			case CREATE_COMPUTER : 
 				pageReturn = Optional.of(createComputerPage);
 				break;
 				
-			case 5 : 
+			case UPDATE_COMPUTER : 
 				pageReturn = Optional.of(updateComputerPage);
 				break;
 			
-			case 6 :
+			case DELETE_COMPUTER :
 				pageReturn = Optional.of(deleteComputerPage);
 				break;
 			
-			case 7 : 
+			case DELETE_COMPANY : 
 				pageReturn = Optional.of(deleteCompanyPage);
 				break;
 				
-			case 8 :
+			case CREATE_USER :
 				pageReturn = Optional.of(createUserPage);
 				break;
 			
-			case 9 : 
+			case QUIT : 
 				System.out.println(Util.boxMessage("Goodbye!"));
 				pageReturn = Optional.empty();
-				break;
-			
-			default :
-				pageReturn = Optional.of(wrongTyped());
 				break;
 			}
 		}
