@@ -22,7 +22,7 @@ public class UserService {
 	@Autowired
 	private UserDAO dao;
 	
-	private static Logger logger = LoggerFactory.getLogger(UserService.class);
+	private Logger logger = LoggerFactory.getLogger(UserService.class);
 	
 	public Optional<RoleUserDTO> getUserRole(String username) {
 		logger.info("getUserRole - " + username);

@@ -24,7 +24,7 @@ public class ComputerDAO {
 	private static final String HQL_LIST = "select ct from Computer as ct left join ct.company as cn";
 	private static final String HQL_BY_NAME = "select ct from Computer as ct left join ct.company as cn where ct.name like :ct_name or cn.name like :cn_name";
 	
-	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	private Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;

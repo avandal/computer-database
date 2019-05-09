@@ -40,7 +40,6 @@ public class ComputerService {
 	private ComputerService() {}
 	
 	public List<ComputerDTO> getAll(SortMode orderMode) {
-		logger.debug("ComputerService - getAll : callings dao.computerList");
 		return computerDAO.getAll(orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
@@ -48,8 +47,13 @@ public class ComputerService {
 		return computerDAO.getByName(name, orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
 	}
 	
-	public Optional<ComputerDTO> getById(int id) {
-		Optional<Computer> computer = computerDAO.getById(id);
+	public Optional<ComputerDTO> getById(String id) {
+		Optional<Integer> optId = Util.parseInt(id);
+		if (optId.isEmpty()) {
+			logger.error("getById - Wrong format of id");
+			return Optional.empty();
+		}
+		Optional<Computer> computer = computerDAO.getById(optId.get());
 		if (computer.isPresent()) {
 			return Optional.of(ComputerMapper.computerToDTO(computer.get()));
 		}
@@ -130,7 +134,7 @@ public class ComputerService {
 		update(intId, name, tsIntroduced, tsDiscontinued, company.get());
 	}
 	
-	public int deleteComputer(String id) throws FailComputerException {
+	public int delete(String id) throws FailComputerException {
 		Optional<Integer> optId = Util.parseInt(id);
 		
 		if (optId.isPresent()) {

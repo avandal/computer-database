@@ -80,7 +80,7 @@ public class DashboardController {
 		if (toDelete != null) {
 			for (String computerId : toDelete) {
 				try {
-					computerService.deleteComputer(computerId);
+					computerService.delete(computerId);
 				} catch (FailComputerException e) {
 					logger.error("post - Fail deleting computer " + computerId);
 				}

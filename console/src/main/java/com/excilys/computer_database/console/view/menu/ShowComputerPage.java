@@ -83,7 +83,7 @@ public class ShowComputerPage extends Page {
 		if (isInvalid.isPresent())
 			return isInvalid;
 		
-		Optional<ComputerDTO> computer = service.getById(idInput.get());
+		Optional<ComputerDTO> computer = service.getById(input);
 		
 		if (computer.isPresent()) {
 			System.out.println(boxMessage("Here's the "+idInput.get()+" computer"));

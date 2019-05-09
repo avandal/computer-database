@@ -66,7 +66,7 @@ public class DeleteComputerPage extends Page {
 		}
 
 		try {
-			service.deleteComputer(input);
+			service.delete(input);
 		} catch (FailComputerException e) {
 			e.printStackTrace();
 		}

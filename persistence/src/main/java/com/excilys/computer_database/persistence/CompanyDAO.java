@@ -21,7 +21,7 @@ public class CompanyDAO {
 	
 	private static final String HQL_SELECT_ALL = "FROM Company";
 	
-	private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
+	private Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;

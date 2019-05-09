@@ -11,6 +11,7 @@ import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.console.view.MenuPage;
 import com.excilys.computer_database.console.view.Page;
 import com.excilys.computer_database.service.service.CompanyService;
+import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
 public class DeleteCompanyPage extends Page {
@@ -62,12 +63,12 @@ public class DeleteCompanyPage extends Page {
 			return Optional.of(deleteCompanyPage);
 		}
 
-		int status = service.delete(input);
-		
-		if (status == 1) {
+		try {
+			service.delete(input);
 			System.out.println(boxMessage("Computer successfully deleted"));
-		} else {
-			System.out.println(boxMessage("[Problem] Fail deleting computer"));
+		} catch (FailComputerException e) {
+			System.out.println(boxMessage("[Problem] Fail deleting company"));
+			e.printStackTrace();
 		}
 		
 		return backToMenu();

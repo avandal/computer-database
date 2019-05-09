@@ -13,7 +13,7 @@ import com.excilys.computer_database.core.model.RoleUser;
 
 @Repository
 public class UserDAO {
-	private static Logger logger = LoggerFactory.getLogger(UserDAO.class);
+	private Logger logger = LoggerFactory.getLogger(UserDAO.class);
 	
 	@Autowired
 	private SessionFactory sessionFactory;

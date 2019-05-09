@@ -20,7 +20,7 @@ import com.excilys.computer_database.service.service.exception.FailComputerExcep
 @Component
 public class UpdateComputerPage extends Page {
 	
-	private static enum Item {
+	private enum Item {
 		MENU_ITEM("1 - Update name\n2 - Update introduced\n3 - Update discontinued\n4 - Confirm update\n5 - Quit without saving"),
 		NAME_ITEM("Please give a computer name ('abort' to abort)"),
 		INTRODUCED_ITEM("Please give an introduced date ('abort' to abort, 'null' to set null)"),
@@ -139,7 +139,7 @@ public class UpdateComputerPage extends Page {
 			return false;
 		}
 		
-		Optional<ComputerDTO> toChange = service.getById(id.get());
+		Optional<ComputerDTO> toChange = service.getById(input);
 		
 		if (toChange.isEmpty()) {
 			System.out.println(boxMessage("There is no computer with this id"));

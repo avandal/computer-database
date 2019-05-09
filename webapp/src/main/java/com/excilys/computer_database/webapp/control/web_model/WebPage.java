@@ -18,7 +18,7 @@ public class WebPage<T> {
 	
 	private String url;
 	
-	private static Logger logger = LoggerFactory.getLogger(WebPage.class);
+	private Logger logger = LoggerFactory.getLogger(WebPage.class);
 	
 	private void fixSize(Optional<Integer> size) {
 		if (size.isPresent()) {

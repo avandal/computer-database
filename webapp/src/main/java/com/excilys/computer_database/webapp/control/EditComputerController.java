@@ -78,7 +78,7 @@ public class EditComputerController {
 		String computerId = args.get(COMPUTER_ID_PARAM);
 		Optional<Integer> id = Util.parseInt(computerId);
 		if (id.isPresent()) {
-			Optional<ComputerDTO> optComputer = computerService.getById(id.get());
+			Optional<ComputerDTO> optComputer = computerService.getById(computerId);
 			if (optComputer.isPresent()) {
 				model.addAttribute(COMPUTER_ID_PARAM, id.get());
 				
