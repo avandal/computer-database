@@ -32,29 +32,29 @@ import com.excilys.computer_database.webapp.validator.ComputerDTOValidator;
 @Controller
 @RequestMapping("/computer")
 public class EditComputerController {
-	static final String URL = "editComputer";
-	static final String VIEW = "/edit";
-	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
+	final static String URL = "editComputer";
+	final static String VIEW = "/edit";
+	final static String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	
-	private static final String LIST_COMP_PARAM = "companyList";
+	private final static String LIST_COMP_PARAM = "companyList";
 	
-	private static final String COMPUTER_ID_PARAM = "computerId";
+	private final static String COMPUTER_ID_PARAM = "computerId";
 	
-	private static final String NAME_PARAM = "computerName";
-	private static final String INTR_PARAM = "introduced";
-	private static final String DISC_PARAM = "discontinued";
-	private static final String COMP_PARAM = "companyId";
+	private final static String NAME_PARAM = "computerName";
+	private final static String INTR_PARAM = "introduced";
+	private final static String DISC_PARAM = "discontinued";
+	private final static String COMP_PARAM = "companyId";
 	
-	private static final String ORIGINAL_NAME_PARAM = "originalComputerName";
-	private static final String ORIGINAL_INTR_PARAM = "originalIntroduced";
-	private static final String ORIGINAL_DISC_PARAM = "originalDiscontinued";
-	private static final String ORIGINAL_COMP_ID_PARAM = "originalCompanyId";
-	private static final String ORIGINAL_COMP_NAME_PARAM = "originalCompanyName";
+	private final static String ORIGINAL_NAME_PARAM = "originalComputerName";
+	private final static String ORIGINAL_INTR_PARAM = "originalIntroduced";
+	private final static String ORIGINAL_DISC_PARAM = "originalDiscontinued";
+	private final static String ORIGINAL_COMP_ID_PARAM = "originalCompanyId";
+	private final static String ORIGINAL_COMP_NAME_PARAM = "originalCompanyName";
 	
-	private static final String ERROR_NAME = "errorName";
-	private static final String ERROR_INTR = "errorIntroduced";
-	private static final String ERROR_DISC = "errorDiscontinued";
-	private static final String ERROR_COMP = "errorCompany";
+	private final static String ERROR_NAME = "errorName";
+	private final static String ERROR_INTR = "errorIntroduced";
+	private final static String ERROR_DISC = "errorDiscontinued";
+	private final static String ERROR_COMP = "errorCompany";
 	
 	private Logger logger = LoggerFactory.getLogger(EditComputerController.class);
 	

@@ -45,7 +45,7 @@ public class CompanyRestController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") String id) {
+	public ResponseEntity<CompanyDTO> delete(@PathVariable("id") String id) {
 		logger.debug("delete");
 		try {
 			companyService.delete(id);

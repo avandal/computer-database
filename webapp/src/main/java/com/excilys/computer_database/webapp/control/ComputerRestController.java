@@ -96,7 +96,7 @@ public class ComputerRestController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") String id) {
+	public ResponseEntity<ComputerDTO> delete(@PathVariable("id") String id) {
 		logger.debug("delete");
 		try {
 			computerService.delete(id);

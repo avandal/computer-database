@@ -10,9 +10,8 @@ import com.excilys.computer_database.core.model.Computer;
 import com.excilys.computer_database.core.model.ComputerBuilder;
 import com.excilys.computer_database.persistence.ComputerDAO;
 
-public class ComputerMapper {
-
-	public ComputerMapper() {}
+public abstract class ComputerMapper {
+	private ComputerMapper() {}
 	
 	public static Computer resultSetComputer(ResultSet res) throws SQLException {
 		return new ComputerBuilder()

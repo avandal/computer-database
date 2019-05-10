@@ -25,11 +25,11 @@ public class CompanyBuilder {
 	}
 	
 	private String randomChain() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < 8; i++) {
-			s += (char)(97 + Math.random() * (122 - 97));
+			s.append((char)(97 + Math.random() * (122 - 97)));
 		}
-		return s;
+		return s.toString();
 	}
 	
 	public CompanyBuilder random() {

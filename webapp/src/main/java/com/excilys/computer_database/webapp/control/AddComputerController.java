@@ -28,21 +28,21 @@ import com.excilys.computer_database.webapp.validator.ComputerDTOValidator;
 @Controller
 @RequestMapping("/computer")
 public class AddComputerController {
-	static final String URL = "addComputer";
-	static final String VIEW = "/new";
-	static final String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
+	final static String URL = "addComputer";
+	final static String VIEW = "/new";
+	final static String REDIRECT_DASHBOARD = "redirect:" + DashboardController.VIEW;
 	
-	private static final String LIST_COMP_PARAM = "companyList";
+	private final static String LIST_COMP_PARAM = "companyList";
 	
-	private static final String NAME_PARAM = "computerName";
-	private static final String INTR_PARAM = "introduced";
-	private static final String DISC_PARAM = "discontinued";
-	private static final String COMP_PARAM = "companyId";
+	private final static String NAME_PARAM = "computerName";
+	private final static String INTR_PARAM = "introduced";
+	private final static String DISC_PARAM = "discontinued";
+	private final static String COMP_PARAM = "companyId";
 	
-	private static final String ERROR_NAME = "errorName";
-	private static final String ERROR_INTR = "errorIntroduced";
-	private static final String ERROR_DISC = "errorDiscontinued";
-	private static final String ERROR_COMP = "errorCompany";
+	private final static String ERROR_NAME = "errorName";
+	private final static String ERROR_INTR = "errorIntroduced";
+	private final static String ERROR_DISC = "errorDiscontinued";
+	private final static String ERROR_COMP = "errorCompany";
 	
 	private Logger logger = LoggerFactory.getLogger(AddComputerController.class);
 	

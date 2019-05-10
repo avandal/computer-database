@@ -7,9 +7,9 @@ public abstract class Page {
 	protected final static String BACK_MENU   = "back to main menu";
 	protected final static String M_BACK_MENU = "Back to main menu";
 	
-	protected static final String NULL = "'null' to set null";
-	protected static final String ABORT = "'abort' to abort";
-	protected static final String NULL_ABORT = ABORT + ", " + NULL;
+	protected final static String NULL = "'null' to set null";
+	protected final static String ABORT = "'abort' to abort";
+	protected final static String NULL_ABORT = ABORT + ", " + NULL;
 	
 	protected Scanner scan = new Scanner(System.in);
 	

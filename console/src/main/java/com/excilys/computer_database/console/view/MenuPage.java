@@ -2,6 +2,7 @@ package com.excilys.computer_database.console.view;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,35 +48,35 @@ public class MenuPage extends Page {
 	private CreateUserPage createUserPage;
 	
 	@Autowired
-	private MenuPage menuPage;
+	private MenuPage that;
 	
 	private MenuPage() {}
 	
 	@Override
 	protected Optional<Page> backToMenu() {
-		return Optional.of(menuPage);
+		return Optional.of(that);
 	}
 
 	@Override
 	public String show() {
-		System.out.println("Choose:");
-		Arrays.asList(MenuDescriptor.values()).forEach(System.out::println);
+		StringBuilder shower = new StringBuilder("Choose:");
 		
-		String input = this.scan.nextLine();
+		Consumer<MenuDescriptor> appendShow = descr -> shower.append(String.format("\n%s",descr));
 		
-		return input;
+		Arrays.asList(MenuDescriptor.values()).forEach(appendShow);
+		System.out.println(shower.toString());
+		
+		return this.scan.nextLine();
 	}
 	
 	private Optional<Page> wrongTyped() {
-		System.out.println(Util.boxMessage("Error typing, " + BACK_MENU));
-		System.out.println();
+		System.out.println(Util.boxMessage(String.format("Error typing, %s\n", BACK_MENU)));
 		return backToMenu();
 	}
 
 	@Override
 	public Optional<Page> exec(String input) {
 		logger.debug("MenuPage - Exec");
-		// TODO Auto-generated method stub
 		Optional<Integer> choice = Util.parseInt(input);
 		Optional<Page> pageReturn = Optional.empty();
 		

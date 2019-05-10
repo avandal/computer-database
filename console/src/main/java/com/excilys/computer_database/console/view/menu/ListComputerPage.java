@@ -40,10 +40,7 @@ public class ListComputerPage extends Page {
 		service.getAll(SortMode.DEFAULT).forEach(s -> sbList.append(s+"\n"));
 		String list = sbList.toString();
 		
-		System.out.println(boxMessage(list.toString(), 3));
-		System.out.println();
-		System.out.println(boxMessage(M_BACK_MENU));
-		System.out.println();
+		System.out.println(String.format("%s\n%s\n", boxMessage(list, 3), M_BACK_MENU));
 		return backToMenu();
 	}
 	

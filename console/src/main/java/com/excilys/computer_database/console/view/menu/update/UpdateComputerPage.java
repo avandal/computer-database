@@ -61,7 +61,7 @@ public class UpdateComputerPage extends Page {
 	private ComputerService service;
 	
 	@Autowired
-	private UpdateComputerPage updateComputerPage;
+	private UpdateComputerPage that;
 	
 	@Autowired
 	private MenuPage menuPage;
@@ -80,16 +80,16 @@ public class UpdateComputerPage extends Page {
 	private UpdateComputerPage() {}
 	
 	private String currentChanges() {
-		String ret = "Now:\n";
-		ret += "name: " + toChange.getName();
-		ret += ", introduced: " + toChange.getIntroduced();
-		ret += ", discontinued: " + toChange.getDiscontinued() + "\n";
-		ret += "Your changes:\n";
-		ret += "name: " + nameComp;
-		ret += ", introduced: " + introducedComp;
-		ret += ", discontinued: "+ discontinuedComp;
+		StringBuilder ret = new StringBuilder("Now:\n")
+		.append(String.format("name: %s", toChange.getName()))
+		.append(String.format(", introduced: %s", toChange.getIntroduced()))
+		.append(String.format(", discontinued: %s\n", toChange.getDiscontinued()))
+		.append("Your changes:\n")
+		.append(String.format("name: %s", nameComp))
+		.append(String.format(", introduced: %s", introducedComp))
+		.append(String.format(", discontinued: %s", discontinuedComp));
 		
-		return boxMessage(ret);
+		return boxMessage(ret.toString());
 	}
 	
 	@Override
@@ -106,9 +106,7 @@ public class UpdateComputerPage extends Page {
 		} else {
 			switch (this.index) {
 			case MENU_ITEM :
-				System.out.println(currentChanges());
-				System.out.println();
-				System.out.println(Item.MENU_ITEM.text());
+				System.out.println(String.format("%s\n%s", currentChanges(), Item.MENU_ITEM.text()));
 				break;
 			case NAME_ITEM : System.out.println(boxMessage(Item.NAME_ITEM.text())); break;
 			case INTRODUCED_ITEM : System.out.println(boxMessage(Item.INTRODUCED_ITEM.text())); break;
@@ -139,9 +137,9 @@ public class UpdateComputerPage extends Page {
 			return false;
 		}
 		
-		Optional<ComputerDTO> toChange = service.getById(input);
+		Optional<ComputerDTO> existing = service.getById(input);
 		
-		if (toChange.isEmpty()) {
+		if (existing.isEmpty()) {
 			System.out.println(boxMessage("There is no computer with this id"));
 			return false;
 		}
@@ -149,9 +147,9 @@ public class UpdateComputerPage extends Page {
 		this.toChange = new ComputerDTOBuilder()
 				.empty()
 				.id(input.trim())
-				.name(toChange.get().getName())
-				.introduced(toChange.get().getIntroduced())
-				.discontinued(toChange.get().getDiscontinued())
+				.name(existing.get().getName())
+				.introduced(existing.get().getIntroduced())
+				.discontinued(existing.get().getDiscontinued())
 				.build();
 		
 		this.nameComp = this.toChange.getName();
@@ -223,7 +221,7 @@ public class UpdateComputerPage extends Page {
 	private Optional<Page> initialChecks(String input) {
 		if (input == null || input.trim().equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(updateComputerPage);
+			return Optional.of(that);
 		}
 		
 		if (input.equals("abort")) {
@@ -254,7 +252,7 @@ public class UpdateComputerPage extends Page {
 		}
 		
 		if (!checkStart(input)) {
-			return Optional.of(updateComputerPage);
+			return Optional.of(that);
 		}
 		
 		switch (this.index) {
@@ -284,7 +282,7 @@ public class UpdateComputerPage extends Page {
 		default : break;
 		}
 		
-		return Optional.of(updateComputerPage);
+		return Optional.of(that);
 	}
 	
 	public String toString() {

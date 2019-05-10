@@ -3,13 +3,13 @@ package com.excilys.computer_database.core.model;
 public enum Role {
 	ADMIN("admin"), GUEST("guest");
 	
-	private String role;
+	private String value;
 	
-	Role(String role) {
-		this.role = role;
+	Role(String value) {
+		this.value = value;
 	}
 	
-	public String getRole() {
-		return role;
+	public String getValue() {
+		return value;
 	}
 }

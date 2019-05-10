@@ -15,11 +15,13 @@ import org.slf4j.LoggerFactory;
 public abstract class Util {
 	private static Logger logger = LoggerFactory.getLogger(Util.class);
 	
+	private Util() {}
+	
 	public static Optional<Integer> parseInt(String input) {
 		try {
 			return Optional.of(Integer.parseInt(input));
 		} catch (NumberFormatException e) {
-			logger.warn("parseInt - invalid input: " + input);
+			logger.warn(String.format("parseInt - invalid input: %s", input));
 			return Optional.empty();
 		}
 	}
@@ -28,7 +30,7 @@ public abstract class Util {
 		try {
 			return Optional.of(Timestamp.valueOf(input));
 		} catch (IllegalArgumentException e) {
-			logger.warn("parseTimestamp - Invalid input: " + input);
+			logger.warn(String.format("parseTimestamp - Invalid input: %s", input));
 			return Optional.empty();
 		}
 	}
@@ -48,7 +50,7 @@ public abstract class Util {
 				
 				return Optional.of(time);
 			} catch (DateTimeParseException e) {
-				logger.warn("dateToTimestamp - Invalid input `" + input + "` with this format: " + format);
+				logger.warn(String.format("dateToTimestamp - Invalid input `%s` with this format: %s", input, format));
 			}
 		}
 		
@@ -118,14 +120,14 @@ public abstract class Util {
 		String[] lines = message.split("\n");
 		int length = sizeMax(lines);
 		
-		String ret = "";
-		ret += " _"+repeatNTimes(length, "_")+"_\n";
+		StringBuilder ret = new StringBuilder();
+		ret.append(" _").append(repeatNTimes(length, "_")).append("_\n");
 		
 		if (lines[0].equals(" "+repeatNTimes(length - 2, "_"))) {
 			k++;
-			ret += "/ " + lines[0] + "  \\\n";
+			ret.append("/ ").append(lines[0]).append("  \\\n");
 		} else {
-			ret += "/ "+repeatNTimes(length, " ")+" \\\n";
+			ret.append("/ ").append(repeatNTimes(length, " ")).append(" \\\n");
 		}
 		
 		
@@ -133,12 +135,12 @@ public abstract class Util {
 			String line = lines[i];
 			
 			int gap = length - line.length();
-			ret += "| " + line + repeatNTimes(gap, " ") + " |\n";
+			ret.append("| ").append(line).append(repeatNTimes(gap, " ")).append(" |\n");
 		}
 		
-		ret += "\\_"+repeatNTimes(length, "_")+"_/\n";
+		ret.append("\\_").append(repeatNTimes(length, "_")).append("_/\n");
 		
-		return ret;
+		return ret.toString();
 	}
 	
 	public static String boxMessage(String message, int n) {

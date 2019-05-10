@@ -36,7 +36,7 @@ public class HibernateConfigTest {
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean fact = new LocalSessionFactoryBean();
 		fact.setDataSource(datasource());
-		fact.setPackagesToScan(new String[] { "com.excilys.computer_database.model" });
+		fact.setPackagesToScan("com.excilys.computer_database.model");
 		fact.setHibernateProperties(hibernateProperties());
 
 		return fact;
@@ -44,15 +44,13 @@ public class HibernateConfigTest {
 	
 	@Bean
 	public DataSource datasource() {
-		DataSource datasource = DataSourceBuilder
+		return DataSourceBuilder
 				.create()
 				.url(env.getProperty("jdbcUrl"))
 				.driverClassName(env.getProperty("driverClassName"))
 				.username(env.getProperty("db.username"))
 				.password(env.getProperty("db.password"))
 				.build();
-		
-		return datasource;
 	}
 
 	Properties hibernateProperties() {

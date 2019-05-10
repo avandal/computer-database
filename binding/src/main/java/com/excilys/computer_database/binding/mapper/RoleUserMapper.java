@@ -6,6 +6,8 @@ import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.RoleUser;
 
 public class RoleUserMapper {
+	private RoleUserMapper() {}
+	
 	public static RoleUserDTO userRoleToDTO(RoleUser user) {
 		RoleUserDTOBuilder builder = new RoleUserDTOBuilder();
 		

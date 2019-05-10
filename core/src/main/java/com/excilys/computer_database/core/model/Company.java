@@ -1,5 +1,6 @@
 package com.excilys.computer_database.core.model;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -35,37 +36,25 @@ public class Company {
 		this.id = id;
 		this.name = name;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return Objects.hash(computers, id, name);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) 
+		if (this == obj) {
 			return true;
-		if (obj == null) 
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass()) 
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		
+		}
 		Company other = (Company) obj;
-		
-		if (id != other.id) 
-			return false;
-		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name))
-			return false;
-		
-		return true;
+		return Objects.equals(computers, other.computers) && id == other.id && Objects.equals(name, other.name);
 	}
 
 	public int getId() {

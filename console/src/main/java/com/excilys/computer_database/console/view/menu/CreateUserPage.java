@@ -14,71 +14,67 @@ import com.excilys.computer_database.service.service.exception.FailUserException
 
 @Component
 public class CreateUserPage extends Page {
-	private static final int USERNAME = 1;
-	private static final int PASSWORD = 2;
+	private final static int STEP_USERNAME = 1;
+	private final static int STEP_PASSWORD = 2;
 	
-	private static final String USERNAME_MESSAGE = "Please give a username ('abort' to abort')";
-	private static final String PASSWORD_MESSAGE = "Please give a password ('abort' to abort')";
+	private final static String USERNAME_MESSAGE = "Please give a username ('abort' to abort')";
+	private final static String PASSWORD_MESSAGE = "Please give a password ('abort' to abort')";
 	
 	private int step = 1;
 	
 	private String username;
-	private String password;
 	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
-	private CreateUserPage createUserPage;
+	private CreateUserPage that;
 	
 	@Autowired
 	private MenuPage menuPage;
 	
 	@Override
 	protected Optional<Page> backToMenu() {
-		step = USERNAME;
+		step = STEP_USERNAME;
 		return Optional.of(menuPage);
 	}
 
 	@Override
 	public String show() {
 		switch (step) {
-		case USERNAME : System.out.println(boxMessage(USERNAME_MESSAGE)); break;
-		case PASSWORD : System.out.println(boxMessage(PASSWORD_MESSAGE)); break;
+		case STEP_USERNAME : System.out.println(boxMessage(USERNAME_MESSAGE)); break;
+		case STEP_PASSWORD : System.out.println(boxMessage(PASSWORD_MESSAGE)); break;
 		default : break;
 		}
 
-		String input = this.scan.nextLine();
-
-		return input;
+		return this.scan.nextLine();
 	}
 
 	@Override
 	public Optional<Page> exec(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(createUserPage);
+			return Optional.of(that);
 		}
 		
 		if (input.equals("abort")) {
-			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
+			System.out.println(boxMessage(String.format("[Aborted] %s", M_BACK_MENU)));
 			return backToMenu();
 		}
 		
 		switch (step) {
-		case USERNAME :
+		case STEP_USERNAME :
 			username = input;
-			step = PASSWORD;
-			return Optional.of(createUserPage);
+			step = STEP_PASSWORD;
+			return Optional.of(that);
 			
-		case PASSWORD :
-			password = input;
+		case STEP_PASSWORD :
 			try {
-				userService.createUser(username, password);
-				System.out.println(boxMessage("User successfully created, " + BACK_MENU));
+				userService.createUser(username, input);
+				System.out.println(boxMessage(String.format("User successfully created, %s", BACK_MENU)));
 			} catch (FailUserException e) {
 				e.printStackTrace();
-				System.out.println(boxMessage("[Error] " + M_BACK_MENU));
+				System.out.println(boxMessage(String.format("[Error] %s", M_BACK_MENU)));
 			}
 			return backToMenu();
 			

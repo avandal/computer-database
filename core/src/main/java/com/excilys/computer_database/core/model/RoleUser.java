@@ -1,6 +1,7 @@
 package com.excilys.computer_database.core.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,19 +11,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.sun.istack.NotNull;
-
 @Entity
 @Table(name = "role")
 public class RoleUser implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private final static long serialVersionUID = 1L;
 
 	@Id
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "username")
 	private User user;
 	
-	@Column(name = "role") @NotNull
+	@Column(name = "role")
 	private String role;
 	
 	public RoleUser() {}
@@ -31,38 +30,27 @@ public class RoleUser implements Serializable {
 		this.user = user;
 		this.role = role;
 	}
-
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
-		return result;
+		return Objects.hash(role, user);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		RoleUser other = (RoleUser) obj;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
-			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		return true;
+		return Objects.equals(role, other.role) && Objects.equals(user, other.user);
 	}
-	
+
 	public User getUser() {
 		return user;
 	}

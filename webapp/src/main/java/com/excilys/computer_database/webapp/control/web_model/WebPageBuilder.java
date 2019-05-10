@@ -43,6 +43,6 @@ public class WebPageBuilder<T> {
 	}
 	
 	public WebPage<T> build() {
-		return new WebPage<T>(list, size, index, url, search, order);
+		return new WebPage<>(list, size, index, url, search, order);
 	}
 }

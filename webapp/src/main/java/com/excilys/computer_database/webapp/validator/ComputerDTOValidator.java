@@ -13,12 +13,12 @@ import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.util.Util;
 
 public class ComputerDTOValidator implements Validator {
-	private static final String EMPTY_NAME = "error.validator.name.empty";
-	private static final String INTRO_WRONG_FORMAT = "error.validator.intro.format";
-	private static final String DISC_WRONG_FORMAT = "error.validator.disc.format";
-	private static final String DISC_WITHOUT_INTRO = "error.validator.disc.without_intro";
-	private static final String DISC_LESS_THAN_INTRO = "error.validator.disc.less_than_intro";
-	private static final String INVALID_COMPANY = "error.validator.comp.invalid";
+	private final static String EMPTY_NAME = "error.validator.name.empty";
+	private final static String INTRO_WRONG_FORMAT = "error.validator.intro.format";
+	private final static String DISC_WRONG_FORMAT = "error.validator.disc.format";
+	private final static String DISC_WITHOUT_INTRO = "error.validator.disc.without_intro";
+	private final static String DISC_LESS_THAN_INTRO = "error.validator.disc.less_than_intro";
+	private final static String INVALID_COMPANY = "error.validator.comp.invalid";
 	
 	Logger logger = LoggerFactory.getLogger(ComputerDTOValidator.class);
 
@@ -37,7 +37,7 @@ public class ComputerDTOValidator implements Validator {
 		verif(target, errors);
 	}
 	
-	private void checkName(ComputerDTO computer, Errors errors) {
+	private void checkName(Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", EMPTY_NAME);
 	}
 	
@@ -105,7 +105,7 @@ public class ComputerDTOValidator implements Validator {
 		
 		ComputerDTO computer = (ComputerDTO) obj;
 		
-		checkName(computer, errors);
+		checkName(errors);
 		checkIntroduced(computer, errors);
 		checkDiscontinued(computer, errors);
 		checkCompany(computer, errors);

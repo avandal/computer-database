@@ -23,7 +23,7 @@ public class DeleteCompanyPage extends Page {
 	private MenuPage menuPage;
 	
 	@Autowired
-	private DeleteCompanyPage deleteCompanyPage;
+	private DeleteCompanyPage that;
 	
 	@Override
 	protected Optional<Page> backToMenu() {
@@ -32,22 +32,20 @@ public class DeleteCompanyPage extends Page {
 
 	@Override
 	public String show() {
-		System.out.println(boxMessage("Please give a company id ('abort' to abort')"));
+		System.out.println(boxMessage(String.format("Please give a company id (%s)", ABORT)));
 
-		String input = this.scan.nextLine();
-
-		return input;
+		return this.scan.nextLine();
 	}
 
 	@Override
 	public Optional<Page> exec(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(deleteCompanyPage);
+			return Optional.of(that);
 		}
 		
 		if (input.equals("abort")) {
-			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
+			System.out.println(boxMessage(String.format("[Aborted] %s", BACK_MENU)));
 			return backToMenu();
 		}
 		
@@ -55,12 +53,12 @@ public class DeleteCompanyPage extends Page {
 		
 		if (idInput.isEmpty()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return Optional.of(deleteCompanyPage);
+			return Optional.of(that);
 		}
 
 		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return Optional.of(deleteCompanyPage);
+			return Optional.of(that);
 		}
 
 		try {

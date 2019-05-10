@@ -15,6 +15,8 @@ public class ControllerCLI {
 	private Page currentPage;
 	
 	private Logger logger = LoggerFactory.getLogger(ControllerCLI.class);
+	
+	private final static String RUN = "ControllerCLI - Run";
 
 	@Autowired
 	private ControllerCLI(MenuPage currentPage) {
@@ -24,7 +26,7 @@ public class ControllerCLI {
 	public void run() {
 		boolean loop = true;
 		
-		logger.debug("ControlerCLI - Run : initial menu is " + currentPage);
+		logger.debug(String.format("%s : initial menu is %s", RUN, currentPage));
 
 		while (loop) {
 			String input = this.currentPage.show();
@@ -32,10 +34,10 @@ public class ControllerCLI {
 			
 			if (page.isEmpty()) {
 				loop = false;
-				logger.debug("ControlerCLI - Run : Exit");
+				logger.debug(String.format("%s : Exit", RUN));
 			} else {
 				this.currentPage = page.get();
-				logger.debug("ControlerCLI - Run : changing menu to " + currentPage);
+				logger.debug(String.format("%s : changing menu to ", RUN, currentPage));
 			}
 		}
 	}

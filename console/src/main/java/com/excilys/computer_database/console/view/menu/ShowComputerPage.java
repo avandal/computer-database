@@ -20,7 +20,7 @@ public class ShowComputerPage extends Page {
 	private ComputerService service;
 	
 	@Autowired
-	private ShowComputerPage showComputerPage;
+	private ShowComputerPage that;
 	
 	@Autowired
 	private MenuPage menuPage;
@@ -34,21 +34,19 @@ public class ShowComputerPage extends Page {
 
 	@Override
 	public String show() {
-		System.out.println(boxMessage("Please give a computer id ('abort' to abort')"));
+		System.out.println(boxMessage(String.format("Please give a computer id (%s)", ABORT)));
 		
-		String input = this.scan.nextLine();
-		
-		return input;
+		return this.scan.nextLine();
 	}
 
 	private Optional<Page> initialCheck(String input) {
 		if (input == null || input.equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(showComputerPage);
+			return Optional.of(that);
 		}
 		
 		if (input.equals("abort")) {
-			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
+			System.out.println(boxMessage(String.format("[Aborted] %s", BACK_MENU)));
 			return backToMenu();
 		}
 		
@@ -58,12 +56,12 @@ public class ShowComputerPage extends Page {
 	private Optional<Page> invalidInput(Optional<Integer> idInput) {
 		if (idInput.isEmpty()) {
 			System.out.println(boxMessage("Invalid id: must be a number"));
-			return Optional.of(showComputerPage);
+			return Optional.of(that);
 		}
 		
 		if (idInput.get() <= 0) {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
-			return Optional.of(showComputerPage);
+			return Optional.of(that);
 		}
 		
 		return Optional.empty();

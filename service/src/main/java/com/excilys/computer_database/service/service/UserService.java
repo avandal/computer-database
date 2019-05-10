@@ -36,7 +36,7 @@ public class UserService {
 	}
 	
 	public int createUser(String username, String password) throws FailUserException {
-		logger.info("createUser - [" + username + "," + password + "]");
+		logger.info(String.format("createUser - [%s, %s]", username, password));
 		
 		if (username == null || username.isEmpty()) {
 			logger.error("Empty username");
@@ -61,7 +61,7 @@ public class UserService {
 					new BCryptPasswordEncoder().encode(password),
 					true
 				),
-				Role.GUEST.getRole()
+				Role.GUEST.getValue()
 			)
 		);
 	}

@@ -25,17 +25,17 @@ import com.excilys.computer_database.webapp.control.web_model.WebPageBuilder;
 @Controller
 @RequestMapping({"/", "/dashboard"})
 public class DashboardController {
-	static final String URL = "dashboard";
-	static final String VIEW = "/dashboard";
-	static final String REDIRECT = "redirect:" + VIEW;
+	final static String URL = "dashboard";
+	final static String VIEW = "/dashboard";
+	final static String REDIRECT = "redirect:" + VIEW;
 	
-	public static final String PAGE_SIZE_PARAM = "pageSize";
-	public static final String PAGE_INDEX_PARAM = "pageIndex";
-	public static final String NB_COMPUTERS = "nbComputers";
-	public static final String LIST_COMP_PARAM_FILTERED = "computerListFiltered";
-	public static final String WEB_PAGE_PARAM = "webPage";
-	public static final String SEARCH_PARAM = "search";
-	public static final String ORDER_PARAM = "order";
+	public final static String PAGE_SIZE_PARAM = "pageSize";
+	public final static String PAGE_INDEX_PARAM = "pageIndex";
+	public final static String NB_COMPUTERS = "nbComputers";
+	public final static String LIST_COMP_PARAM_FILTERED = "computerListFiltered";
+	public final static String WEB_PAGE_PARAM = "webPage";
+	public final static String SEARCH_PARAM = "search";
+	public final static String ORDER_PARAM = "order";
 	
 	private Logger logger = LoggerFactory.getLogger(DashboardController.class);
 	

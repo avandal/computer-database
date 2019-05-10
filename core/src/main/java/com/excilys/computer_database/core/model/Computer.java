@@ -1,20 +1,17 @@
 package com.excilys.computer_database.core.model;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "computer")
@@ -45,64 +42,28 @@ public class Computer {
 		this.discontinued = discontinued;
 		this.company = company;
 	}
-
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((company == null) ? 0 : company.hashCode());
-		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-		result = prime * result + id;
-		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return Objects.hash(company, discontinued, id, introduced, name);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		
+		}
 		Computer other = (Computer) obj;
-		
-		if (id != other.id)
-			return false;
-		
-		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name))
-			return false;
-		
-		if (introduced == null) {
-			if (other.introduced != null) {
-				return false;
-			}
-		} else if (!introduced.equals(other.introduced))
-			return false;
-		
-		if (discontinued == null) {
-			if (other.discontinued != null) {
-				return false;
-			}
-		} else if (!discontinued.equals(other.discontinued))
-			return false;
-		
-		if (company == null) {
-			if (other.company != null) {
-				return false;
-			}
-		} else if (!company.equals(other.company))
-			return false;
-		
-		return true;
-	}	
-	
+		return Objects.equals(company, other.company) && Objects.equals(discontinued, other.discontinued)
+				&& id == other.id && Objects.equals(introduced, other.introduced) && Objects.equals(name, other.name);
+	}
+
 	public int getId() {
 		return id;
 	}

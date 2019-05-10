@@ -30,7 +30,7 @@ public class HibernateConfig {
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean fact = new LocalSessionFactoryBean();
 		fact.setDataSource(datasource());
-		fact.setPackagesToScan(new String[] { "com.excilys.computer_database.core.model" });
+		fact.setPackagesToScan("com.excilys.computer_database.core.model");
 		fact.setHibernateProperties(hibernateProperties());
 
 		return fact;

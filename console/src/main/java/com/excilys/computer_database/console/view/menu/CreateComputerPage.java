@@ -19,10 +19,10 @@ import com.excilys.computer_database.service.service.exception.FailComputerExcep
 
 @Component
 public class CreateComputerPage extends Page {
-	private static final int NAME = 1;
-	private static final int INTRODUCED = 2;
-	private static final int DISCONTINUED = 3;
-	private static final int IDCOMP = 4;
+	private final static int NAME = 1;
+	private final static int INTRODUCED = 2;
+	private final static int DISCONTINUED = 3;
+	private final static int IDCOMP = 4;
 	
 	private final static String NAME_MESSAGE = "Please give a computer name (" + ABORT + ")";
 	private final static String INTRODUCED_MESSAGE = "Please give an introduced date (" + NULL_ABORT + ")";
@@ -40,7 +40,7 @@ public class CreateComputerPage extends Page {
 	private ComputerService service;
 	
 	@Autowired
-	private CreateComputerPage createComputerPage;
+	private CreateComputerPage that;
 	
 	@Autowired
 	private MenuPage menuPage;
@@ -63,9 +63,7 @@ public class CreateComputerPage extends Page {
 		default: break;
 		}
 
-		String input = this.scan.nextLine();
-
-		return input;
+		return this.scan.nextLine();
 	}
 	
 	private void step() {
@@ -130,11 +128,11 @@ public class CreateComputerPage extends Page {
 	public Optional<Page> exec(String input) {
 		if (input == null || input.trim().equals("")) {
 			System.out.println(boxMessage("Invalid input"));
-			return Optional.of(createComputerPage);
+			return Optional.of(that);
 		}
 
 		if (input.equals("abort")) {
-			System.out.println(boxMessage("[Aborted] " + BACK_MENU));
+			System.out.println(boxMessage(String.format("[Aborted] %s", M_BACK_MENU)));
 			return backToMenu();
 		}
 
@@ -154,10 +152,10 @@ public class CreateComputerPage extends Page {
 		
 			try {
 				service.create(computer);
-				System.out.println(boxMessage("Computer successfully created, " + BACK_MENU));
+				System.out.println(boxMessage(String.format("Computer successfully created, %s", BACK_MENU)));
 			} catch (FailComputerException e) {
 				e.printStackTrace();
-				System.out.println(boxMessage("[Error] " + M_BACK_MENU));
+				System.out.println(boxMessage(String.format("[Error] %s", M_BACK_MENU)));
 			}
 			
 			return backToMenu();
@@ -167,7 +165,7 @@ public class CreateComputerPage extends Page {
 			return backToMenu();
 		}
 
-		return Optional.of(createComputerPage);
+		return Optional.of(that);
 	}
 	
 	public String toString() {
