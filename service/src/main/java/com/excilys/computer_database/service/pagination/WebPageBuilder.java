@@ -1,11 +1,11 @@
-package com.excilys.computer_database.webapp.control.web_model;
+package com.excilys.computer_database.service.pagination;
 
 import java.util.List;
 import java.util.Optional;
 
 public class WebPageBuilder<T> {
 	private List<T> list;
-	private Optional<Integer> size;
+	private String size;
 	private Optional<Integer> index;
 	private String search;
 	private String order;
@@ -17,7 +17,7 @@ public class WebPageBuilder<T> {
 		return this;
 	}
 	
-	public WebPageBuilder<T> size(Optional<Integer> size) {
+	public WebPageBuilder<T> size(String size) {
 		this.size = size;
 		return this;
 	}

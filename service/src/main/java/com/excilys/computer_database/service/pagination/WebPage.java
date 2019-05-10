@@ -1,4 +1,4 @@
-package com.excilys.computer_database.webapp.control.web_model;
+package com.excilys.computer_database.service.pagination;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,27 +6,39 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.SortMode;
-import com.excilys.computer_database.webapp.control.DashboardController;
 
 public class WebPage<T> {
+	public final static String PAGE_SIZE_PARAM = "pageSize";
+	public final static String PAGE_INDEX_PARAM = "pageIndex";
+	public final static String SEARCH_PARAM = "search";
+	public final static String ORDER_PARAM = "order";
+	
 	private List<T> list;
 	private int index;
 	private int size;
 	private String search;
 	private String order;
-	
+
+	private String urlSize;
 	private String url;
 	
 	private Logger logger = LoggerFactory.getLogger(WebPage.class);
 	
-	private void fixSize(Optional<Integer> size) {
-		if (size.isPresent()) {
-			this.size = PageSize.getById(size.get()).getSize();
-		} else {
-			logger.warn("extractPageSize - Undefined pageSize input, set to default");
-			this.size = PageSize.SHOW_10.getSize();
+	private boolean isShowAll(String size) {
+		return PageSize.SHOW_ALL.getSize().equals(size);
+	}
+	
+	private void fixSize(String size) {
+		
+		if (isShowAll(size)) {
+			this.urlSize = size;
+			this.size = list.size();
+			return;
 		}
+		
+		this.size = Util.parseInt(PageSize.getById(size).getSize()).get();
 	}
 	
 	private void fixIndex(Optional<Integer> optIndex) {
@@ -43,7 +55,7 @@ public class WebPage<T> {
 		}
 	}
 	
-	public WebPage(List<T> list, Optional<Integer> size, Optional<Integer> index, String url, String search, String order) {
+	public WebPage(List<T> list, String size, Optional<Integer> index, String url, String search, String order) {
 		this.list = list;
 		fixSize(size);
 		fixIndex(index);
@@ -53,30 +65,30 @@ public class WebPage<T> {
 		this.url = url;
 	}
 	
-	private String formatUrl(int index, int size, String search, String order) {
-		return String.format("%s?%s=%d&%s=%d&%s=%s&%s=%s", url, 
-				DashboardController.PAGE_INDEX_PARAM, index, 
-				DashboardController.PAGE_SIZE_PARAM, size, 
-				DashboardController.SEARCH_PARAM, search,
-				DashboardController.ORDER_PARAM, order);
+	private String formatUrl(int index, String size, String search, String order) {
+		return String.format("%s?%s=%d&%s=%s&%s=%s&%s=%s", url, 
+				PAGE_INDEX_PARAM, index, 
+				PAGE_SIZE_PARAM, size, 
+				SEARCH_PARAM, search,
+				ORDER_PARAM, order);
 	}
 	
 	public String previousPage() {
 		int newPage = (index > 1) ? index - 1 : 1;
-		return formatUrl(newPage, size, search, order);
+		return formatUrl(newPage, urlSize, search, order);
 	}
 	
 	public String nextPage() {		
 		int newPage = (index * size < list.size()) ? index + 1 : index;
-		return formatUrl(newPage, size, search, order);
+		return formatUrl(newPage, urlSize, search, order);
 	}
 	
 	public String indexAt(int index) {
-		return formatUrl(index, size, search, order);
+		return formatUrl(index, urlSize, search, order);
 	}
 	
-	public String setPageSize(int size) {
-		return formatUrl(1, size, search, order);
+	public String setPageSize(String urlSize) {
+		return formatUrl(1, urlSize, search, order);
 	}
 	
 	public PageSize[] sizes() {
@@ -155,7 +167,7 @@ public class WebPage<T> {
 	}
 	
 	public String order(String mode) {
-		return formatUrl(index, size, search, mode);
+		return formatUrl(index, urlSize, search, mode);
 	}
 	
 	public int getSize() {

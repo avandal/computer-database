@@ -1,24 +1,16 @@
 package com.excilys.computer_database.binding.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.function.Predicate;
 
 import com.excilys.computer_database.binding.dto.CompanyDTO;
 import com.excilys.computer_database.binding.dto.CompanyDTOBuilder;
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.Company;
 import com.excilys.computer_database.core.model.CompanyBuilder;
-import com.excilys.computer_database.persistence.CompanyDAO;
 
 public abstract class CompanyMapper {
 	private CompanyMapper() {}
-
-	public static Company resultSetCompany(ResultSet res) throws SQLException {
-		return new CompanyBuilder()
-				.id(res.getInt(CompanyDAO.ID_CN_ALIAS))
-				.name(res.getString(CompanyDAO.NAME_CN_ALIAS))
-				.build();
-	}
 	
 	public static Company dtoToCompany(CompanyDTO dto) {
 		return new CompanyBuilder()
@@ -31,6 +23,15 @@ public abstract class CompanyMapper {
 		return new CompanyDTOBuilder()
 				.id(Integer.toString(company.getId()))
 				.name(company.getName())
+				.build();
+	}
+	
+	public static CompanyDTO hashmapToDTO(HashMap<String, String> map) {
+		Predicate<String> condition = s -> s != null;
+		
+		return new CompanyDTOBuilder()
+				.id(Util.accordingTo(condition, map.get("id") ,"0"))
+				.name(Util.accordingTo(condition, map.get("name"), ""))
 				.build();
 	}
 }

@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.SortMode;
+import com.excilys.computer_database.service.pagination.WebPage;
+import com.excilys.computer_database.service.pagination.WebPageBuilder;
 import com.excilys.computer_database.service.service.ComputerService;
 import com.excilys.computer_database.service.service.exception.FailComputerException;
-import com.excilys.computer_database.webapp.control.web_model.WebPage;
-import com.excilys.computer_database.webapp.control.web_model.WebPageBuilder;
 
 @Controller
 @RequestMapping({"/", "/dashboard"})
@@ -29,13 +29,9 @@ public class DashboardController {
 	final static String VIEW = "/dashboard";
 	final static String REDIRECT = "redirect:" + VIEW;
 	
-	public final static String PAGE_SIZE_PARAM = "pageSize";
-	public final static String PAGE_INDEX_PARAM = "pageIndex";
 	public final static String NB_COMPUTERS = "nbComputers";
 	public final static String LIST_COMP_PARAM_FILTERED = "computerListFiltered";
 	public final static String WEB_PAGE_PARAM = "webPage";
-	public final static String SEARCH_PARAM = "search";
-	public final static String ORDER_PARAM = "order";
 	
 	private Logger logger = LoggerFactory.getLogger(DashboardController.class);
 	
@@ -46,14 +42,14 @@ public class DashboardController {
 	public String get(@RequestParam(required = false) Map<String, String> args, Model model) {
 		logger.info("entering get");
 		
-		String search = args.get(SEARCH_PARAM);
-		String order = args.get(ORDER_PARAM);
+		String search = args.get(WebPage.SEARCH_PARAM);
+		String order = args.get(WebPage.ORDER_PARAM);
+		String size = args.get(WebPage.PAGE_SIZE_PARAM);
 		SortMode mode = SortMode.getByValue(order);
 		
 		List<ComputerDTO> list = search == null || "".equals(search) ? computerService.getAll(mode) : computerService.getByName(search, mode);
 		
-		Optional<Integer> size = Util.parseInt(args.get(PAGE_SIZE_PARAM));
-		Optional<Integer> index = Util.parseInt(args.get(PAGE_INDEX_PARAM));
+		Optional<Integer> index = Util.parseInt(args.get(WebPage.PAGE_INDEX_PARAM));
 		
 		WebPage<ComputerDTO> webPage = new WebPageBuilder<ComputerDTO>()
 				.list(list)
@@ -66,8 +62,8 @@ public class DashboardController {
 		
 		model.addAttribute(NB_COMPUTERS, list.size());
 		model.addAttribute(LIST_COMP_PARAM_FILTERED, list);
-		model.addAttribute(PAGE_INDEX_PARAM, webPage.getIndex());
-		model.addAttribute(PAGE_SIZE_PARAM, webPage.getSize());
+		model.addAttribute(WebPage.PAGE_INDEX_PARAM, webPage.getIndex());
+		model.addAttribute(WebPage.PAGE_SIZE_PARAM, webPage.getSize());
 		model.addAttribute(WEB_PAGE_PARAM, webPage);
 		
 		return URL;

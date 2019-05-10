@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.SortMode;
+import com.excilys.computer_database.service.pagination.WebPage;
+import com.excilys.computer_database.service.pagination.WebPageBuilder;
 import com.excilys.computer_database.service.service.ComputerService;
 import com.excilys.computer_database.service.service.exception.FailComputerException;
-import com.excilys.computer_database.webapp.control.web_model.WebPage;
-import com.excilys.computer_database.webapp.control.web_model.WebPageBuilder;
 
 @RestController
 @RequestMapping(path = "/api/computer", produces = "application/json")
@@ -39,14 +39,14 @@ public class ComputerRestController {
 	@GetMapping
 	public ResponseEntity<List<ComputerDTO>> getAll(@RequestParam Map<String, String> args) {
 		logger.debug("getAll");
-		String search = args.get(DashboardController.SEARCH_PARAM);
-		String order = args.get(DashboardController.ORDER_PARAM);
+		String search = args.get(WebPage.SEARCH_PARAM);
+		String order = args.get(WebPage.ORDER_PARAM);
+		String size = args.get(WebPage.PAGE_SIZE_PARAM);
 		SortMode mode = SortMode.getByValue(order);
 		
 		List<ComputerDTO> list = search == null || "".equals(search) ? computerService.getAll(mode) : computerService.getByName(search, mode);
 		
-		Optional<Integer> size = Util.parseInt(args.get(DashboardController.PAGE_SIZE_PARAM));
-		Optional<Integer> index = Util.parseInt(args.get(DashboardController.PAGE_INDEX_PARAM));
+		Optional<Integer> index = Util.parseInt(args.get(WebPage.PAGE_INDEX_PARAM));
 		
 		WebPage<ComputerDTO> webPage = new WebPageBuilder<ComputerDTO>()
 				.list(list)

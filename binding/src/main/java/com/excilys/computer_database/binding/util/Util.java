@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -22,15 +24,6 @@ public abstract class Util {
 			return Optional.of(Integer.parseInt(input));
 		} catch (NumberFormatException e) {
 			logger.warn(String.format("parseInt - invalid input: %s", input));
-			return Optional.empty();
-		}
-	}
-	
-	public static Optional<Timestamp> parseTimestamp(String input) {
-		try {
-			return Optional.of(Timestamp.valueOf(input));
-		} catch (IllegalArgumentException e) {
-			logger.warn(String.format("parseTimestamp - Invalid input: %s", input));
 			return Optional.empty();
 		}
 	}
@@ -55,6 +48,13 @@ public abstract class Util {
 		}
 		
 		return Optional.empty();
+	}
+	
+	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+	    List<T> r = new ArrayList<T>(c.size());
+	    for(Object o: c)
+	      r.add(clazz.cast(o));
+	    return r;
 	}
 	
 	public static <T> T accordingTo(Predicate<T> condition, T initialValue, T defaultValue) {

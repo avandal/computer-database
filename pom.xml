@@ -30,6 +30,7 @@
 		<hibernate>5.4.2.Final</hibernate>
 		<hql>1.5.0.Final</hql>
 		<servlet>4.0.1</servlet>
+		<jackson>2.9.8</jackson>
 	</properties>
 
 	<dependencies>

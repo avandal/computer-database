@@ -1,27 +1,15 @@
 package com.excilys.computer_database.binding.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.function.Predicate;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.Computer;
-import com.excilys.computer_database.core.model.ComputerBuilder;
-import com.excilys.computer_database.persistence.ComputerDAO;
 
 public abstract class ComputerMapper {
 	private ComputerMapper() {}
-	
-	public static Computer resultSetComputer(ResultSet res) throws SQLException {
-		return new ComputerBuilder()
-				.id(res.getInt(ComputerDAO.ID_CT_ALIAS))
-				.name(res.getString(ComputerDAO.NAME_CT_ALIAS))
-				.introduced(res.getTimestamp("ct.introduced"))
-				.discontinued(res.getTimestamp("ct.discontinued"))
-				.company(CompanyMapper.resultSetCompany(res))
-				.build();
-	}
 	
 	public static ComputerDTO computerToDTO(Computer computer) {
 		ComputerDTOBuilder builder = new ComputerDTOBuilder().empty();
@@ -39,5 +27,18 @@ public abstract class ComputerMapper {
 		}
 		
 		return builder.build();
+	}
+	
+	public static ComputerDTO hashmapToDTO(HashMap<String, String> map) {
+		Predicate<String> condition = s -> s != null;
+		
+		return new ComputerDTOBuilder()
+				.id(Util.accordingTo(condition, map.get("id") ,"0"))
+				.name(Util.accordingTo(condition, map.get("name"), ""))
+				.introduced(Util.accordingTo(condition, map.get("introduced"), null))
+				.discontinued(Util.accordingTo(condition, map.get("discontinued"), null))
+				.companyId(Util.accordingTo(condition, map.get("companyId"), null))
+				.companyName(Util.accordingTo(condition, map.get("companyName"), null))
+				.build();
 	}
 }
