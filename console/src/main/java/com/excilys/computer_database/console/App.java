@@ -7,10 +7,10 @@ import com.excilys.computer_database.console.control.ControllerCLI;
 import com.excilys.computer_database.service.config.HibernateConfig;
 
 public class App {
-	public final static String DATASOURCE = "/datasource.properties";
-	public final static String DATASOURCE_TEST = "/datasourceTest.properties";
+	public static final String DATASOURCE = "/datasource.properties";
+	public static final String DATASOURCE_TEST = "/datasourceTest.properties";
 
-	public final static String CONFIG_TEST = "/config_test.sql";
+	public static final String CONFIG_TEST = "/config_test.sql";
 
 	public static void main(String[] args) {
 		GenericApplicationContext context = new AnnotationConfigApplicationContext(HibernateConfig.class);

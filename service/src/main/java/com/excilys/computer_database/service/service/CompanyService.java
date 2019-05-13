@@ -27,7 +27,7 @@ public class CompanyService {
 	private CompanyService() {}
 	
 	public List<CompanyDTO> getAll() {
-		return dao.companyList().stream().map(c -> CompanyMapper.companyToDTO(c)).collect(Collectors.toList());
+		return dao.getAll().stream().map(CompanyMapper::companyToDTO).collect(Collectors.toList());
 	}
 	
 	public Optional<CompanyDTO> getById(String id) {
@@ -37,7 +37,7 @@ public class CompanyService {
 			return Optional.empty();
 		}
 		
-		Optional<Company> company = dao.getCompanyById(companyId.get());
+		Optional<Company> company = dao.getById(companyId.get());
 		
 		if (company.isPresent()) {
 			return Optional.of(CompanyMapper.companyToDTO(company.get()));
@@ -47,12 +47,12 @@ public class CompanyService {
 	
 	public int delete(String id) throws FailComputerException {
 		if ("".equals(id)) {
-			return dao.deleteCompany(null);
+			return dao.delete(null);
 		}
 		
 		Optional<Integer> optId = Util.parseInt(id);
 		if (optId.isPresent()) {
-			return dao.deleteCompany(optId.get());
+			return dao.delete(optId.get());
 		}
 		
 		throw new FailComputerException(ConcernedField.ID, FailComputerException.ID_ERROR);

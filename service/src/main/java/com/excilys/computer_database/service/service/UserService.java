@@ -25,7 +25,7 @@ public class UserService {
 	private Logger logger = LoggerFactory.getLogger(UserService.class);
 	
 	public Optional<RoleUserDTO> getUserRole(String username) {
-		logger.info("getUserRole - " + username);
+		logger.info("getUserRole - {}", username);
 		
 		Optional<RoleUser> userRole = dao.getUserRole(username);
 		if (userRole.isPresent()) {
@@ -36,7 +36,7 @@ public class UserService {
 	}
 	
 	public int createUser(String username, String password) throws FailUserException {
-		logger.info(String.format("createUser - [%s, %s]", username, password));
+		logger.info("createUser - [{}, {}]", username, password);
 		
 		if (username == null || username.isEmpty()) {
 			logger.error("Empty username");

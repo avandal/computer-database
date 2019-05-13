@@ -14,11 +14,11 @@ import com.excilys.computer_database.service.service.exception.FailUserException
 
 @Component
 public class CreateUserPage extends Page {
-	private final static int STEP_USERNAME = 1;
-	private final static int STEP_PASSWORD = 2;
+	private static final int STEP_USERNAME = 1;
+	private static final int STEP_PASSWORD = 2;
 	
-	private final static String USERNAME_MESSAGE = "Please give a username ('abort' to abort')";
-	private final static String PASSWORD_MESSAGE = "Please give a password ('abort' to abort')";
+	private static final String USERNAME_MESSAGE = "Please give a username ('abort' to abort')";
+	private static final String PASSWORD_MESSAGE = "Please give a password ('abort' to abort')";
 	
 	private int step = 1;
 	

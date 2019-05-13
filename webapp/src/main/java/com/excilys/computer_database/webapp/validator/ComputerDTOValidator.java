@@ -12,12 +12,17 @@ import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.util.Util;
 
 public class ComputerDTOValidator implements Validator {
-	private final static String EMPTY_NAME = "error.validator.name.empty";
-	private final static String INTRO_WRONG_FORMAT = "error.validator.intro.format";
-	private final static String DISC_WRONG_FORMAT = "error.validator.disc.format";
-	private final static String DISC_WITHOUT_INTRO = "error.validator.disc.without_intro";
-	private final static String DISC_LESS_THAN_INTRO = "error.validator.disc.less_than_intro";
-	private final static String INVALID_COMPANY = "error.validator.comp.invalid";
+	private static final String EMPTY_NAME = "error.validator.name.empty";
+	private static final String INTRO_WRONG_FORMAT = "error.validator.intro.format";
+	private static final String DISC_WRONG_FORMAT = "error.validator.disc.format";
+	private static final String DISC_WITHOUT_INTRO = "error.validator.disc.without_intro";
+	private static final String DISC_LESS_THAN_INTRO = "error.validator.disc.less_than_intro";
+	private static final String INVALID_COMPANY = "error.validator.comp.invalid";
+	
+	private static final String NAME = "name";
+	private static final String INTRODUCED = "introduced";
+	private static final String DISCONTINUED = "discontinued";
+	private static final String COMPANY_ID = "companyId";
 	
 	Logger logger = LoggerFactory.getLogger(ComputerDTOValidator.class);
 
@@ -38,7 +43,7 @@ public class ComputerDTOValidator implements Validator {
 	
 	private void checkName(ComputerDTO computer, Errors errors) {
 		if (computer.getName() == null || computer.getName().trim().equals("")) {
-			errors.rejectValue("name", EMPTY_NAME);
+			errors.rejectValue(NAME, EMPTY_NAME);
 		}
 	}
 	
@@ -49,7 +54,7 @@ public class ComputerDTOValidator implements Validator {
 			&& Util.dateToTimestamp(introduced).isEmpty()) {
 			
 				logger.error("Introduced wrong format");
-				errors.rejectValue("introduced", INTRO_WRONG_FORMAT);
+				errors.rejectValue(INTRODUCED, INTRO_WRONG_FORMAT);
 		}
 	}
 	
@@ -63,7 +68,7 @@ public class ComputerDTOValidator implements Validator {
 		if (introduced == null || introduced.trim().equals("")) {
 			if (discontinued != null && !discontinued.trim().equals("")) {
 				logger.error("Discontinued without introducted");
-				errors.rejectValue("discontinued", DISC_WITHOUT_INTRO);
+				errors.rejectValue(DISCONTINUED, DISC_WITHOUT_INTRO);
 			}
 		} else {
 			if (discontinued == null || discontinued.trim().equals("")) {
@@ -72,7 +77,7 @@ public class ComputerDTOValidator implements Validator {
 			
 			if (optDiscontinued.isEmpty()) {
 				logger.error("Discontinued wrong format");
-				errors.rejectValue("discontinued", DISC_WRONG_FORMAT);
+				errors.rejectValue(DISCONTINUED, DISC_WRONG_FORMAT);
 			} else {
 				if (optIntroduced.isEmpty()) {
 					return;
@@ -83,7 +88,7 @@ public class ComputerDTOValidator implements Validator {
 				
 				if (disc.before(intro)) {
 					logger.error("Discontinued less than introduced");
-					errors.rejectValue("discontinued", DISC_LESS_THAN_INTRO);
+					errors.rejectValue(DISCONTINUED, DISC_LESS_THAN_INTRO);
 				}
 			}
 		}
@@ -97,7 +102,7 @@ public class ComputerDTOValidator implements Validator {
 			
 			if (optCompany.isEmpty()) {
 				logger.error("Invalid company id");
-				errors.rejectValue("companyId", INVALID_COMPANY);
+				errors.rejectValue(COMPANY_ID, INVALID_COMPANY);
 			}
 		}
 	}

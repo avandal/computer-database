@@ -18,12 +18,12 @@ import com.excilys.computer_database.service.service.exception.FailUserException
 @Controller
 @RequestMapping("/login")
 public class CreateUserController {
-	final static String URL = "signup";
-	final static String VIEW = "/signup";
-	final static String REDIRECT_LOGIN = "redirect:/login";
+	static final String URL = "signup";
+	static final String VIEW = "/signup";
+	static final String REDIRECT_LOGIN = "redirect:/login";
 	
-	private final static String ERROR_USERNAME = "errorUsername";
-	private final static String ERROR_PASSWORD = "errorPassword";
+	private static final String ERROR_USERNAME = "errorUsername";
+	private static final String ERROR_PASSWORD = "errorPassword";
 	
 	private Logger logger = LoggerFactory.getLogger(CreateUserController.class);
 	
@@ -46,7 +46,7 @@ public class CreateUserController {
 		try {
 			userService.createUser(username, password);
 			
-			logger.info(String.format("User successfully created: [%s, %s]", username, password));
+			logger.info("User successfully created: [{}, {}]", username, password);
 			return REDIRECT_LOGIN;
 		} catch (FailUserException e) {
 			switch (e.getConcerned()) {

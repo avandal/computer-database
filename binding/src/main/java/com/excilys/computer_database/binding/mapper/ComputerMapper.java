@@ -1,6 +1,7 @@
 package com.excilys.computer_database.binding.mapper;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
@@ -8,9 +9,7 @@ import com.excilys.computer_database.binding.dto.ComputerDTOBuilder;
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.Computer;
 
-public abstract class ComputerMapper {
-	private ComputerMapper() {}
-	
+public interface ComputerMapper {
 	public static ComputerDTO computerToDTO(Computer computer) {
 		ComputerDTOBuilder builder = new ComputerDTOBuilder().empty();
 		builder.id(Integer.toString(computer.getId())).name(computer.getName());
@@ -29,8 +28,8 @@ public abstract class ComputerMapper {
 		return builder.build();
 	}
 	
-	public static ComputerDTO hashmapToDTO(HashMap<String, String> map) {
-		Predicate<String> condition = s -> s != null;
+	public static ComputerDTO hashmapToDTO(Map<String, String> map) {
+		Predicate<String> condition = Objects::nonNull;
 		
 		return new ComputerDTOBuilder()
 				.id(Util.accordingTo(condition, map.get("id") ,"0"))

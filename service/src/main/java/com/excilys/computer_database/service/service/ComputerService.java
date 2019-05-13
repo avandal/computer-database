@@ -2,6 +2,7 @@ package com.excilys.computer_database.service.service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -40,11 +41,11 @@ public class ComputerService {
 	private ComputerService() {}
 	
 	public List<ComputerDTO> getAll(SortMode orderMode) {
-		return computerDAO.getAll(orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
+		return computerDAO.getAll(orderMode.suffix()).stream().map(ComputerMapper::computerToDTO).collect(Collectors.toList());
 	}
 	
 	public List<ComputerDTO> getByName(String name, SortMode orderMode) {
-		return computerDAO.getByName(name, orderMode.suffix()).stream().map(c -> ComputerMapper.computerToDTO(c)).collect(Collectors.toList());
+		return computerDAO.getByName(name, orderMode.suffix()).stream().map(ComputerMapper::computerToDTO).collect(Collectors.toList());
 	}
 	
 	public Optional<ComputerDTO> getById(String id) {
@@ -85,7 +86,7 @@ public class ComputerService {
 		Timestamp tsIntroduced = Util.extract(Util.dateToTimestamp(introduced));
 		Timestamp tsDiscontinued = Util.extract(Util.dateToTimestamp(discontinued));
 		
-		Optional<Company> company = companyDAO.getCompanyById(Integer.parseInt(companyId));
+		Optional<Company> company = companyDAO.getById(Integer.parseInt(companyId));
 		
 		if (Integer.parseInt(companyId) <= 0) {
 			create(name, tsIntroduced, tsDiscontinued, null);
@@ -108,7 +109,7 @@ public class ComputerService {
 	}
 	
 	public void update(ComputerDTO computer) throws FailComputerException {
-		computer.setCompanyId(Util.accordingTo(s -> s != null, computer.getCompanyId(), "0"));
+		computer.setCompanyId(Util.accordingTo(Objects::nonNull, computer.getCompanyId(), "0"));
 		
 		validator.checkId(computer);
 		validator.checkName(computer);
@@ -124,7 +125,7 @@ public class ComputerService {
 		int intId = Util.parseInt(id).get();
 		Timestamp tsIntroduced = Util.extract(Util.dateToTimestamp(introduced));
 		Timestamp tsDiscontinued = Util.extract(Util.dateToTimestamp(discontinued));
-		Optional<Company> company = companyDAO.getCompanyById(Integer.parseInt(companyId));
+		Optional<Company> company = companyDAO.getById(Integer.parseInt(companyId));
 		
 		if (Integer.parseInt(companyId) <= 0) {
 			update(intId, name, tsIntroduced, tsDiscontinued, null);

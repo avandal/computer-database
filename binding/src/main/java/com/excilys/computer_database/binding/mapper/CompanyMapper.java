@@ -1,6 +1,8 @@
 package com.excilys.computer_database.binding.mapper;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.excilys.computer_database.binding.dto.CompanyDTO;
@@ -9,12 +11,12 @@ import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.Company;
 import com.excilys.computer_database.core.model.CompanyBuilder;
 
-public abstract class CompanyMapper {
-	private CompanyMapper() {}
-	
+public interface CompanyMapper {
 	public static Company dtoToCompany(CompanyDTO dto) {
+		Optional<Integer> optId = Util.parseInt(dto.getId());
+		
 		return new CompanyBuilder()
-				.id(Util.parseInt(dto.getId()).isEmpty() ? 0 : Util.parseInt(dto.getId()).get())	
+				.id(optId.isEmpty() ? 0 : optId.get())	
 				.name(dto.getName())
 				.build();
 	}
@@ -26,8 +28,8 @@ public abstract class CompanyMapper {
 				.build();
 	}
 	
-	public static CompanyDTO hashmapToDTO(HashMap<String, String> map) {
-		Predicate<String> condition = s -> s != null;
+	public static CompanyDTO hashmapToDTO(Map<String, String> map) {
+		Predicate<String> condition = Objects::nonNull;
 		
 		return new CompanyDTOBuilder()
 				.id(Util.accordingTo(condition, map.get("id") ,"0"))

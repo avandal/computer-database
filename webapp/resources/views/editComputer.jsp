@@ -99,7 +99,7 @@
                         <div class="actions pull-right">
                             <input id="add" type="submit" value="<spring:message code="edit_computer.edit" />" class="btn btn-primary">
                             <spring:message code="or" />
-                            <a href="dashboard" class="btn btn-default"><spring:message code="cancel" /></a>
+                            <a href="<c:url value = "/dashboard" />" class="btn btn-default"><spring:message code="cancel" /></a>
                         </div>
                     </form:form>
                 </div>

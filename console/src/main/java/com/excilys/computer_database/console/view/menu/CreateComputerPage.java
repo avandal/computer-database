@@ -23,15 +23,15 @@ import com.excilys.computer_database.console.view.menu.update.TimestampChoice;
 
 @Component
 public class CreateComputerPage extends Page {
-	private final static int NAME = 1;
-	private final static int INTRODUCED = 2;
-	private final static int DISCONTINUED = 3;
-	private final static int IDCOMP = 4;
+	private static final int NAME = 1;
+	private static final int INTRODUCED = 2;
+	private static final int DISCONTINUED = 3;
+	private static final int IDCOMP = 4;
 	
-	private final static String NAME_MESSAGE = "Please give a computer name (" + ABORT + ")";
-	private final static String INTRODUCED_MESSAGE = "Please give an introduced date (" + NULL_ABORT + ")";
-	private final static String DISCONTINUED_MESSAGE = "Please give a discontinued date (" + NULL_ABORT + ")";
-	private final static String IDCOMP_MESSAGE = "Please give a company id (an integer, " + NULL_ABORT + ")";
+	private static final String NAME_MESSAGE = "Please give a computer name (" + ABORT + ")";
+	private static final String INTRODUCED_MESSAGE = "Please give an introduced date (" + NULL_ABORT + ")";
+	private static final String DISCONTINUED_MESSAGE = "Please give a discontinued date (" + NULL_ABORT + ")";
+	private static final String IDCOMP_MESSAGE = "Please give a company id (an integer, " + NULL_ABORT + ")";
 
 	private int step = 1;
 
@@ -39,9 +39,6 @@ public class CreateComputerPage extends Page {
 	private String introducedComp;
 	private String discontinuedComp;
 	private String companyIdComp;
-	
-//	@Autowired
-//	private ComputerService service;
 	
 	@Autowired
 	private CreateComputerPage that;

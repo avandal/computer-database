@@ -118,7 +118,7 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="<spring:message code="add_computer.add" />" class="btn btn-primary" id="add">
-							<spring:message code="or" /> <a href=<c:url value = "dashboard" /> class="btn btn-default">
+							<spring:message code="or" /> <a href="<c:url value = "/dashboard" />" class="btn btn-default">
 							<spring:message code="cancel" /></a>
 							<c:choose>
 								<c:when test="${status.equals('void')}"></c:when>

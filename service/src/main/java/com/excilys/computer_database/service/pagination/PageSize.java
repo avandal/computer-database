@@ -17,6 +17,7 @@ public enum PageSize {
 		return size;
 	}
 	
+	@Override
 	public String toString() {
 		return "Showing " + size + " per page";
 	}

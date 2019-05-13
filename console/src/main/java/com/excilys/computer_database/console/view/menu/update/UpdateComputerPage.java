@@ -71,7 +71,7 @@ public class UpdateComputerPage extends Page {
 	@Autowired
 	private MenuPage menuPage;
 	
-	private final static String MSG_ID = "Please give a computer id ('abort' to abort)";
+	private static final String MSG_ID = "Please give a computer id ('abort' to abort)";
 										
 	private ComputerDTO toChange;
 	
@@ -88,7 +88,7 @@ public class UpdateComputerPage extends Page {
 		StringBuilder ret = new StringBuilder("Now:\n")
 		.append(String.format("name: %s", toChange.getName()))
 		.append(String.format(", introduced: %s", toChange.getIntroduced()))
-		.append(String.format(", discontinued: %s\n", toChange.getDiscontinued()))
+		.append(String.format(", discontinued: %s%n", toChange.getDiscontinued()))
 		.append("Your changes:\n")
 		.append(String.format("name: %s", nameComp))
 		.append(String.format(", introduced: %s", introducedComp))
@@ -111,7 +111,7 @@ public class UpdateComputerPage extends Page {
 		} else {
 			switch (this.index) {
 			case MENU_ITEM :
-				System.out.println(String.format("%s\n%s", currentChanges(), Item.MENU_ITEM.text()));
+				System.out.println(String.format("%s%n%s", currentChanges(), Item.MENU_ITEM.text()));
 				break;
 			case NAME_ITEM : System.out.println(boxMessage(Item.NAME_ITEM.text())); break;
 			case INTRODUCED_ITEM : System.out.println(boxMessage(Item.INTRODUCED_ITEM.text())); break;
@@ -193,9 +193,10 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private void setTimestamp(TimestampChoice choice, String time) {
-		switch (choice) {
-		case INTRODUCED : this.introducedComp = time; break;
-		case DISCONTINUED : this.discontinuedComp = time; break;
+		if (choice == TimestampChoice.INTRODUCED) {
+			introducedComp = time;
+		} else {
+			discontinuedComp = time;
 		}
 	}
 	

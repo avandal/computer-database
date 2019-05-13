@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.excilys.computer_database.binding.config.HibernateConfigTest;
 
 public class ScriptRunner {
-	private final static String URL = "src/resources/config_test.sql";
+	private static final String URL = "src/resources/config_test.sql";
 	
 	public void run() throws IOException {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(HibernateConfigTest.class);

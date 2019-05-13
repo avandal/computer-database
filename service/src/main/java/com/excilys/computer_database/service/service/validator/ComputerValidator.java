@@ -99,7 +99,7 @@ public class ComputerValidator {
 			
 			int intCompanyId = optCompanyId.get();
 			
-			if (intCompanyId > 0 && companyDAO.getCompanyById(intCompanyId).isEmpty()) {
+			if (intCompanyId > 0 && companyDAO.getById(intCompanyId).isEmpty()) {
 				logger.warn("checkCompany - nonexistent company");
 				throw new FailComputerException(ConcernedField.COMPANY, FailComputerException.NONEXISTENT_COMPANY);
 			}

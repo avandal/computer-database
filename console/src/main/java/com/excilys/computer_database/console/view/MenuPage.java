@@ -61,7 +61,7 @@ public class MenuPage extends Page {
 	public String show() {
 		StringBuilder shower = new StringBuilder("Choose:");
 		
-		Consumer<MenuDescriptor> appendShow = descr -> shower.append(String.format("\n%s",descr));
+		Consumer<MenuDescriptor> appendShow = descr -> shower.append(String.format("%n%s",descr));
 		
 		Arrays.asList(MenuDescriptor.values()).forEach(appendShow);
 		System.out.println(shower.toString());
@@ -70,7 +70,7 @@ public class MenuPage extends Page {
 	}
 	
 	private Optional<Page> wrongTyped() {
-		System.out.println(Util.boxMessage(String.format("Error typing, %s\n", BACK_MENU)));
+		System.out.println(Util.boxMessage(String.format("Error typing, %s%n", BACK_MENU)));
 		return backToMenu();
 	}
 

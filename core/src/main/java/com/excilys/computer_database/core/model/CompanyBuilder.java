@@ -3,6 +3,7 @@ package com.excilys.computer_database.core.model;
 import java.util.Random;
 
 public class CompanyBuilder {
+	private Random random = new Random();
 	private int id;
 	private String name;
 
@@ -25,15 +26,16 @@ public class CompanyBuilder {
 	}
 	
 	private String randomChain() {
-		StringBuilder s = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
+		
 		for (int i = 0; i < 8; i++) {
-			s.append((char)(97 + Math.random() * (122 - 97)));
+			builder.append((char)(97 + random.nextInt('z' - 'a')));
 		}
-		return s.toString();
+		return builder.toString();
 	}
 	
 	public CompanyBuilder random() {
-		this.id = new Random().nextInt(1000) + 1;
+		this.id = random.nextInt(1000) + 1;
 		this.name = randomChain();
 		return this;
 	}

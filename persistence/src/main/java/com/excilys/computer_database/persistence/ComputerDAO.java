@@ -13,13 +13,13 @@ import com.excilys.computer_database.core.model.Computer;
 
 @Repository
 public class ComputerDAO extends DAO {
-	public final static String ID_CT_ALIAS = "id_computer";
-	public final static String NAME_CT_ALIAS = "name_computer";
-	public final static String ID_CN_ALIAS = "id_company";
-	public final static String NAME_CN_ALIAS = "name_company";
+	public static final String ID_CT_ALIAS = "id_computer";
+	public static final String NAME_CT_ALIAS = "name_computer";
+	public static final String ID_CN_ALIAS = "id_company";
+	public static final String NAME_CN_ALIAS = "name_company";
 	
-	private final static String HQL_LIST = "select ct from Computer as ct left join ct.company as cn";
-	private final static String HQL_BY_NAME = "select ct from Computer as ct left join ct.company as cn where ct.name like :ct_name or cn.name like :cn_name";
+	private static final String HQL_LIST = "select ct from Computer as ct left join ct.company as cn";
+	private static final String HQL_BY_NAME = "select ct from Computer as ct left join ct.company as cn where ct.name like :ct_name or cn.name like :cn_name";
 	
 	private Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 	private ComputerDAO() {
@@ -35,7 +35,7 @@ public class ComputerDAO extends DAO {
 	}
 	
 	public Optional<Computer> getById(int computerId) {
-		logger.info("getComputerId");
+		logger.info("getById");
 		openSession();
 		return Optional.ofNullable(session.get(Computer.class, computerId));
 	}

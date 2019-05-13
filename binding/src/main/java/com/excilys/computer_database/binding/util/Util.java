@@ -23,7 +23,7 @@ public abstract class Util {
 		try {
 			return Optional.of(Integer.parseInt(input));
 		} catch (NumberFormatException e) {
-			logger.warn(String.format("parseInt - invalid input: %s", input));
+			logger.warn("parseInt - invalid input: {}", input);
 			return Optional.empty();
 		}
 	}
@@ -43,7 +43,7 @@ public abstract class Util {
 				
 				return Optional.of(time);
 			} catch (DateTimeParseException e) {
-				logger.warn(String.format("dateToTimestamp - Invalid input `%s` with this format: %s", input, format));
+				logger.warn("dateToTimestamp - Invalid input `{}` with this format: {}", input, format);
 			}
 		}
 		
@@ -51,7 +51,7 @@ public abstract class Util {
 	}
 	
 	public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
-	    List<T> r = new ArrayList<T>(c.size());
+	    List<T> r = new ArrayList<>(c.size());
 	    for(Object o: c)
 	      r.add(clazz.cast(o));
 	    return r;
@@ -79,8 +79,7 @@ public abstract class Util {
 		
 		String dateFormat = "dd/MM/yyyy";
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormat);
-		String ret = parsedDate.format(dateFormatter);
-		return ret;
+		return parsedDate.format(dateFormatter);
 	}
 	
 	private static int sizeMax(String[] lines) {

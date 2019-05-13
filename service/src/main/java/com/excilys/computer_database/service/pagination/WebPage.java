@@ -10,10 +10,10 @@ import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.core.model.SortMode;
 
 public class WebPage<T> {
-	public final static String PAGE_SIZE_PARAM = "pageSize";
-	public final static String PAGE_INDEX_PARAM = "pageIndex";
-	public final static String SEARCH_PARAM = "search";
-	public final static String ORDER_PARAM = "order";
+	public static final String PAGE_SIZE_PARAM = "pageSize";
+	public static final String PAGE_INDEX_PARAM = "pageIndex";
+	public static final String SEARCH_PARAM = "search";
+	public static final String ORDER_PARAM = "order";
 	
 	private List<T> list;
 	private int index;

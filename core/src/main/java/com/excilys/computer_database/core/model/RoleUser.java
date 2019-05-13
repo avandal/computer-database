@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "role")
 public class RoleUser implements Serializable {
-	private final static long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@OneToOne(fetch = FetchType.LAZY)

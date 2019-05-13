@@ -3,7 +3,7 @@ package com.excilys.computer_database.service.service.exception;
 import com.excilys.computer_database.binding.util.Util;
 
 public abstract class FailException extends Exception {
-	private final static long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	
 	protected final ConcernedField concerned;
 	protected final String reason;

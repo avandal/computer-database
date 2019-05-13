@@ -15,7 +15,7 @@ public class UserDAO extends DAO {
 	private UserDAO() {}
 	
 	public Optional<RoleUser> getUserRole(String username) {
-		logger.info("getUserRole - " + username);
+		logger.info("getUserRole - {}", username);
 		openSession();
 		return Optional.ofNullable(session.get(RoleUser.class, username));
 	}

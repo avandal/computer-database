@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Random;
 
 public class ComputerBuilder {
+	private Random random = new Random();
+	
 	private int id;
 	private String name;
 	private Timestamp introduced;
@@ -47,21 +49,22 @@ public class ComputerBuilder {
 	}
 	
 	private String randomChain() {
-		StringBuilder s = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
+		
 		for (int i = 0; i < 8; i++) {
-			s.append((char)(97 + Math.random() * (122 - 97)));
+			builder.append((char)(97 + random.nextInt('z' - 'a')));
 		}
-		return s.toString();
+		return builder.toString();
 	}
 	
 	private Timestamp randomTime() {
-		int year = 1990 + (int)(Math.random() * (2019 - 1990));
-		int month = 1 + (int)(Math.random() * (12 - 1));
-		int day = 1 + (int)(Math.random() * (28 - 1));
+		int year = 1990 + random.nextInt(2019 - 1990);
+		int month = 1 + random.nextInt(12 - 1);
+		int day = 1 + random.nextInt(28 - 1);
 		
-		int hour = (int)(Math.random() * 24);
-		int minute = (int)(Math.random() * 60);
-		int second = (int)(Math.random() * 60);
+		int hour = random.nextInt(24);
+		int minute = random.nextInt(60);
+		int second = random.nextInt(60);
 		
 		String time = String.format("%d-%d-%d %d:%d:%d", year, month, day, hour, minute, second);
 		
@@ -69,7 +72,7 @@ public class ComputerBuilder {
 	}
 	
 	public ComputerBuilder random() {
-		this.id = new Random().nextInt(1000) + 1;
+		this.id = random.nextInt(1000) + 1;
 		this.name = randomChain();
 		this.introduced = randomTime();
 		this.discontinued = randomTime();
