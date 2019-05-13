@@ -104,20 +104,21 @@ public abstract class Util {
 		if (n <= 0) return "";
 		
 		return new String(new char[n]).replace("\0", c);
-		
 	}
 	
-	/**
-	 * 
-	 * @param message The message you want to box
-	 * @return Your message after boxing
-	 */
-	public static String boxMessage(String message) {
-		if (message == null) return null;
+	private static String toString(Object object) {
+		if (!(object instanceof String)) {
+			return object.toString();
+		} else {
+			return (String) object;
+		}
+	}
+	
+	private static String boxMessage(String message) {
+		String[] lines = message.split("\n");
 		
 		int k = 0;
 		
-		String[] lines = message.split("\n");
 		int length = sizeMax(lines);
 		
 		StringBuilder ret = new StringBuilder();
@@ -143,11 +144,26 @@ public abstract class Util {
 		return ret.toString();
 	}
 	
-	public static String boxMessage(String message, int n) {
-		message = boxMessage(message);
+	/**
+	 * 
+	 * @param object The message you want to box
+	 * @return Your message after boxing
+	 */
+	public static String boxMessage(Object object) {
+		if (object == null) return null;
+		
+		return boxMessage(toString(object));
+	}
+	
+	public static String boxMessage(Object message, int n) {
+		if (message == null) return null;
+		
+		String ret = toString(message);
+		
+		ret = boxMessage(ret);
 		while (--n > 0) {
-			message = boxMessage(message);
+			ret = boxMessage(ret);
 		}
-		return "\n" + message;
+		return "\n" + ret;
 	}
 }

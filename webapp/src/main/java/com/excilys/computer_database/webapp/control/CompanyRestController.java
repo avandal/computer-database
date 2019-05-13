@@ -1,5 +1,7 @@
 package com.excilys.computer_database.webapp.control;
 
+import static com.excilys.computer_database.binding.util.Util.boxMessage;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -49,8 +51,10 @@ public class CompanyRestController {
 		logger.debug("delete");
 		try {
 			companyService.delete(id);
+			System.out.println(boxMessage("Company successfully deleted"));
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (FailComputerException e) {
+			System.out.println(boxMessage("[Problem] Fail deleting company"));
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

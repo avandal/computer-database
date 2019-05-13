@@ -70,7 +70,7 @@ public class ComputerValidator {
 			}
 			retIntroduced = optIntroduced.get();
 			
-			if (!"".equals(discontinued)) {
+			if (discontinued != null && !"".equals(discontinued)) {
 				Optional<Timestamp> optDiscontinued = Util.dateToTimestamp(discontinued);
 				
 				if (optDiscontinued.isEmpty()) {

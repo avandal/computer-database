@@ -118,7 +118,7 @@ public class ComputerService {
 		String id = computer.getId();
 		String name = computer.getName();
 		String introduced = computer.getIntroduced();
-		String discontinued = computer.getIntroduced();
+		String discontinued = computer.getDiscontinued();
 		String companyId = computer.getCompanyId();
 		
 		int intId = Util.parseInt(id).get();

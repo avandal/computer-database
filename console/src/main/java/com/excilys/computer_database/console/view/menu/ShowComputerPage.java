@@ -4,20 +4,21 @@ import static com.excilys.computer_database.binding.util.Util.boxMessage;
 
 import java.util.Optional;
 
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.console.view.MenuPage;
 import com.excilys.computer_database.console.view.Page;
-import com.excilys.computer_database.service.service.ComputerService;
 
 @Component
 public class ShowComputerPage extends Page {
-	
-	@Autowired
-	private ComputerService service;
 	
 	@Autowired
 	private ShowComputerPage that;
@@ -81,16 +82,15 @@ public class ShowComputerPage extends Page {
 		if (isInvalid.isPresent())
 			return isInvalid;
 		
-		Optional<ComputerDTO> computer = service.getById(input);
+		Invocation.Builder invoke = client.target(URL_API + "/computer/" + input).request(MediaType.APPLICATION_JSON);
+		Response response = invoke.get();
 		
-		if (computer.isPresent()) {
-			System.out.println(boxMessage("Here's the "+idInput.get()+" computer"));
-			System.out.println(computer.get());
+		if (response.getStatus() == HttpStatus.OK.value()) {
+			ComputerDTO computer = response.readEntity(ComputerDTO.class);
+			System.out.println(String.format("\nHere's the %s computer:\n%s", input, boxMessage(computer)));
 		} else {
-			System.out.println((boxMessage("There is no computer with this id")));
+			System.out.println(boxMessage("There is no computer with the given id: " + input));
 		}
-		
-		System.out.println(boxMessage(M_BACK_MENU));
 		
 		return backToMenu();
 	}

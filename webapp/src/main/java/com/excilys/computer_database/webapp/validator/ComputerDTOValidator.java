@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
@@ -37,8 +36,10 @@ public class ComputerDTOValidator implements Validator {
 		verif(target, errors);
 	}
 	
-	private void checkName(Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", EMPTY_NAME);
+	private void checkName(ComputerDTO computer, Errors errors) {
+		if (computer.getName() == null || computer.getName().trim().equals("")) {
+			errors.rejectValue("name", EMPTY_NAME);
+		}
 	}
 	
 	private void checkIntroduced(ComputerDTO computer, Errors errors) {
@@ -89,11 +90,15 @@ public class ComputerDTOValidator implements Validator {
 	}
 	
 	private void checkCompany(ComputerDTO computer, Errors errors) {
-		Optional<Integer> optCompany = Util.parseInt(computer.getCompanyId());
+		String companyId = computer.getCompanyId();
 		
-		if (optCompany.isEmpty()) {
-			logger.error("Invalid company id");
-			errors.rejectValue("companyId", INVALID_COMPANY);
+		if (companyId != null) {
+			Optional<Integer> optCompany = Util.parseInt(companyId);
+			
+			if (optCompany.isEmpty()) {
+				logger.error("Invalid company id");
+				errors.rejectValue("companyId", INVALID_COMPANY);
+			}
 		}
 	}
 	
@@ -105,7 +110,7 @@ public class ComputerDTOValidator implements Validator {
 		
 		ComputerDTO computer = (ComputerDTO) obj;
 		
-		checkName(errors);
+		checkName(computer, errors);
 		checkIntroduced(computer, errors);
 		checkDiscontinued(computer, errors);
 		checkCompany(computer, errors);

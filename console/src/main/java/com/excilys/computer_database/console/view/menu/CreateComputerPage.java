@@ -5,7 +5,13 @@ import static com.excilys.computer_database.binding.util.Util.boxMessage;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
@@ -14,8 +20,6 @@ import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.console.view.MenuPage;
 import com.excilys.computer_database.console.view.Page;
 import com.excilys.computer_database.console.view.menu.update.TimestampChoice;
-import com.excilys.computer_database.service.service.ComputerService;
-import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
 public class CreateComputerPage extends Page {
@@ -36,8 +40,8 @@ public class CreateComputerPage extends Page {
 	private String discontinuedComp;
 	private String companyIdComp;
 	
-	@Autowired
-	private ComputerService service;
+//	@Autowired
+//	private ComputerService service;
 	
 	@Autowired
 	private CreateComputerPage that;
@@ -149,13 +153,14 @@ public class CreateComputerPage extends Page {
 				.discontinued(discontinuedComp)
 				.companyId(companyIdComp)
 				.build();
-		
-			try {
-				service.create(computer);
-				System.out.println(boxMessage(String.format("Computer successfully created, %s", BACK_MENU)));
-			} catch (FailComputerException e) {
-				e.printStackTrace();
-				System.out.println(boxMessage(String.format("[Error] %s", M_BACK_MENU)));
+			
+			Invocation.Builder invoke = client.target(URL_API + "/computer").request(MediaType.APPLICATION_JSON);
+			Response response = invoke.post(Entity.json(computer));
+			
+			if (response.getStatus() == HttpStatus.OK.value()) {
+				System.out.println(Util.boxMessage("Computer successfully created"));
+			} else {
+				System.out.println(Util.boxMessage("Error when creating a computer"));
 			}
 			
 			return backToMenu();

@@ -38,7 +38,7 @@ public class ListCompanyPage extends Page {
 		List<HashMap<String, String>> list = Util.castList(HashMap.class, invoke.get().readEntity(List.class));
 		list.forEach(s -> sbList.append(CompanyMapper.hashmapToDTO(s)+"\n"));
 		
-		System.out.println(String.format("%s\n%s\n", boxMessage(sbList.toString(), 3), M_BACK_MENU));
+		System.out.println(String.format("%s\n%s\n", boxMessage(sbList, 3), M_BACK_MENU));
 		return null;
 	}
 

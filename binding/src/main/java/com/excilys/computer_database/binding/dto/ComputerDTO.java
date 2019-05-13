@@ -3,6 +3,7 @@ package com.excilys.computer_database.binding.dto;
 import java.util.Objects;
 
 public class ComputerDTO {
+	
 	private String id;
 	private String name;
 	private String introduced;
@@ -10,6 +11,8 @@ public class ComputerDTO {
 	
 	private String companyId;
 	private String companyName;
+	
+	public ComputerDTO() {}
 	
 	public ComputerDTO(String id, String name, String introduced, String discontinued, String companyId, String companyName) {
 		this.id = id;

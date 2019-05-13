@@ -4,7 +4,13 @@ import static com.excilys.computer_database.binding.util.Util.boxMessage;
 
 import java.util.Optional;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.dto.ComputerDTO;
@@ -15,7 +21,6 @@ import com.excilys.computer_database.console.view.Page;
 import com.excilys.computer_database.console.view.menu.update.checker.DateChecker;
 import com.excilys.computer_database.console.view.menu.update.checker.NameChecker;
 import com.excilys.computer_database.service.service.ComputerService;
-import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
 public class UpdateComputerPage extends Page {
@@ -191,7 +196,6 @@ public class UpdateComputerPage extends Page {
 		switch (choice) {
 		case INTRODUCED : this.introducedComp = time; break;
 		case DISCONTINUED : this.discontinuedComp = time; break;
-		default : break;
 		}
 	}
 	
@@ -205,14 +209,17 @@ public class UpdateComputerPage extends Page {
 	}
 	
 	private void execUpdate() {
-		try {
-			toChange.setName(nameComp);
-			toChange.setIntroduced(introducedComp);
-			toChange.setDiscontinued(discontinuedComp);
-			
-			service.update(toChange);
-		} catch (FailComputerException e) {
-			e.printStackTrace();
+		toChange.setName(nameComp);
+		toChange.setIntroduced(introducedComp);
+		toChange.setDiscontinued(discontinuedComp);
+		
+		Invocation.Builder invoke = client.target(URL_API + "/computer").request(MediaType.APPLICATION_JSON);
+		Response response = invoke.put(Entity.json(toChange));
+		
+		if (response.getStatus() == HttpStatus.OK.value()) {
+			System.out.println("Computer successfully updated: " + boxMessage(currentChanges()));
+		} else {
+			System.out.println(Util.boxMessage("Error when updating this computer: " + toChange));
 		}
 		
 		this.index = Item.UPDATE_ITEM;

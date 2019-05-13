@@ -4,20 +4,20 @@ import static com.excilys.computer_database.binding.util.Util.boxMessage;
 
 import java.util.Optional;
 
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.excilys.computer_database.binding.util.Util;
 import com.excilys.computer_database.console.view.MenuPage;
 import com.excilys.computer_database.console.view.Page;
-import com.excilys.computer_database.service.service.CompanyService;
-import com.excilys.computer_database.service.service.exception.FailComputerException;
 
 @Component
 public class DeleteCompanyPage extends Page {
-	
-	@Autowired
-	private CompanyService service;
 	
 	@Autowired
 	private MenuPage menuPage;
@@ -60,13 +60,14 @@ public class DeleteCompanyPage extends Page {
 			System.out.println(boxMessage("Invalid id: must be > 0"));
 			return Optional.of(that);
 		}
-
-		try {
-			service.delete(input);
-			System.out.println(boxMessage("Computer successfully deleted"));
-		} catch (FailComputerException e) {
-			System.out.println(boxMessage("[Problem] Fail deleting company"));
-			e.printStackTrace();
+		
+		Invocation.Builder invoke = client.target(URL_API + "/company/" + input).request(MediaType.APPLICATION_JSON);
+		Response response = invoke.delete();
+		
+		if (response.getStatus() == HttpStatus.OK.value()) {
+			System.out.println(Util.boxMessage("Company successfully deleted"));
+		} else {
+			System.out.println(Util.boxMessage("Error when deleting the given company: " + input));
 		}
 		
 		return backToMenu();

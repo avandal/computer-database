@@ -1,5 +1,7 @@
 package com.excilys.computer_database.webapp.control;
 
+import static com.excilys.computer_database.binding.util.Util.boxMessage;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +31,7 @@ import com.excilys.computer_database.service.pagination.WebPage;
 import com.excilys.computer_database.service.pagination.WebPageBuilder;
 import com.excilys.computer_database.service.service.ComputerService;
 import com.excilys.computer_database.service.service.exception.FailComputerException;
+import com.excilys.computer_database.webapp.validator.ComputerDTOValidator;
 
 @RestController
 @RequestMapping(path = "/api/computer", produces = "application/json")
@@ -35,6 +40,11 @@ public class ComputerRestController {
 	
 	@Autowired
 	private ComputerService computerService;
+	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(new ComputerDTOValidator());
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<ComputerDTO>> getAll(@RequestParam Map<String, String> args) {
@@ -71,7 +81,7 @@ public class ComputerRestController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ComputerDTO> create(@Validated @ModelAttribute("computer") ComputerDTO computer) {
+	public ResponseEntity<ComputerDTO> create(@Validated @RequestBody ComputerDTO computer) {
 		logger.debug("create");
 		try {
 			computerService.create(computer);
@@ -82,10 +92,9 @@ public class ComputerRestController {
 		}
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<ComputerDTO> update(@Validated @ModelAttribute("computer") ComputerDTO computer, @PathVariable("id") String id) {
+	@PutMapping
+	public ResponseEntity<ComputerDTO> update(@Validated @RequestBody ComputerDTO computer) {
 		logger.debug("update");
-		computer.setId(id);
 		try {
 			computerService.update(computer);
 			return new ResponseEntity<>(computer, HttpStatus.OK);
@@ -100,8 +109,10 @@ public class ComputerRestController {
 		logger.debug("delete");
 		try {
 			computerService.delete(id);
+			System.out.println(boxMessage("Computer successfully deleted"));
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (FailComputerException e) {
+			System.out.println(boxMessage("[Problem] Fail deleting computer"));
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
